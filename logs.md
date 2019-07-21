@@ -408,9 +408,13 @@ After starting each experiment, I'll commit the code with the name of that exper
 
 * `21-7_efficientnet-b5_fold1_bgccpo300`: started with `18-7_efficientnet-b5_fold0_bgccold`'s ckpt19 model, and fine tuning on 300 sized bgcc images. lr: 3e-5
 lr reduced by 10 at ep 23, selecting 20 for submission.
-
-
+ckpt 10: LB: 0.784
+ckpt 12: LB: 0.795
 As all models are using bgcc will drop this keyword from ext_text in model names.
+
+* `21-7_efficientnet-b5-fold1_bgccpo300aug`: previous model,  with image color contrast sharp aug.
+
+5e-5 is better than 3e-5 for efficientnet-b5.
 
 
 # Questions and Ideas:

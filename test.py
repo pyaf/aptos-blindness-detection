@@ -53,6 +53,18 @@ class TestDataset(data.Dataset):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.RandomScale(scale_limit=0.1),
+                albumentations.OneOf(
+                    [
+                        albumentations.CLAHE(clip_limit=2),
+                        albumentations.IAASharpen(),
+                        albumentations.IAAEmboss(),
+                        albumentations.RandomBrightnessContrast(),
+                        albumentations.JpegCompression(),
+                        albumentations.Blur(),
+                        albumentations.GaussNoise(),
+                    ],
+                    p=0.5,
+                ),
 
             ]
         )
@@ -127,7 +139,7 @@ if __name__ == "__main__":
 
     tta = 4 # number of augs in tta
     start_epoch = 0
-    end_epoch = 26
+    end_epoch = 40
 
     root = f"data/{predict_on}_images/"
     size = 300
@@ -172,6 +184,8 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
+    base_threshold = np.array([0.5, 1.5, 2.5, 3.5])
+
     for epoch in range(start_epoch, end_epoch+1):
         print(f"Using ckpt{epoch}.pth")
         ckpt_path = os.path.join(model_folder_path, "ckpt%d.pth" % epoch)
@@ -181,8 +195,10 @@ if __name__ == "__main__":
         print(f"Best thresholds: {best_thresholds}")
         preds = get_predictions(model, testset, tta)
 
-        pred_labels = predict(preds, best_thresholds)
-        print(np.unique(pred_labels, return_counts=True))
+        pred1 = predict(preds, best_threshold)
+        pred2 = predict(preds, base_threshold)
+        print('best:', np.unique(pred1, return_counts=True)[1])
+        print('base:', np.unique(pred2, return_counts=True)[1])
 
         mat_to_save = [preds, best_thresholds]
         np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)

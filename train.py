@@ -41,7 +41,7 @@ class Trainer(object):
         #self.model_name = "se_resnet50_v0"
         #self.model_name = "densenet121"
         self.model_name = "efficientnet-b5"
-        ext_text = "bgccpo300aug"
+        ext_text = "bgccpo300aug2"
         self.num_samples = None #5000
         self.folder = f"weights/{date}_{self.model_name}_fold{self.fold}_{ext_text}"
         self.resume = False
@@ -56,7 +56,7 @@ class Trainer(object):
         self.num_workers = 12
         self.batch_size = {"train": 16, "val": 8}
         self.num_classes = 1
-        self.top_lr = 3e-5
+        self.top_lr = 5e-5
         self.ep2unfreeze = 0
         self.num_epochs = 40
         #self.base_lr = self.top_lr * 0.001

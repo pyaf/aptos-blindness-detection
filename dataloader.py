@@ -56,30 +56,22 @@ def get_transforms(phase, size, mean, std):
     if phase == "train":
         list_transforms.extend(
             [
-                albumentations.Rotate(limit=180, p=0.5),
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
-                albumentations.RandomScale(scale_limit=0.1),
-                albumentations.OneOf(
-                    [
-                        albumentations.CLAHE(clip_limit=2),
-                        albumentations.IAASharpen(),
-                        albumentations.IAAEmboss(),
-                        albumentations.RandomBrightnessContrast(),
-                        albumentations.JpegCompression(),
-                        albumentations.Blur(),
-                        albumentations.GaussNoise(),
-                    ],
+                albumentations.ShiftScaleRotate(
+                    shift_limit=0,
+                    rotate_limit=120,
                     p=0.5,
+                    border_mode=cv2.BORDER_CONSTANT
                 ),
+                albumentations.RandomBrightnessContrast(p=0.25),
             ]
         )
-
     list_transforms.extend(
         [
 
             albumentations.Normalize(mean=mean, std=std, p=1),
-            albumentations.Resize(size, size),
+            #albumentations.Resize(size, size),
             AT.ToTensor(normalize=None), # [6]
         ]
     )
