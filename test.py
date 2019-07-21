@@ -49,23 +49,16 @@ class TestDataset(data.Dataset):
         self.tta = tta
         self.TTA = albumentations.Compose(
             [
-                albumentations.Rotate(limit=180, p=0.5),
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
-                albumentations.RandomScale(scale_limit=0.1),
-                albumentations.OneOf(
-                    [
-                        albumentations.CLAHE(clip_limit=2),
-                        albumentations.IAASharpen(),
-                        albumentations.IAAEmboss(),
-                        albumentations.RandomBrightnessContrast(),
-                        albumentations.JpegCompression(),
-                        albumentations.Blur(),
-                        albumentations.GaussNoise(),
-                    ],
+                albumentations.ShiftScaleRotate(
+                    shift_limit=0, # no resizing
+                    scale_limit=0.1,
+                    rotate_limit=120,
                     p=0.5,
+                    border_mode=cv2.BORDER_CONSTANT
                 ),
-
+                albumentations.RandomBrightnessContrast(p=0.25),
             ]
         )
         self.transform = albumentations.Compose(
@@ -184,7 +177,7 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
-    base_threshold = np.array([0.5, 1.5, 2.5, 3.5])
+    base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
 
     for epoch in range(start_epoch, end_epoch+1):
         print(f"Using ckpt{epoch}.pth")
@@ -195,8 +188,8 @@ if __name__ == "__main__":
         print(f"Best thresholds: {best_thresholds}")
         preds = get_predictions(model, testset, tta)
 
-        pred1 = predict(preds, best_threshold)
-        pred2 = predict(preds, base_threshold)
+        pred1 = predict(preds, best_thresholds)
+        pred2 = predict(preds, base_thresholds)
         print('best:', np.unique(pred1, return_counts=True)[1])
         print('base:', np.unique(pred2, return_counts=True)[1])
 

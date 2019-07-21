@@ -59,7 +59,8 @@ def get_transforms(phase, size, mean, std):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.ShiftScaleRotate(
-                    shift_limit=0,
+                    shift_limit=0, # no resizing
+                    scale_limit=0.1,
                     rotate_limit=120,
                     p=0.5,
                     border_mode=cv2.BORDER_CONSTANT

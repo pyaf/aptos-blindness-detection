@@ -416,6 +416,14 @@ As all models are using bgcc will drop this keyword from ext_text in model names
 
 5e-5 is better than 3e-5 for efficientnet-b5.
 
+Analysed data augmentation, RandomScale was useless, all it did was resize the input into random shape, after which you resized it back to its org shape -_-, image makeup augmentations where adding noise and blur, have only kept RandomBrightnessContrast, Added RandomShiftScaleRotate doing rotation with fixed border value interpolation, and scaling the image as in zooming in and out randomly.
+
+* `21-7_efficientnet-b5-fold1_bgccpo300aug2`: with changed aug as mentioned above. lr: 5e-5
+ep 15-25 look good, selecting 15 for submission, adding aug snippet to inference kernel.
+
+
+Will train on old data, with new data a validation, img size 300
+
 
 # Questions and Ideas:
 
