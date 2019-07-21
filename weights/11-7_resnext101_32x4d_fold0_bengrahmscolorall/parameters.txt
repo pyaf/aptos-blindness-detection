@@ -1,0 +1,63 @@
+Time: 2019-07-11 12:03:58.300394
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolorall
+fold: 0
+total_folds: 5
+sampling class weights: [1, 1.2, 1, 1.2, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 32, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 32, 'val': 8}
+remark: 
+        Resnext101_32xd model with ben grahm's color version, on all data, with all equal class_weights
+                
+Time: 2019-07-11 12:05:00.148150
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolorall
+fold: 0
+total_folds: 5
+sampling class weights: [1, 1.2, 1, 1.2, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+        Resnext101_32xd model with ben grahm's color version, on all data, with all equal class_weights
+                
+Time: 2019-07-11 13:12:58.416389
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: True
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolorall
+fold: 0
+total_folds: 5
+sampling class weights: [1, 1.2, 1, 1.2, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 1
+batchsize: {'train': 16, 'val': 8}
+remark: 
+        Resnext101_32xd model with ben grahm's color version, on all data, with all equal class_weights
+                

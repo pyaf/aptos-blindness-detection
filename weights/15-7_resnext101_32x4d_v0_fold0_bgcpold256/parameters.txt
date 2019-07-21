@@ -1,0 +1,48 @@
+Time: 2019-07-15 15:18:36.492981
+model_name: resnext101_32x4d_v0
+train_df_name: train12.csv
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+pretrained: True
+pretrained_path: weights/15-7_resnext101_32x4d_v0_fold0_bgcold256/ckpt30.pth
+folder: weights/15-7_resnext101_32x4d_v0_fold0_bgcpold256
+fold: 0
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 256
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Rotate object at 0x7effc0614898>, <albumentations.augmentations.transforms.Transpose object at 0x7effc06148d0>, <albumentations.augmentations.transforms.Flip object at 0x7effc06149b0>, <albumentations.augmentations.transforms.RandomScale object at 0x7effc0614c18>, <albumentations.augmentations.transforms.Normalize object at 0x7effc0614240>, <albumentations.augmentations.transforms.Resize object at 0x7effc0614d68>, <albumentations.pytorch.transforms.ToTensor object at 0x7effc0614da0>]
+remark: Pretraining resnextv0 model on sampled old data with 256 img size
+Time: 2019-07-15 15:19:14.286833
+model_name: resnext101_32x4d_v0
+train_df_name: train12.csv
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+pretrained: True
+pretrained_path: weights/15-7_resnext101_32x4d_v0_fold0_bgcold256/ckpt30.pth
+folder: weights/15-7_resnext101_32x4d_v0_fold0_bgcpold256
+fold: 0
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 256
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Rotate object at 0x7f07843ee908>, <albumentations.augmentations.transforms.Transpose object at 0x7f07843eea58>, <albumentations.augmentations.transforms.Flip object at 0x7f07843ee588>, <albumentations.augmentations.transforms.RandomScale object at 0x7f07843ee710>, <albumentations.augmentations.transforms.Normalize object at 0x7f07843eea20>, <albumentations.augmentations.transforms.Resize object at 0x7f07843ee240>, <albumentations.pytorch.transforms.ToTensor object at 0x7f07843eec50>]
+remark: Pretraining resnextv0 model on sampled old data with 256 img size

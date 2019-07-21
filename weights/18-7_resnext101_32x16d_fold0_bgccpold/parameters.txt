@@ -1,0 +1,97 @@
+
+        f"Time: {time_now}
+"
+        f"model_name: {trainer.model_name}
+"
+        f"train_df_name: {trainer.train_df_name}
+"
+        f"images_folder: {trainer.images_folder}
+"
+        f"resume: {trainer.resume}
+"
+        f"pretrained: {trainer.pretrained}
+"
+        f"pretrained_path: {trainer.pretrained_path}
+"
+        f"folder: {trainer.folder}
+"
+        f"fold: {trainer.fold}
+"
+        f"total_folds: {trainer.total_folds}
+"
+        f"num_samples: {trainer.num_samples}
+"
+        f"sampling class weights: {trainer.class_weights}
+"
+        f"size: {trainer.size}
+"
+        f"top_lr: {trainer.top_lr}
+"
+        f"base_lr: {trainer.base_lr}
+"
+        f"num_workers: {trainer.num_workers}
+"
+        f"batchsize: {trainer.batch_size}
+"
+        f"momentum: {trainer.momentum}
+"
+        f"mean: {trainer.mean}
+"
+        f"std: {trainer.std}
+"
+        f"start_epoch: {trainer.start_epoch}
+"
+        f"batchsize: {trainer.batch_size}
+"
+        f"augmentations: {augmentations}
+"
+        f"remark: {remark}
+"
+    Time: 2019-07-18 10:43:11.666099
+model_name: resnext101_32x16d
+train_df_name: train12.csv
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+pretrained: True
+pretrained_path: weights/18-7_resnext101_32x16d_fold0_bgccold/ckpt8.pth
+folder: weights/18-7_resnext101_32x16d_fold0_bgccpold
+fold: 0
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 256
+top_lr: 1e-06
+base_lr: None
+num_workers: 8
+batchsize: {'train': 4, 'val': 2}
+momentum: 0.95
+mean: (0, 0, 0)
+std: (1, 1, 1)
+start_epoch: 0
+batchsize: {'train': 4, 'val': 2}
+augmentations: [Rotate(always_apply=False, p=0.5, limit=(-180, 180), interpolation=1, border_mode=4, value=None), Transpose(always_apply=False, p=0.5), Flip(always_apply=False, p=0.5), RandomScale(always_apply=False, p=0.5, interpolation=1, scale_limit=(-0.09999999999999998, 0.10000000000000009)), Normalize(always_apply=False, p=1, mean=(0, 0, 0), std=(1, 1, 1), max_pixel_value=255.0), Resize(always_apply=False, p=1, height=256, width=256, interpolation=1), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+remark: All of old data as train set, train12 as val set
+Time: 2019-07-18 11:21:51.012636
+model_name: resnext101_32x16d
+train_df_name: train12.csv
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: True
+pretrained: True
+pretrained_path: weights/18-7_resnext101_32x16d_fold0_bgccold/ckpt8.pth
+folder: weights/18-7_resnext101_32x16d_fold0_bgccpold
+fold: 0
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 256
+top_lr: 1e-06
+base_lr: None
+num_workers: 8
+batchsize: {'train': 4, 'val': 2}
+momentum: 0.95
+mean: (0, 0, 0)
+std: (1, 1, 1)
+start_epoch: 5
+batchsize: {'train': 4, 'val': 2}
+augmentations: [Rotate(always_apply=False, p=0.5, limit=(-180, 180), interpolation=1, border_mode=4, value=None), Transpose(always_apply=False, p=0.5), Flip(always_apply=False, p=0.5), RandomScale(always_apply=False, p=0.5, interpolation=1, scale_limit=(-0.09999999999999998, 0.10000000000000009)), Normalize(always_apply=False, p=1, mean=(0, 0, 0), std=(1, 1, 1), max_pixel_value=255.0), Resize(always_apply=False, p=1, height=256, width=256, interpolation=1), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+remark: All of old data as train set, train12 as val set

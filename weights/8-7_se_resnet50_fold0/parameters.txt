@@ -1,0 +1,18 @@
+Time: 2019-07-08 18:12:07.884087
+model_name: se_resnet50
+resume: False
+folder: weights/8-7_se_resnet50_fold0
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                

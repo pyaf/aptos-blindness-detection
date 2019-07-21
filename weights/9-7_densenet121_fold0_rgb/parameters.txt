@@ -1,0 +1,126 @@
+Time: 2019-07-09 14:54:25.475482
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 14:57:04.115014
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 14:58:11.519456
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 14:59:12.793375
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 15:00:14.540692
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 15:12:07.735899
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                
+Time: 2019-07-09 15:15:34.364287
+model_name: densenet121
+resume: False
+folder: weights/9-7_densenet121_fold0_rbg
+fold: 0
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+                changed class weights wto [1, 2, 1, 2, 2], too much weight hurt the perf on test set last time
+                

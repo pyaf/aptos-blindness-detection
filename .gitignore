@@ -2,7 +2,9 @@
 *.h5
 *.pkl
 *.json
-weights/*
+*.pth
+*.npy
+*.csv
 data/*
 notebooks/PATH
 external_data/*

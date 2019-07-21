@@ -1,0 +1,207 @@
+Time: 2019-07-12 15:22:19.115041
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f239c8ccfd0>, <albumentations.augmentations.transforms.Normalize object at 0x7f239c8ccef0>, <albumentations.augmentations.transforms.Resize object at 0x7f239c8ccf60>, <albumentations.pytorch.transforms.ToTensor object at 0x7f23a414c0f0>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:23:24.725221
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f3dc63de198>, <albumentations.augmentations.transforms.Normalize object at 0x7f3dac5fd080>, <albumentations.augmentations.transforms.Resize object at 0x7f3dac5fd1d0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f3dac5fd2e8>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:24:00.588656
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f741cb04f60>, <albumentations.augmentations.transforms.Normalize object at 0x7f741cb04fd0>, <albumentations.augmentations.transforms.Resize object at 0x7f741cb04cc0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f7443b082e8>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:24:55.416228
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f770e480dd8>, <albumentations.augmentations.transforms.Normalize object at 0x7f770e480e48>, <albumentations.augmentations.transforms.Resize object at 0x7f7715ce7208>, <albumentations.pytorch.transforms.ToTensor object at 0x7f7715ce72b0>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:26:04.933385
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f36854a9f98>, <albumentations.augmentations.transforms.Normalize object at 0x7f36854a9c88>, <albumentations.augmentations.transforms.Resize object at 0x7f36854a9fd0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f368cd17048>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:26:55.502547
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7ff6062bcda0>, <albumentations.augmentations.transforms.Normalize object at 0x7ff6062bcf28>, <albumentations.augmentations.transforms.Resize object at 0x7ff6062bcef0>, <albumentations.pytorch.transforms.ToTensor object at 0x7ff60d329198>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:28:11.342303
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7fae40795fd0>, <albumentations.augmentations.transforms.Normalize object at 0x7fae40795ef0>, <albumentations.augmentations.transforms.Resize object at 0x7fae40795f60>, <albumentations.pytorch.transforms.ToTensor object at 0x7fae477fa080>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:29:20.530397
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f6d64d15eb8>, <albumentations.augmentations.transforms.Normalize object at 0x7f6d64d15d68>, <albumentations.augmentations.transforms.Resize object at 0x7f6d64d15dd8>, <albumentations.pytorch.transforms.ToTensor object at 0x7f6d6c588208>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+
+Time: 2019-07-12 15:29:32.389470
+model_name: resnext101_32x4d_v1
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/12-7_resnext101_32x4d_v1_fold0_bgcold
+fold: 0
+total_folds: 5
+num_samples: None
+sampling class weights: None
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Flip object at 0x7f6a9555cf98>, <albumentations.augmentations.transforms.Normalize object at 0x7f6a9555cdd8>, <albumentations.augmentations.transforms.Resize object at 0x7f6a9555cef0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f6ab7a67240>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on comp. data, no class weights, with only flip augmentation nothing else,
+

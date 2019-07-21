@@ -1,0 +1,18 @@
+Time: 2019-07-07 22:49:13.663841
+model_name: resnext101_32x4d
+resume: False
+folder: weights/7-7_resnext101_32x4d_fold4
+fold: 4
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+remark: 
+        Training with class weights [1, 3, 1, 4, 3], previous class weights of each getting equal no. of images out of dl didn't work
+                

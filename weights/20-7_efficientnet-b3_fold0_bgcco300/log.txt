@@ -1,0 +1,626 @@
+21:41:28 Starting epoch: 0 | phase: train 
+21:43:42 Starting epoch: 0 | phase: train 
+21:44:43 Starting epoch: 0 | phase: train 
+21:47:12 Starting epoch: 0 | phase: train 
+21:50:35 Starting epoch: 0 | phase: train 
+21:51:41 Starting epoch: 0 | phase: train 
+21:59:20 Starting epoch: 0 | phase: train 
+21:59:24 train epoch: 0 (0/1098) loss: 1.6720 || 00:04
+21:59:50 train epoch: 0 (100/1098) loss: 1.1272 || 00:30
+22:00:19 train epoch: 0 (200/1098) loss: 1.3659 || 00:59
+22:00:48 train epoch: 0 (300/1098) loss: 2.1869 || 01:27
+22:01:12 train epoch: 0 (400/1098) loss: 1.5571 || 01:51
+22:01:35 train epoch: 0 (500/1098) loss: 1.4742 || 02:15
+22:01:56 train epoch: 0 (600/1098) loss: 1.4563 || 02:36
+22:11:06 Starting epoch: 0 | phase: train 
+22:11:12 train epoch: 0 (0/1098) loss: 2.7848 || 00:05
+22:11:50 train epoch: 0 (100/1098) loss: 0.7416 || 00:43
+22:12:23 train epoch: 0 (200/1098) loss: 1.3444 || 01:16
+22:12:56 train epoch: 0 (300/1098) loss: 2.7125 || 01:50
+22:13:24 train epoch: 0 (400/1098) loss: 1.4187 || 02:18
+22:13:52 train epoch: 0 (500/1098) loss: 0.4546 || 02:45
+22:14:16 train epoch: 0 (600/1098) loss: 0.6301 || 03:10
+22:14:39 train epoch: 0 (700/1098) loss: 1.1243 || 03:32
+22:14:58 train epoch: 0 (800/1098) loss: 1.2718 || 03:51
+22:15:17 train epoch: 0 (900/1098) loss: 1.3639 || 04:10
+22:15:34 train epoch: 0 (1000/1098) loss: 0.8133 || 04:27
+22:15:50 train 0 |  loss: 1.3439 | qwk: 0.0273 | acc: 0.5034 
+
+22:15:50 None
+22:15:50 Time taken for train phase: 04:43 
+
+22:15:50 Starting epoch: 0 | phase: val 
+22:15:52 val epoch: 0 (0/608) loss: 0.9276 || 00:02
+22:16:03 val epoch: 0 (100/608) loss: 1.2922 || 00:12
+22:16:12 val epoch: 0 (200/608) loss: 1.3870 || 00:21
+22:16:21 val epoch: 0 (300/608) loss: 2.4866 || 00:31
+22:16:31 val epoch: 0 (400/608) loss: 3.7974 || 00:40
+22:16:41 val epoch: 0 (500/608) loss: 2.6800 || 00:50
+22:16:50 val epoch: 0 (600/608) loss: 2.4321 || 00:59
+22:16:51 val 0 |  loss: 1.9460 | qwk: 0.1970 | acc: 0.3799 
+
+22:16:51 None
+22:16:51 Time taken for val phase: 01:01 
+
+22:16:52 ******** New optimal found, saving state ********
+22:16:52 Time taken by the epoch: 05:46
+22:16:52 Total time taken so far: 05:46
+22:16:52 
+============================================================
+
+22:16:52 Starting epoch: 1 | phase: train 
+22:16:55 train epoch: 1 (0/1098) loss: 1.0716 || 00:02
+22:17:11 train epoch: 1 (100/1098) loss: 2.0867 || 00:18
+22:17:23 train epoch: 1 (200/1098) loss: 0.9464 || 00:30
+22:17:35 train epoch: 1 (300/1098) loss: 1.1319 || 00:42
+22:17:48 train epoch: 1 (400/1098) loss: 1.9716 || 00:55
+22:18:00 train epoch: 1 (500/1098) loss: 1.5756 || 01:07
+22:18:11 train epoch: 1 (600/1098) loss: 1.0746 || 01:19
+22:18:22 train epoch: 1 (700/1098) loss: 1.3583 || 01:29
+22:18:33 train epoch: 1 (800/1098) loss: 2.0282 || 01:40
+22:18:44 train epoch: 1 (900/1098) loss: 1.1038 || 01:51
+22:18:55 train epoch: 1 (1000/1098) loss: 1.2392 || 02:02
+22:19:05 train 1 |  loss: 1.1690 | qwk: 0.1220 | acc: 0.4273 
+
+22:19:05 None
+22:19:05 Time taken for train phase: 02:12 
+
+22:19:05 Starting epoch: 1 | phase: val 
+22:19:05 val epoch: 1 (0/608) loss: 2.8360 || 00:00
+22:19:09 val epoch: 1 (100/608) loss: 0.7809 || 00:04
+22:19:13 val epoch: 1 (200/608) loss: 1.6176 || 00:08
+22:19:17 val epoch: 1 (300/608) loss: 1.5543 || 00:12
+22:19:22 val epoch: 1 (400/608) loss: 0.6790 || 00:16
+22:19:26 val epoch: 1 (500/608) loss: 0.8945 || 00:20
+22:19:29 val epoch: 1 (600/608) loss: 2.5140 || 00:24
+22:19:30 val 1 |  loss: 1.7447 | qwk: 0.4588 | acc: 0.5372 
+
+22:19:30 None
+22:19:30 Time taken for val phase: 00:25 
+
+22:19:30 ******** New optimal found, saving state ********
+22:19:30 Time taken by the epoch: 02:37
+22:19:30 Total time taken so far: 08:24
+22:19:30 
+============================================================
+
+22:19:30 Starting epoch: 2 | phase: train 
+22:19:32 train epoch: 2 (0/1098) loss: 1.2374 || 00:01
+22:19:42 train epoch: 2 (100/1098) loss: 1.5433 || 00:11
+22:19:53 train epoch: 2 (200/1098) loss: 0.9642 || 00:22
+22:20:04 train epoch: 2 (300/1098) loss: 0.5962 || 00:33
+22:20:14 train epoch: 2 (400/1098) loss: 1.5133 || 00:43
+22:20:25 train epoch: 2 (500/1098) loss: 0.9534 || 00:54
+22:20:36 train epoch: 2 (600/1098) loss: 0.8860 || 01:05
+22:20:46 train epoch: 2 (700/1098) loss: 1.1122 || 01:15
+22:20:57 train epoch: 2 (800/1098) loss: 1.5227 || 01:26
+22:21:08 train epoch: 2 (900/1098) loss: 1.1256 || 01:37
+22:21:19 train epoch: 2 (1000/1098) loss: 0.9785 || 01:48
+22:21:29 train 2 |  loss: 1.1084 | qwk: 0.1654 | acc: 0.4193 
+
+22:21:29 None
+22:21:29 Time taken for train phase: 01:58 
+
+22:21:29 Starting epoch: 2 | phase: val 
+22:21:29 val epoch: 2 (0/608) loss: 0.5667 || 00:00
+22:21:33 val epoch: 2 (100/608) loss: 1.1676 || 00:04
+22:21:38 val epoch: 2 (200/608) loss: 1.1794 || 00:08
+22:21:42 val epoch: 2 (300/608) loss: 1.1223 || 00:12
+22:21:46 val epoch: 2 (400/608) loss: 1.0088 || 00:16
+22:21:49 val epoch: 2 (500/608) loss: 1.2879 || 00:19
+22:21:53 val epoch: 2 (600/608) loss: 1.9626 || 00:23
+22:21:54 val 2 |  loss: 1.6371 | qwk: 0.4941 | acc: 0.5695 
+
+22:21:54 None
+22:21:54 Time taken for val phase: 00:24 
+
+22:21:54 ******** New optimal found, saving state ********
+22:21:54 Time taken by the epoch: 02:23
+22:21:54 Total time taken so far: 10:47
+22:21:54 
+============================================================
+
+22:21:54 Starting epoch: 3 | phase: train 
+22:21:55 train epoch: 3 (0/1098) loss: 1.3733 || 00:01
+22:22:06 train epoch: 3 (100/1098) loss: 1.1736 || 00:12
+22:22:17 train epoch: 3 (200/1098) loss: 0.7068 || 00:22
+22:22:27 train epoch: 3 (300/1098) loss: 0.8068 || 00:33
+22:22:38 train epoch: 3 (400/1098) loss: 1.3162 || 00:44
+22:22:49 train epoch: 3 (500/1098) loss: 0.9277 || 00:55
+22:22:59 train epoch: 3 (600/1098) loss: 1.2077 || 01:05
+22:23:10 train epoch: 3 (700/1098) loss: 1.2601 || 01:16
+22:23:21 train epoch: 3 (800/1098) loss: 0.9887 || 01:27
+22:23:32 train epoch: 3 (900/1098) loss: 0.8325 || 01:37
+22:23:43 train epoch: 3 (1000/1098) loss: 1.3138 || 01:48
+22:23:53 train 3 |  loss: 1.0800 | qwk: 0.1864 | acc: 0.4019 
+
+22:23:53 None
+22:23:53 Time taken for train phase: 01:58 
+
+22:23:53 Starting epoch: 3 | phase: val 
+22:23:53 val epoch: 3 (0/608) loss: 0.5072 || 00:00
+22:23:57 val epoch: 3 (100/608) loss: 2.7869 || 00:04
+22:24:01 val epoch: 3 (200/608) loss: 2.2467 || 00:08
+22:24:05 val epoch: 3 (300/608) loss: 2.3091 || 00:12
+22:24:09 val epoch: 3 (400/608) loss: 1.8175 || 00:16
+22:24:13 val epoch: 3 (500/608) loss: 1.8900 || 00:19
+22:24:17 val epoch: 3 (600/608) loss: 1.4612 || 00:23
+22:24:17 val 3 |  loss: 1.5417 | qwk: 0.5030 | acc: 0.5954 
+
+22:24:17 None
+22:24:17 Time taken for val phase: 00:24 
+
+22:24:18 ******** New optimal found, saving state ********
+22:24:18 Time taken by the epoch: 02:23
+22:24:18 Total time taken so far: 13:11
+22:24:18 
+============================================================
+
+22:24:18 Starting epoch: 4 | phase: train 
+22:24:19 train epoch: 4 (0/1098) loss: 0.8008 || 00:00
+22:24:30 train epoch: 4 (100/1098) loss: 0.6565 || 00:11
+22:24:40 train epoch: 4 (200/1098) loss: 0.8635 || 00:22
+22:24:51 train epoch: 4 (300/1098) loss: 0.9924 || 00:33
+22:25:02 train epoch: 4 (400/1098) loss: 0.4139 || 00:44
+22:25:13 train epoch: 4 (500/1098) loss: 1.2038 || 00:54
+22:25:24 train epoch: 4 (600/1098) loss: 1.1332 || 01:05
+22:25:34 train epoch: 4 (700/1098) loss: 1.0198 || 01:16
+22:25:45 train epoch: 4 (800/1098) loss: 1.4184 || 01:27
+22:25:56 train epoch: 4 (900/1098) loss: 1.0111 || 01:38
+22:26:07 train epoch: 4 (1000/1098) loss: 0.7374 || 01:48
+22:26:17 train 4 |  loss: 1.0432 | qwk: 0.2167 | acc: 0.4152 
+
+22:26:17 None
+22:26:17 Time taken for train phase: 01:59 
+
+22:26:17 Starting epoch: 4 | phase: val 
+22:26:17 val epoch: 4 (0/608) loss: 0.8931 || 00:00
+22:26:21 val epoch: 4 (100/608) loss: 1.1184 || 00:04
+22:26:25 val epoch: 4 (200/608) loss: 1.0185 || 00:07
+22:26:28 val epoch: 4 (300/608) loss: 0.9065 || 00:11
+22:26:33 val epoch: 4 (400/608) loss: 0.1778 || 00:16
+22:26:37 val epoch: 4 (500/608) loss: 1.4478 || 00:20
+22:26:41 val epoch: 4 (600/608) loss: 2.5532 || 00:23
+22:26:41 val 4 |  loss: 1.4850 | qwk: 0.5256 | acc: 0.5804 
+
+22:26:41 None
+22:26:41 Time taken for val phase: 00:24 
+
+22:26:41 ******** New optimal found, saving state ********
+22:26:42 Time taken by the epoch: 02:23
+22:26:42 Total time taken so far: 15:35
+22:26:42 
+============================================================
+
+22:26:42 Starting epoch: 5 | phase: train 
+22:26:44 train epoch: 5 (0/1098) loss: 0.8845 || 00:02
+22:27:21 train epoch: 5 (100/1098) loss: 0.8516 || 00:38
+22:27:57 train epoch: 5 (200/1098) loss: 1.4003 || 01:15
+22:28:33 train epoch: 5 (300/1098) loss: 0.7738 || 01:51
+22:29:09 train epoch: 5 (400/1098) loss: 0.9741 || 02:27
+22:29:45 train epoch: 5 (500/1098) loss: 0.4899 || 03:03
+22:30:21 train epoch: 5 (600/1098) loss: 0.5017 || 03:38
+22:30:56 train epoch: 5 (700/1098) loss: 0.8286 || 04:14
+22:31:32 train epoch: 5 (800/1098) loss: 0.4141 || 04:50
+22:32:08 train epoch: 5 (900/1098) loss: 0.5282 || 05:26
+22:32:43 train epoch: 5 (1000/1098) loss: 0.6686 || 06:01
+22:33:20 train 5 |  loss: 0.7420 | qwk: 0.5532 | acc: 0.5035 
+
+22:33:20 None
+22:33:20 Time taken for train phase: 06:38 
+
+22:33:21 Starting epoch: 5 | phase: val 
+22:33:21 val epoch: 5 (0/608) loss: 0.1785 || 00:00
+22:33:26 val epoch: 5 (100/608) loss: 0.6620 || 00:05
+22:33:30 val epoch: 5 (200/608) loss: 0.3655 || 00:09
+22:33:35 val epoch: 5 (300/608) loss: 0.3106 || 00:14
+22:33:39 val epoch: 5 (400/608) loss: 0.4678 || 00:18
+22:33:44 val epoch: 5 (500/608) loss: 0.3061 || 00:23
+22:33:48 val epoch: 5 (600/608) loss: 0.9487 || 00:27
+22:33:49 val 5 |  loss: 0.6527 | qwk: 0.7849 | acc: 0.5862 
+
+22:33:49 None
+22:33:49 Time taken for val phase: 00:28 
+
+22:33:50 ******** New optimal found, saving state ********
+22:33:50 Time taken by the epoch: 07:08
+22:33:50 Total time taken so far: 22:44
+22:33:50 
+============================================================
+
+22:33:50 Starting epoch: 6 | phase: train 
+22:33:52 train epoch: 6 (0/1098) loss: 0.4443 || 00:01
+22:34:28 train epoch: 6 (100/1098) loss: 0.5296 || 00:37
+22:35:04 train epoch: 6 (200/1098) loss: 0.6394 || 01:13
+22:35:39 train epoch: 6 (300/1098) loss: 0.3143 || 01:48
+22:36:15 train epoch: 6 (400/1098) loss: 0.6857 || 02:24
+22:36:51 train epoch: 6 (500/1098) loss: 0.5861 || 03:00
+22:37:27 train epoch: 6 (600/1098) loss: 0.5657 || 03:36
+22:38:03 train epoch: 6 (700/1098) loss: 0.4188 || 04:12
+22:38:39 train epoch: 6 (800/1098) loss: 0.7483 || 04:48
+22:39:15 train epoch: 6 (900/1098) loss: 0.4919 || 05:24
+22:39:51 train epoch: 6 (1000/1098) loss: 0.4715 || 06:00
+22:40:26 train 6 |  loss: 0.5864 | qwk: 0.6741 | acc: 0.5748 
+
+22:40:26 None
+22:40:26 Time taken for train phase: 06:35 
+
+22:40:26 Starting epoch: 6 | phase: val 
+22:40:26 val epoch: 6 (0/608) loss: 0.8281 || 00:00
+22:40:31 val epoch: 6 (100/608) loss: 0.7507 || 00:05
+22:40:36 val epoch: 6 (200/608) loss: 0.6564 || 00:09
+22:40:40 val epoch: 6 (300/608) loss: 0.8651 || 00:14
+22:40:45 val epoch: 6 (400/608) loss: 0.3166 || 00:19
+22:40:50 val epoch: 6 (500/608) loss: 0.1700 || 00:24
+22:40:54 val epoch: 6 (600/608) loss: 0.8936 || 00:28
+22:40:55 val 6 |  loss: 0.6019 | qwk: 0.8108 | acc: 0.6220 
+
+22:40:55 None
+22:40:55 Time taken for val phase: 00:29 
+
+22:40:56 ******** New optimal found, saving state ********
+22:40:56 Time taken by the epoch: 07:05
+22:40:56 Total time taken so far: 29:50
+22:40:56 
+============================================================
+
+22:40:56 Starting epoch: 7 | phase: train 
+22:40:58 train epoch: 7 (0/1098) loss: 0.4030 || 00:01
+22:41:34 train epoch: 7 (100/1098) loss: 0.3786 || 00:37
+22:42:10 train epoch: 7 (200/1098) loss: 0.6024 || 01:13
+22:42:46 train epoch: 7 (300/1098) loss: 0.6455 || 01:49
+22:43:22 train epoch: 7 (400/1098) loss: 0.5820 || 02:25
+22:43:57 train epoch: 7 (500/1098) loss: 0.6188 || 03:01
+22:44:33 train epoch: 7 (600/1098) loss: 0.5162 || 03:36
+22:45:09 train epoch: 7 (700/1098) loss: 0.2169 || 04:12
+22:45:45 train epoch: 7 (800/1098) loss: 0.6110 || 04:48
+22:46:21 train epoch: 7 (900/1098) loss: 0.5233 || 05:24
+22:46:57 train epoch: 7 (1000/1098) loss: 0.3615 || 06:00
+22:47:32 train 7 |  loss: 0.5161 | qwk: 0.7056 | acc: 0.6101 
+
+22:47:32 None
+22:47:32 Time taken for train phase: 06:35 
+
+22:47:32 Starting epoch: 7 | phase: val 
+22:47:32 val epoch: 7 (0/608) loss: 0.2492 || 00:00
+22:47:37 val epoch: 7 (100/608) loss: 0.7971 || 00:04
+22:47:41 val epoch: 7 (200/608) loss: 0.4661 || 00:09
+22:47:46 val epoch: 7 (300/608) loss: 0.2928 || 00:14
+22:47:51 val epoch: 7 (400/608) loss: 0.9326 || 00:18
+22:47:55 val epoch: 7 (500/608) loss: 0.3752 || 00:23
+22:48:00 val epoch: 7 (600/608) loss: 0.1598 || 00:28
+22:48:01 val 7 |  loss: 0.6047 | qwk: 0.8121 | acc: 0.6024 
+
+22:48:01 None
+22:48:01 Time taken for val phase: 00:28 
+
+22:48:01 Time taken by the epoch: 07:04
+22:48:01 Total time taken so far: 36:55
+22:48:01 
+============================================================
+
+22:48:01 Starting epoch: 8 | phase: train 
+22:48:03 train epoch: 8 (0/1098) loss: 0.3342 || 00:01
+22:48:40 train epoch: 8 (100/1098) loss: 0.3375 || 00:38
+22:49:17 train epoch: 8 (200/1098) loss: 0.4742 || 01:15
+22:49:54 train epoch: 8 (300/1098) loss: 0.3230 || 01:52
+22:50:31 train epoch: 8 (400/1098) loss: 0.5247 || 02:29
+22:51:07 train epoch: 8 (500/1098) loss: 0.6107 || 03:06
+22:51:44 train epoch: 8 (600/1098) loss: 0.4278 || 03:42
+22:52:21 train epoch: 8 (700/1098) loss: 0.2867 || 04:19
+22:52:57 train epoch: 8 (800/1098) loss: 0.4589 || 04:55
+22:53:34 train epoch: 8 (900/1098) loss: 0.6090 || 05:32
+22:54:10 train epoch: 8 (1000/1098) loss: 0.4812 || 06:08
+22:54:45 train 8 |  loss: 0.4903 | qwk: 0.7289 | acc: 0.6250 
+
+22:54:45 None
+22:54:45 Time taken for train phase: 06:43 
+
+22:54:45 Starting epoch: 8 | phase: val 
+22:54:46 val epoch: 8 (0/608) loss: 1.6319 || 00:00
+22:54:50 val epoch: 8 (100/608) loss: 0.4901 || 00:04
+22:54:55 val epoch: 8 (200/608) loss: 0.1381 || 00:09
+22:55:00 val epoch: 8 (300/608) loss: 1.3186 || 00:14
+22:55:05 val epoch: 8 (400/608) loss: 2.0434 || 00:19
+22:55:09 val epoch: 8 (500/608) loss: 0.3362 || 00:23
+22:55:14 val epoch: 8 (600/608) loss: 0.1883 || 00:28
+22:55:15 val 8 |  loss: 0.5324 | qwk: 0.8202 | acc: 0.6462 
+
+22:55:15 None
+22:55:15 Time taken for val phase: 00:29 
+
+22:55:15 ******** New optimal found, saving state ********
+22:55:16 Time taken by the epoch: 07:14
+22:55:16 Total time taken so far: 44:09
+22:55:16 
+============================================================
+
+22:55:16 Starting epoch: 9 | phase: train 
+22:55:17 train epoch: 9 (0/1098) loss: 0.6686 || 00:01
+22:55:54 train epoch: 9 (100/1098) loss: 0.3224 || 00:38
+22:56:31 train epoch: 9 (200/1098) loss: 0.5050 || 01:15
+22:57:08 train epoch: 9 (300/1098) loss: 0.4348 || 01:52
+22:57:45 train epoch: 9 (400/1098) loss: 0.3401 || 02:29
+22:58:22 train epoch: 9 (500/1098) loss: 0.6051 || 03:06
+22:58:59 train epoch: 9 (600/1098) loss: 0.5433 || 03:43
+22:59:36 train epoch: 9 (700/1098) loss: 0.4434 || 04:20
+23:00:13 train epoch: 9 (800/1098) loss: 0.4970 || 04:57
+23:00:49 train epoch: 9 (900/1098) loss: 0.6368 || 05:33
+23:01:26 train epoch: 9 (1000/1098) loss: 0.4779 || 06:10
+23:02:02 train 9 |  loss: 0.4513 | qwk: 0.7528 | acc: 0.6491 
+
+23:02:02 None
+23:02:02 Time taken for train phase: 06:46 
+
+23:02:02 Starting epoch: 9 | phase: val 
+23:02:02 val epoch: 9 (0/608) loss: 0.1239 || 00:00
+23:02:07 val epoch: 9 (100/608) loss: 0.4217 || 00:05
+23:02:11 val epoch: 9 (200/608) loss: 0.7226 || 00:09
+23:02:16 val epoch: 9 (300/608) loss: 0.0279 || 00:13
+23:02:20 val epoch: 9 (400/608) loss: 0.5654 || 00:17
+23:02:24 val epoch: 9 (500/608) loss: 0.0778 || 00:22
+23:02:28 val epoch: 9 (600/608) loss: 0.8034 || 00:26
+23:02:29 val 9 |  loss: 0.5273 | qwk: 0.8309 | acc: 0.6637 
+
+23:02:29 None
+23:02:29 Time taken for val phase: 00:27 
+
+23:02:30 ******** New optimal found, saving state ********
+23:02:30 Time taken by the epoch: 07:14
+23:02:30 Total time taken so far: 51:24
+23:02:30 
+============================================================
+
+23:02:30 Starting epoch: 10 | phase: train 
+23:02:32 train epoch: 10 (0/1098) loss: 0.1881 || 00:02
+23:03:10 train epoch: 10 (100/1098) loss: 0.3376 || 00:39
+23:03:47 train epoch: 10 (200/1098) loss: 0.4713 || 01:16
+23:04:24 train epoch: 10 (300/1098) loss: 0.2068 || 01:53
+23:05:01 train epoch: 10 (400/1098) loss: 0.4020 || 02:30
+23:05:38 train epoch: 10 (500/1098) loss: 0.6806 || 03:07
+23:06:15 train epoch: 10 (600/1098) loss: 0.2544 || 03:44
+23:06:52 train epoch: 10 (700/1098) loss: 0.4904 || 04:21
+23:07:29 train epoch: 10 (800/1098) loss: 0.2569 || 04:58
+23:08:06 train epoch: 10 (900/1098) loss: 0.3067 || 05:35
+23:08:42 train epoch: 10 (1000/1098) loss: 0.4700 || 06:12
+23:09:18 train 10 |  loss: 0.4145 | qwk: 0.7715 | acc: 0.6736 
+
+23:09:18 None
+23:09:18 Time taken for train phase: 06:47 
+
+23:09:18 Starting epoch: 10 | phase: val 
+23:09:18 val epoch: 10 (0/608) loss: 0.2642 || 00:00
+23:09:23 val epoch: 10 (100/608) loss: 0.4215 || 00:04
+23:09:27 val epoch: 10 (200/608) loss: 0.4601 || 00:09
+23:09:32 val epoch: 10 (300/608) loss: 0.7183 || 00:13
+23:09:36 val epoch: 10 (400/608) loss: 0.2236 || 00:18
+23:09:41 val epoch: 10 (500/608) loss: 0.3481 || 00:22
+23:09:45 val epoch: 10 (600/608) loss: 0.6589 || 00:27
+23:09:46 val 10 |  loss: 0.5283 | qwk: 0.8361 | acc: 0.6643 
+
+23:09:46 None
+23:09:46 Time taken for val phase: 00:27 
+
+23:09:46 Time taken by the epoch: 07:16
+23:09:46 Total time taken so far: 58:40
+23:09:46 
+============================================================
+
+23:09:46 Starting epoch: 11 | phase: train 
+23:09:48 train epoch: 11 (0/1098) loss: 0.4522 || 00:01
+23:10:25 train epoch: 11 (100/1098) loss: 0.6380 || 00:38
+23:11:02 train epoch: 11 (200/1098) loss: 0.4088 || 01:15
+23:11:39 train epoch: 11 (300/1098) loss: 0.3599 || 01:52
+23:12:16 train epoch: 11 (400/1098) loss: 0.3883 || 02:29
+23:12:53 train epoch: 11 (500/1098) loss: 0.5022 || 03:06
+23:13:30 train epoch: 11 (600/1098) loss: 0.2562 || 03:43
+23:14:07 train epoch: 11 (700/1098) loss: 0.5328 || 04:20
+23:14:44 train epoch: 11 (800/1098) loss: 0.7064 || 04:57
+23:15:21 train epoch: 11 (900/1098) loss: 0.5680 || 05:34
+23:15:58 train epoch: 11 (1000/1098) loss: 0.3681 || 06:11
+23:16:33 train 11 |  loss: 0.4026 | qwk: 0.7808 | acc: 0.6763 
+
+23:16:33 None
+23:16:33 Time taken for train phase: 06:46 
+
+23:16:33 Starting epoch: 11 | phase: val 
+23:16:34 val epoch: 11 (0/608) loss: 0.2710 || 00:00
+23:16:38 val epoch: 11 (100/608) loss: 0.2115 || 00:05
+23:16:43 val epoch: 11 (200/608) loss: 0.3606 || 00:09
+23:16:48 val epoch: 11 (300/608) loss: 0.8135 || 00:14
+23:16:52 val epoch: 11 (400/608) loss: 0.1879 || 00:19
+23:16:57 val epoch: 11 (500/608) loss: 0.9227 || 00:23
+23:17:02 val epoch: 11 (600/608) loss: 0.8367 || 00:28
+23:17:02 val 11 |  loss: 0.5636 | qwk: 0.8406 | acc: 0.6647 
+
+23:17:02 None
+23:17:02 Time taken for val phase: 00:29 
+
+23:17:03 Time taken by the epoch: 07:16
+23:17:03 Total time taken so far: 65:56
+23:17:03 
+============================================================
+
+23:17:03 Starting epoch: 12 | phase: train 
+23:17:05 train epoch: 12 (0/1098) loss: 0.3107 || 00:01
+23:17:41 train epoch: 12 (100/1098) loss: 0.4074 || 00:38
+23:18:18 train epoch: 12 (200/1098) loss: 0.3098 || 01:15
+23:18:55 train epoch: 12 (300/1098) loss: 0.2031 || 01:52
+23:19:32 train epoch: 12 (400/1098) loss: 0.1608 || 02:29
+23:20:09 train epoch: 12 (500/1098) loss: 0.4959 || 03:05
+23:20:46 train epoch: 12 (600/1098) loss: 0.3740 || 03:42
+23:21:23 train epoch: 12 (700/1098) loss: 0.3475 || 04:20
+23:22:00 train epoch: 12 (800/1098) loss: 0.3734 || 04:57
+23:22:37 train epoch: 12 (900/1098) loss: 0.4372 || 05:34
+23:23:14 train epoch: 12 (1000/1098) loss: 0.3049 || 06:10
+23:23:49 train 12 |  loss: 0.3849 | qwk: 0.7894 | acc: 0.6840 
+
+23:23:49 None
+23:23:49 Time taken for train phase: 06:46 
+
+23:23:49 Starting epoch: 12 | phase: val 
+23:23:50 val epoch: 12 (0/608) loss: 0.1311 || 00:00
+23:23:54 val epoch: 12 (100/608) loss: 0.3846 || 00:05
+23:23:59 val epoch: 12 (200/608) loss: 0.2281 || 00:09
+23:24:03 val epoch: 12 (300/608) loss: 0.3407 || 00:14
+23:24:08 val epoch: 12 (400/608) loss: 0.3666 || 00:18
+23:24:13 val epoch: 12 (500/608) loss: 0.2105 || 00:23
+23:24:17 val epoch: 12 (600/608) loss: 0.1621 || 00:27
+23:24:18 val 12 |  loss: 0.4781 | qwk: 0.8425 | acc: 0.6520 
+
+23:24:18 None
+23:24:18 Time taken for val phase: 00:28 
+
+23:24:18 ******** New optimal found, saving state ********
+23:24:18 Time taken by the epoch: 07:15
+23:24:18 Total time taken so far: 73:12
+23:24:18 
+============================================================
+
+23:24:18 Starting epoch: 13 | phase: train 
+23:24:20 train epoch: 13 (0/1098) loss: 0.2668 || 00:01
+23:24:57 train epoch: 13 (100/1098) loss: 0.2178 || 00:38
+23:25:34 train epoch: 13 (200/1098) loss: 0.3207 || 01:15
+23:26:11 train epoch: 13 (300/1098) loss: 0.2436 || 01:52
+23:26:48 train epoch: 13 (400/1098) loss: 0.3323 || 02:29
+23:27:25 train epoch: 13 (500/1098) loss: 0.3860 || 03:06
+23:28:02 train epoch: 13 (600/1098) loss: 0.2684 || 03:43
+23:28:38 train epoch: 13 (700/1098) loss: 0.2240 || 04:20
+23:29:15 train epoch: 13 (800/1098) loss: 0.5818 || 04:56
+23:29:52 train epoch: 13 (900/1098) loss: 0.5100 || 05:33
+23:30:29 train epoch: 13 (1000/1098) loss: 0.3261 || 06:10
+23:31:04 train 13 |  loss: 0.3564 | qwk: 0.8095 | acc: 0.7060 
+
+23:31:04 None
+23:31:04 Time taken for train phase: 06:46 
+
+23:31:05 Starting epoch: 13 | phase: val 
+23:31:05 val epoch: 13 (0/608) loss: 1.0778 || 00:00
+23:31:09 val epoch: 13 (100/608) loss: 0.5056 || 00:04
+23:31:14 val epoch: 13 (200/608) loss: 1.0396 || 00:09
+23:31:19 val epoch: 13 (300/608) loss: 0.5819 || 00:14
+23:31:23 val epoch: 13 (400/608) loss: 0.6164 || 00:18
+23:31:28 val epoch: 13 (500/608) loss: 1.5578 || 00:23
+23:31:33 val epoch: 13 (600/608) loss: 0.3755 || 00:28
+23:31:34 val 13 |  loss: 0.5107 | qwk: 0.8471 | acc: 0.6613 
+
+23:31:34 None
+23:31:34 Time taken for val phase: 00:29 
+
+23:31:34 Time taken by the epoch: 07:15
+23:31:34 Total time taken so far: 80:28
+23:31:34 
+============================================================
+
+23:31:34 Starting epoch: 14 | phase: train 
+23:31:36 train epoch: 14 (0/1098) loss: 0.3716 || 00:01
+23:32:13 train epoch: 14 (100/1098) loss: 0.4793 || 00:38
+23:32:49 train epoch: 14 (200/1098) loss: 0.4278 || 01:15
+23:33:26 train epoch: 14 (300/1098) loss: 0.4534 || 01:51
+23:34:03 train epoch: 14 (400/1098) loss: 0.3252 || 02:28
+23:34:39 train epoch: 14 (500/1098) loss: 0.6038 || 03:05
+23:35:16 train epoch: 14 (600/1098) loss: 0.2749 || 03:41
+23:35:53 train epoch: 14 (700/1098) loss: 0.2251 || 04:18
+23:36:29 train epoch: 14 (800/1098) loss: 0.2211 || 04:54
+23:37:06 train epoch: 14 (900/1098) loss: 0.1582 || 05:31
+23:37:42 train epoch: 14 (1000/1098) loss: 0.2284 || 06:07
+23:38:18 train 14 |  loss: 0.3576 | qwk: 0.8074 | acc: 0.7007 
+
+23:38:18 None
+23:38:18 Time taken for train phase: 06:43 
+
+23:38:18 Starting epoch: 14 | phase: val 
+23:38:18 val epoch: 14 (0/608) loss: 0.3674 || 00:00
+23:38:23 val epoch: 14 (100/608) loss: 0.4821 || 00:05
+23:38:28 val epoch: 14 (200/608) loss: 0.3015 || 00:10
+23:38:32 val epoch: 14 (300/608) loss: 1.0600 || 00:14
+23:38:37 val epoch: 14 (400/608) loss: 0.2612 || 00:19
+23:38:41 val epoch: 14 (500/608) loss: 0.3679 || 00:23
+23:38:46 val epoch: 14 (600/608) loss: 0.2251 || 00:28
+23:38:47 val 14 |  loss: 0.5328 | qwk: 0.8470 | acc: 0.6547 
+
+23:38:47 None
+23:38:47 Time taken for val phase: 00:29 
+
+23:38:47 Time taken by the epoch: 07:12
+23:38:47 Total time taken so far: 87:40
+23:38:47 
+============================================================
+
+23:38:47 Starting epoch: 15 | phase: train 
+23:38:48 train epoch: 15 (0/1098) loss: 0.3526 || 00:01
+23:39:25 train epoch: 15 (100/1098) loss: 0.5399 || 00:37
+23:40:02 train epoch: 15 (200/1098) loss: 0.1775 || 01:14
+23:40:39 train epoch: 15 (300/1098) loss: 0.3222 || 01:51
+23:41:15 train epoch: 15 (400/1098) loss: 0.2660 || 02:28
+23:41:52 train epoch: 15 (500/1098) loss: 0.4009 || 03:04
+23:42:29 train epoch: 15 (600/1098) loss: 0.4369 || 03:41
+23:43:05 train epoch: 15 (700/1098) loss: 0.3390 || 04:18
+23:43:42 train epoch: 15 (800/1098) loss: 0.2624 || 04:54
+23:44:18 train epoch: 15 (900/1098) loss: 0.1413 || 05:31
+23:44:55 train epoch: 15 (1000/1098) loss: 0.1809 || 06:08
+23:45:30 train 15 |  loss: 0.3318 | qwk: 0.8240 | acc: 0.7147 
+
+23:45:30 None
+23:45:30 Time taken for train phase: 06:43 
+
+23:45:30 Starting epoch: 15 | phase: val 
+23:45:31 val epoch: 15 (0/608) loss: 0.1762 || 00:00
+23:45:35 val epoch: 15 (100/608) loss: 0.1241 || 00:04
+23:45:40 val epoch: 15 (200/608) loss: 0.5116 || 00:09
+23:45:44 val epoch: 15 (300/608) loss: 0.8537 || 00:13
+23:45:49 val epoch: 15 (400/608) loss: 0.9455 || 00:18
+23:45:53 val epoch: 15 (500/608) loss: 1.4133 || 00:22
+23:45:57 val epoch: 15 (600/608) loss: 0.4661 || 00:26
+23:45:58 val 15 |  loss: 0.5506 | qwk: 0.8525 | acc: 0.6831 
+
+23:45:58 None
+23:45:58 Time taken for val phase: 00:27 
+
+23:45:59 Time taken by the epoch: 07:11
+23:45:59 Total time taken so far: 94:52
+23:45:59 
+============================================================
+
+23:45:59 Starting epoch: 16 | phase: train 
+23:46:01 train epoch: 16 (0/1098) loss: 0.7747 || 00:01
+23:46:37 train epoch: 16 (100/1098) loss: 0.2606 || 00:38
+23:47:14 train epoch: 16 (200/1098) loss: 0.3003 || 01:15
+23:47:50 train epoch: 16 (300/1098) loss: 0.2291 || 01:51
+23:48:27 train epoch: 16 (400/1098) loss: 0.4312 || 02:28
+23:49:04 train epoch: 16 (500/1098) loss: 0.2470 || 03:05
+23:49:41 train epoch: 16 (600/1098) loss: 0.1806 || 03:41
+23:50:17 train epoch: 16 (700/1098) loss: 0.3550 || 04:18
+23:50:54 train epoch: 16 (800/1098) loss: 0.3047 || 04:55
+23:51:30 train epoch: 16 (900/1098) loss: 0.3885 || 05:31
+23:52:07 train epoch: 16 (1000/1098) loss: 0.3410 || 06:08
+23:52:42 train 16 |  loss: 0.3256 | qwk: 0.8224 | acc: 0.7190 
+
+23:52:42 None
+23:52:42 Time taken for train phase: 06:43 
+
+23:52:42 Starting epoch: 16 | phase: val 
+23:52:42 val epoch: 16 (0/608) loss: 0.4797 || 00:00
+23:52:47 val epoch: 16 (100/608) loss: 0.3176 || 00:04
+23:52:51 val epoch: 16 (200/608) loss: 0.2828 || 00:09
+23:52:56 val epoch: 16 (300/608) loss: 0.2742 || 00:14
+23:53:01 val epoch: 16 (400/608) loss: 0.8747 || 00:18
+23:53:05 val epoch: 16 (500/608) loss: 0.3644 || 00:23
+23:53:10 val epoch: 16 (600/608) loss: 0.6012 || 00:27
+23:53:11 val 16 |  loss: 0.4943 | qwk: 0.8490 | acc: 0.6427 
+
+23:53:11 None
+23:53:11 Time taken for val phase: 00:28 
+
+23:53:11 Time taken by the epoch: 07:12
+23:53:11 Total time taken so far: 102:04
+23:53:11 
+============================================================
+
+23:53:11 Starting epoch: 17 | phase: train 
+23:53:13 train epoch: 17 (0/1098) loss: 0.2825 || 00:01
+23:53:49 train epoch: 17 (100/1098) loss: 0.4035 || 00:38
+23:54:26 train epoch: 17 (200/1098) loss: 0.3351 || 01:15
+23:55:03 train epoch: 17 (300/1098) loss: 0.2053 || 01:51
+23:55:40 train epoch: 17 (400/1098) loss: 0.2035 || 02:28
+23:56:16 train epoch: 17 (500/1098) loss: 0.2808 || 03:05

@@ -1,0 +1,127 @@
+Time: 2019-07-11 13:58:04.833174
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolor5k
+fold: 0
+total_folds: 5
+num_samples: 5000
+sampling class weights: [1, 1.2, 1, 1.2, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Normalize object at 0x7f7b9a430da0>, <albumentations.augmentations.transforms.Transpose object at 0x7f7b9a430a20>, <albumentations.augmentations.transforms.Flip object at 0x7f7b9a430cf8>, <albumentations.augmentations.transforms.RandomScale object at 0x7f7b9a430c88>, <albumentations.core.composition.OneOf object at 0x7f7b9a45e048>, <albumentations.augmentations.transforms.HueSaturationValue object at 0x7f7b9a45e080>, <albumentations.augmentations.transforms.ShiftScaleRotate object at 0x7f7b9a45e0b8>, <albumentations.augmentations.transforms.Resize object at 0x7f7b9a45e0f0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f7b9a45e128>]
+
+remark: Resnext101_32xd model with ben grahm's color version, on all data[:5000] samples, with all equal class_weights
+
+
+Time: 2019-07-11 13:58:53.542395
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolor5k
+fold: 0
+total_folds: 5
+num_samples: 5000
+sampling class weights: [1, 1.2, 1, 1.2, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Transpose object at 0x7f879c179da0>, <albumentations.augmentations.transforms.Flip object at 0x7f879c179cc0>, <albumentations.augmentations.transforms.RandomScale object at 0x7f879c179ba8>, <albumentations.core.composition.OneOf object at 0x7f87b7c37048>, <albumentations.augmentations.transforms.HueSaturationValue object at 0x7f87b7c37080>, <albumentations.augmentations.transforms.ShiftScaleRotate object at 0x7f87b7c370b8>, <albumentations.augmentations.transforms.Resize object at 0x7f87b7c370f0>, <albumentations.pytorch.transforms.ToTensor object at 0x7f87b7c37128>]
+
+remark: Resnext101_32xd model with ben grahm's color version, on all data[:5000] samples, with all equal class_weights
+
+Time: 2019-07-11 15:33:49.519442
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolor5k
+fold: 0
+total_folds: 5
+num_samples: 5000
+sampling class weights: [1.5, 1, 1.5, 1, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Transpose object at 0x7fd3f98b2ba8>, <albumentations.augmentations.transforms.Flip object at 0x7fd3f98b2a90>, <albumentations.augmentations.transforms.RandomScale object at 0x7fd3f98b2e48>, <albumentations.core.composition.OneOf object at 0x7fd3f98de048>, <albumentations.augmentations.transforms.HueSaturationValue object at 0x7fd3f98de080>, <albumentations.augmentations.transforms.ShiftScaleRotate object at 0x7fd3f98de0b8>, <albumentations.augmentations.transforms.Normalize object at 0x7fd3f98de0f0>, <albumentations.augmentations.transforms.Resize object at 0x7fd3f98de128>, <albumentations.pytorch.transforms.ToTensor object at 0x7fd3f98de160>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on all data[:5000] samples, with all equal class_weights
+
+albumentations.OneOf(
+                   [
+                       albumentations.CLAHE(clip_limit=2),
+                       albumentations.IAASharpen(),
+                       albumentations.IAAEmboss(),
+                       albumentations.RandomBrightnessContrast(),
+                       albumentations.JpegCompression(),
+                       albumentations.Blur(),
+                       albumentations.GaussNoise(),
+                   ],
+                   p=0.5,
+                ),
+                albumentations.HueSaturationValue(p=0.5),
+                albumentations.ShiftScaleRotate(
+                   shift_limit=0.15, scale_limit=0.15, rotate_limit=45, p=0.5
+                )
+
+Time: 2019-07-11 15:55:36.692267
+model_name: resnext101_32x4d
+images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
+resume: False
+folder: weights/11-7_resnext101_32x4d_fold0_bengrahmscolor5k
+fold: 0
+total_folds: 5
+num_samples: 5000
+sampling class weights: [1.5, 1, 1.5, 1, 1]
+size: 224
+top_lr: 0.0001
+base_lr: 1.0000000000000001e-07
+num_workers: 8
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [<albumentations.augmentations.transforms.Transpose object at 0x7fec27cc6dd8>, <albumentations.augmentations.transforms.Flip object at 0x7fec27cc6a58>, <albumentations.augmentations.transforms.RandomScale object at 0x7fec27cc6d30>, <albumentations.core.composition.OneOf object at 0x7fec27cf1048>, <albumentations.augmentations.transforms.HueSaturationValue object at 0x7fec27cf1080>, <albumentations.augmentations.transforms.ShiftScaleRotate object at 0x7fec27cf10b8>, <albumentations.augmentations.transforms.Normalize object at 0x7fec27cf10f0>, <albumentations.augmentations.transforms.Resize object at 0x7fec27cf1128>, <albumentations.pytorch.transforms.ToTensor object at 0x7fec27cf1160>]
+remark: 
+Resnext101_32xd model with ben grahm's color version, on all data[:5000] samples, with all equal class_weights
+
+albumentations.OneOf(
+                   [
+                       albumentations.CLAHE(clip_limit=2),
+                       albumentations.IAASharpen(),
+                       albumentations.IAAEmboss(),
+                       albumentations.RandomBrightnessContrast(),
+                       albumentations.JpegCompression(),
+                       albumentations.Blur(),
+                       albumentations.GaussNoise(),
+                   ],
+                   p=0.5,
+                ),
+                albumentations.HueSaturationValue(p=0.5),
+                albumentations.ShiftScaleRotate(
+                   shift_limit=0.15, scale_limit=0.15, rotate_limit=45, p=0.5
+                )
+
