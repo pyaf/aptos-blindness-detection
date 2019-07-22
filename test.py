@@ -131,8 +131,8 @@ if __name__ == "__main__":
         sample_submission_path = "data/train.csv"
 
     tta = 4 # number of augs in tta
-    start_epoch = 0
-    end_epoch = 40
+    start_epoch = 20
+    end_epoch = 20
 
     root = f"data/{predict_on}_images/"
     size = 300

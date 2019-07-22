@@ -423,6 +423,7 @@ ep 15-25 look good, selecting 15 for submission, adding aug snippet to inference
 
 
 Will train on old data, with new data a validation, img size 300
+Have a list of hard examples, gotta give them higher weight in data sampling.
 
 
 # Questions and Ideas:
@@ -512,7 +513,8 @@ Will train on old data, with new data a validation, img size 300
 * data/train_meta.csv: train images shapes and related information
 * data/test_meta.csv: test images' shapes and related information, though I need to write shape extraction functions in the inference scripts also as kernel is run on hidden test data.
 * data/train32.csv: old + messidor data
-*
+* data/hard_examples1.npy : hard examples in train set category 1. Evaluated on 21-7_efficientnet-b5-fold1_bgccpo300aug2, ckpt15 LB 0.798
+* data/extremely_bad_examples1.npy : extremely hard examples, pred and actual difference > 1, ^
 
 
 # remarks shortcut/keywords

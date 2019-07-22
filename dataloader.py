@@ -147,14 +147,14 @@ def provider(
     #print(f'sampled df shape: {df.shape}')
     #print('data dist:\n',  df['diagnosis'].value_counts(normalize=True))
 
-    kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
-    train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
-    train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
+    #kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
+    #train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
+    #train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
 
     #train_df = train_df.append(duplicates, ignore_index=True)  # add all
 
-    #train_df = pd.read_csv('data/train_old.csv')
-    #val_df = pd.read_csv('data/train12.csv')
+    train_df = pd.read_csv('data/train32.csv')
+    val_df = pd.read_csv('data/train.csv')
 
     df = train_df if phase == "train" else val_df
 
