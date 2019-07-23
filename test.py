@@ -72,8 +72,6 @@ class TestDataset(data.Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         path = os.path.join(self.root, fname + ".png")
-        # image = load_image(path, size)
-        # image = load_ben_gray(path)
         image = load_ben_color(path, size=self.size, crop=True)
 
         images = [self.transform(image=image)["image"]]
@@ -131,8 +129,8 @@ if __name__ == "__main__":
         sample_submission_path = "data/train.csv"
 
     tta = 4 # number of augs in tta
-    start_epoch = 20
-    end_epoch = 20
+    start_epoch = 0
+    end_epoch = 30
 
     root = f"data/{predict_on}_images/"
     size = 300
@@ -151,6 +149,7 @@ if __name__ == "__main__":
     else:
         torch.set_default_tensor_type("torch.FloatTensor")
 
+    best_sub = 'weights/submission812.csv'
     df = pd.read_csv(sample_submission_path)
     testset = DataLoader(
         TestDataset(root, df, size, mean, std, tta),

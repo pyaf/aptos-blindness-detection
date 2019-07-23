@@ -35,13 +35,13 @@ class Trainer(object):
         remark = "finetuing using bgcc300, on previous 18-7 model pretrained on old bgcc 256 images"
         self.fold = 1
         self.total_folds = 7
-        self.class_weights = None #[1, 1.5, 1, 1.5, 1.5]
+        self.class_weights = [1, 1, 1, 1, 2.5]
         #self.model_name = "resnext101_32x4d_v0"
         #self.model_name = "resnext101_32x16d"
         #self.model_name = "se_resnet50_v0"
         #self.model_name = "densenet121"
         self.model_name = "efficientnet-b5"
-        ext_text = "po3005e-6"
+        ext_text = "po300cw"
         self.num_samples = None #5000
         self.folder = f"weights/{date}_{self.model_name}_fold{self.fold}_{ext_text}"
         self.resume = False

@@ -188,18 +188,18 @@ if __name__ == "__main__":
     total_folds = 5
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    mean = (0.5, 0.5, 0.5)
-    std = (0.5, 0.5, 0.5)
+    #mean = (0.5, 0.5, 0.5)
+    #std = (0.5, 0.5, 0.5)
 
     size = 300
 
     root = os.path.dirname(__file__)  # data folder
     data_folder = "data"
-    # train_df_name = 'train.csv'
+    train_df_name = 'train.csv'
     #train_df_name = "train12.csv"
-    train_df_name = 'train_old.csv'
+    #train_df_name = 'train_old.csv'
     num_samples = None #5000
-    class_weights = [1, 2, 1, 2, 2]
+    class_weights = [1, 1, 1, 1, 1]
     batch_size = 16
     # data_folder = 'external_data'
     images_folder = os.path.join(root, data_folder, "train_images/")  #

@@ -438,11 +438,13 @@ Whenever finetuning, use a low rate, like 5e-6 or something. ( 10 times less tha
 A lot of 1's are being predicted as 2, 2's are equally distributed to 1 and 3, 4's are being predicted as 3
 Extremely hard examples: from class 0, 1, 2, 3 total 5, but from class 4 there are about 50 examples, being predicted as 2, If I fix this issue, boi the score is gonna improve, because they are pulling down the qwk a lot. Do some weighted sampling with more weight to class 4. Analyse class wise qwk scores and you'll get to know.
 
+train.csv dataloader with
+class weight: 1, 1, 1, 1, 1: array([1345,  294,  877,  168,  226]))
+class weight: 1, 1, 1, 1, 2: array([1351,  262,  737,  143,  417]))
+class weight: 1, 1, 1, 1, 2.5: array([1226,  285,  723,  152,  524]))
 
 
-
-
-
+* `23-7_efficientnet-b5_fold1_po300c4`: class 4 weighted to 2.5, rest to 1.
 
 
 # Questions and Ideas:
