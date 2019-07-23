@@ -425,6 +425,25 @@ ep 15-25 look good, selecting 15 for submission, adding aug snippet to inference
 Will train on old data, with new data a validation, img size 300
 Have a list of hard examples, gotta give them higher weight in data sampling.
 
+* `23-7_efficientnet-b5_fold1_t32v1`: training on old + messidor as train, new as val set, with aug, on 300 image size, lr: 5e-5, unfreeze at ep5,
+ at ep 15: qwk: 0.8505/0.8841, acc: 0.8130/0.7242, ckpt15 looks good to continue the finetuning from.
+submitting ckpt15, mistakenly named dataset by 22-7...
+
+
+* `23-7_efficientnet-b5_fold1_po300`: fine tuning previous model's ckpt15 on new data only (train.csv)
+Whenever finetuning, use a low rate, like 5e-6 or something. ( 10 times less that pretraining one)
+* `23-7_efficientnet-b5_fold1_po3005e-6`: finetuning with  5e-6
+*IMP*
+
+A lot of 1's are being predicted as 2, 2's are equally distributed to 1 and 3, 4's are being predicted as 3
+Extremely hard examples: from class 0, 1, 2, 3 total 5, but from class 4 there are about 50 examples, being predicted as 2, If I fix this issue, boi the score is gonna improve, because they are pulling down the qwk a lot. Do some weighted sampling with more weight to class 4. Analyse class wise qwk scores and you'll get to know.
+
+
+
+
+
+
+
 
 # Questions and Ideas:
 

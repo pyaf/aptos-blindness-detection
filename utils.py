@@ -2,6 +2,7 @@ import os
 import pdb
 import cv2
 import time
+import json
 import torch
 import random
 import scipy
@@ -33,6 +34,24 @@ def logger_init(save_folder):
     logger = logging.getLogger(__name__)
     logger.addHandler(console)
     return logger
+
+
+class CM(ConfusionMatrix):
+    def __init__(self, *args):
+        ConfusionMatrix.__init__(self, *args)
+
+    def save(self, name, qwk, loss, **kwargs):
+        ''' add `qwk` and `loss` to the saved obj,
+        Use json.load(fileobject) for reading qwk and loss values,
+        they won't be read by ConfusionMatrix class
+        '''
+        status = self.save_obj(name, **kwargs)
+        obj_full_path = status['Message']
+        with open(obj_full_path, 'r') as f:
+            dump_dict = json.load(f)
+            dump_dict['qwk'] = qwk
+            dump_dict['loss'] = loss
+        json.dump(dump_dict, open(obj_full_path, 'w'))
 
 
 def to_multi_label(target, classes):
@@ -121,7 +140,7 @@ class Meter:
         #pdb.set_trace()
         thresholds = self.best_thresholds
         self.predictions = predict(self.predictions, self.best_thresholds)
-        cm = ConfusionMatrix(self.targets, self.predictions)
+        cm = CM(self.targets, self.predictions)
         qwk = cohen_kappa_score(self.targets, self.predictions, weights="quadratic")
         return cm, qwk
 
@@ -182,13 +201,18 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
     cls_ppv = cm.class_stat['PPV']
 
     print()
+    tpr = 0 if tpr is 'None' else tpr # [8]
+    ppv = 0 if ppv is 'None' else ppv
+
     log(
         "%s %d |  loss: %0.4f | QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f \n"
         % (phase, epoch, epoch_loss, qwk, acc, tpr, ppv)
     )
-
-    cls_tpr = {x: "%0.4f" % y for x, y in cls_tpr.items()}
-    cls_ppv = {x: "%0.4f" % y for x, y in cls_ppv.items()}
+    try:
+        cls_tpr = {x: "%0.4f" % y for x, y in cls_tpr.items()}
+        cls_ppv = {x: "%0.4f" % y for x, y in cls_ppv.items()}
+    except Exception as e: # [8]
+        print("line 196, utils.py", e)
 
     log('Class TPR: %s' % cls_tpr)
     log('Class PPV: %s' % cls_ppv)
@@ -205,7 +229,7 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
 
     # save pycm confusion
     obj_path = os.path.join(meter.save_folder, f"cm{phase}_{epoch}")
-    cm.save_obj(obj_path, save_stat=True, save_vector=False)
+    cm.save(obj_path, qwk, epoch_loss, save_stat=True, save_vector=True)
 
     return qwk
 
@@ -284,4 +308,6 @@ It can be argued ki why are we using 0.5 for train, then, well we used 0.5 for b
 [6]: It's important to keep these two in np array, else ConfusionMatrix takes targets as strings. -_-
 
 [7]: macro mean average of all the classes. Micro is batch average or sth.
+
+[8]: sometimes initial values may come as "None" (str)
 """

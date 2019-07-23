@@ -1,4 +1,4 @@
-Time: 2019-07-23 01:30:08.559770
+Time: 2019-07-23 01:54:04.352668
 model_name: efficientnet-b5
 train_df_name: train_old.csv
 images_folder: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/data/train_images
