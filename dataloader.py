@@ -20,10 +20,10 @@ class ImageDataset(Dataset):
     def __init__(self, df, images_folder, size, mean, std, phase="train"):
         """
         Args:
-            fold: for k fold CV
-            images_folder: the folder which contains the images
-            df_path: data frame path, which contains image ids
-            transform (callable, optional): Optional transform to be applied
+                fold: for k fold CV
+                images_folder: the folder which contains the images
+                df_path: data frame path, which contains image ids
+                transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
         self.phase = phase
@@ -37,18 +37,28 @@ class ImageDataset(Dataset):
         # self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
         # self.labels = np.eye(self.num_classes)[self.labels]
         self.transform = get_transforms(phase, size, mean, std)
+        '''
+        self.images = []
+        for fname in tqdm(self.fnames):
+            path = os.path.join(self.images_folder, "bgcc300", fname + ".npy")
+            image = np.load(path)
+            self.images.append(image)
+        '''
+
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
         path = os.path.join(self.images_folder, "bgcc300", fname + ".npy")
         image = np.load(path)
+        #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label
 
     def __len__(self):
-        #return 100
+        # return 100
         return len(self.df)
+
 
 def get_transforms(phase, size, mean, std):
     list_transforms = [
@@ -60,7 +70,7 @@ def get_transforms(phase, size, mean, std):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.ShiftScaleRotate(
-                    shift_limit=0, # no resizing
+                    shift_limit=0,  # no resizing
                     scale_limit=0.1,
                     rotate_limit=120,
                     p=0.5,
@@ -74,39 +84,36 @@ def get_transforms(phase, size, mean, std):
 
             albumentations.Normalize(mean=mean, std=std, p=1),
             #albumentations.Resize(size, size),
-            AT.ToTensor(normalize=None), # [6]
+            AT.ToTensor(normalize=None),  # [6]
         ]
     )
     return albumentations.Compose(list_transforms)
 
-def get_sampler(df, class_weights=None):
-    if class_weights is None:
-        labels, label_counts = np.unique(
-            df["diagnosis"].values, return_counts=True
-        )  # [2]
-        # class_weights = max(label_counts) / label_counts # higher count, lower weight
-        # class_weights = class_weights / sum(class_weights)
-        class_weights = [1, 1, 1, 1, 1]
+
+def get_sampler(df, class_weights=[1, 1, 1, 1, 1]):
     print("weights", class_weights)
     dataset_weights = [class_weights[idx] for idx in df["diagnosis"]]
+    #dataset_weights = df["weight"].values
     datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
+
     return datasampler
 
-def resampled(df):
 
+def resampled(df):
     ''' resample `total` data points from old data, following the dist of org data '''
-    def sample(obj): # [5]
+    def sample(obj):  # [5]
         return obj.sample(n=count_dict[obj.name], replace=False)
 
     count_dict = {
-        0: 10000,
+        0: 6000,
         2: 5292,
         1: 2443,
         3: 873,
         4: 708
-    } # notice the order of keys
+    }  # notice the order of keys
 
-    sampled_df = train_old.groupby('diagnosis').apply(sample).reset_index(drop=True)
+    sampled_df = df.groupby('diagnosis').apply(
+        sample).reset_index(drop=True)
 
     return sampled_df
 
@@ -128,20 +135,23 @@ def provider(
     df = pd.read_csv(df_path)
     HOME = os.path.abspath(os.path.dirname(__file__))
 
-    bad_indices = np.load(os.path.join(HOME, "data/bad_train_indices.npy"))
-    dup_indices = np.load(
-        os.path.join(HOME, "data/dups_with_same_diagnosis.npy")
-    )  # [3]
-    duplicates = df.iloc[dup_indices]
+    #hard_examples = np.load('data/hard_examples1.npy')  # [9]
+    #df['weight'] = 1
+    #df.at[hard_examples, 'weight'] = 2
 
-    all_dups = np.array(list(bad_indices) + list(dup_indices))
-    df = df.drop(df.index[all_dups])  # remove duplicates and split train/val
+    #bad_indices = np.load(os.path.join(HOME, "data/bad_train_indices.npy"))
+    #dup_indices = np.load(
+    #    os.path.join(HOME, "data/dups_with_same_diagnosis.npy")
+    #)  # [3]
+    #duplicates = df.iloc[dup_indices]
+
+    #all_dups = np.array(list(bad_indices) + list(dup_indices))
+    #df = df.drop(df.index[all_dups])  # remove duplicates and split train/val
 
     '''later appended also'''
-
-    print('num_samples:', num_samples)
-    if num_samples: # [4]
-        df = df.iloc[:num_samples]
+    #print('num_samples:', num_samples)
+    #if num_samples:  # [4]
+    #    df = df.iloc[:num_samples]
 
     #''' to be used only with old data training '''
     #df = resampled(df)
@@ -149,12 +159,14 @@ def provider(
     #print('data dist:\n',  df['diagnosis'].value_counts(normalize=True))
 
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
-    train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
+    train_idx, val_idx = list(kfold.split(
+        df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
 
-    train_df = train_df.append(duplicates, ignore_index=True)  # add all
+    #train_df = train_df.append(duplicates, ignore_index=True)  # add all
 
     #train_df = pd.read_csv('data/train32.csv')
+    #train_df = df.copy()
     #val_df = pd.read_csv('data/train.csv')
 
     df = train_df if phase == "train" else val_df
@@ -175,14 +187,15 @@ def provider(
         sampler=datasampler,
     )  # shuffle and sampler are mutually exclusive args
 
-    print(f'len(dataloader): {len(dataloader)}')
+    #print(f'len(dataloader): {len(dataloader)}')
     return dataloader
 
 
 if __name__ == "__main__":
     import time
     start = time.time()
-    phase = "train"
+    #phase = "train"
+    phase = "val"
     num_workers = 8
     fold = 0
     total_folds = 5
@@ -198,8 +211,8 @@ if __name__ == "__main__":
     train_df_name = 'train.csv'
     #train_df_name = "train12.csv"
     #train_df_name = 'train_old.csv'
-    num_samples = None #5000
-    class_weights = [1, 1, 1, 1, 1]
+    num_samples = None  # 5000
+    class_weights = True  # [1, 1, 1, 1, 1]
     batch_size = 16
     # data_folder = 'external_data'
     images_folder = os.path.join(root, data_folder, "train_images/")  #
@@ -221,14 +234,22 @@ if __name__ == "__main__":
     )
     total_labels = []
     total_len = len(dataloader)
+    from collections import defaultdict
+    fnames_dict = defaultdict(int)
     for idx, batch in enumerate(dataloader):
         fnames, images, labels = batch
+        for fname in fnames:
+            fnames_dict[fname] += 1
+
         print("%d/%d" % (idx, total_len), images.shape, labels.shape)
         total_labels.extend(labels.tolist())
-        #pdb.set_trace()
+        # pdb.set_trace()
     print(np.unique(total_labels, return_counts=True))
     diff = time.time() - start
-    print('Time taken: %02d:%02d' % (diff//60, diff%60))
+    print('Time taken: %02d:%02d' % (diff//60, diff % 60))
+
+    print(np.unique(list(fnames_dict.values()), return_counts=True))
+    pdb.set_trace()
 
 
 """
@@ -243,4 +264,5 @@ https://github.com/btgraham/SparseConvNet/tree/kaggle_Diabetic_Retinopathy_compe
 [5]: as replace=False,  total samples can be a finite number so that those many number of classes exist in the dataset, and as the count_dist is approx, not normalized to 1, 7800 is optimum, totaling to ~8100 samples
 
 [6]: albumentations.Normalize will divide by 255, subtract mean and divide by std. output dtype = float32. ToTensor converts to torch tensor and divides by 255 if input dtype is uint8.
+[7]: indices of hard examples, evaluated using 0.81 scoring model.
 """

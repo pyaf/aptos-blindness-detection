@@ -10,6 +10,7 @@ import logging
 import traceback
 import numpy as np
 from datetime import datetime
+
 # from config import HOME
 from tensorboard_logger import log_value, log_images
 from torchnet.meter import ConfusionMeter
@@ -40,18 +41,19 @@ class CM(ConfusionMatrix):
     def __init__(self, *args):
         ConfusionMatrix.__init__(self, *args)
 
-    def save(self, name, qwk, loss, **kwargs):
-        ''' add `qwk` and `loss` to the saved obj,
+    def save(self, name, best_qwk, base_qwk, loss, **kwargs):
+        """ add `qwk` and `loss` to the saved obj,
         Use json.load(fileobject) for reading qwk and loss values,
         they won't be read by ConfusionMatrix class
-        '''
+        """
         status = self.save_obj(name, **kwargs)
-        obj_full_path = status['Message']
-        with open(obj_full_path, 'r') as f:
+        obj_full_path = status["Message"]
+        with open(obj_full_path, "r") as f:
             dump_dict = json.load(f)
-            dump_dict['qwk'] = qwk
-            dump_dict['loss'] = loss
-        json.dump(dump_dict, open(obj_full_path, 'w'))
+            dump_dict["best_qwk"] = best_qwk
+            dump_dict["base_qwk"] = base_qwk
+            dump_dict["loss"] = loss
+        json.dump(dump_dict, open(obj_full_path, "w"))
 
 
 def to_multi_label(target, classes):
@@ -85,7 +87,7 @@ def predict(X, coef):
             X_p[i] = 3
         else:
             X_p[i] = 4
-    return X_p.astype('int')
+    return X_p.astype("int")
 
 
 def compute_score_inv(thresholds, predictions, targets):
@@ -101,24 +103,24 @@ class Meter:
         self.phase = phase
         self.epoch = epoch
         self.save_folder = os.path.join(save_folder, "logs")
-        #self.num_classes = 5  # hard coded, yeah, I know
-        self.best_thresholds = [0.5, 1.5, 2.5, 3.5] # initial guess
+        # self.num_classes = 5  # hard coded, yeah, I know
+        self.best_thresholds = [0.5, 1.5, 2.5, 3.5]  # initial guess
 
     def update(self, targets, outputs):
-        '''targets, outputs are detached CUDA tensors'''
+        """targets, outputs are detached CUDA tensors"""
         # get multi-label to single label
-        #targets = torch.sum(targets, 1) - 1 # no multilabel target in regression
+        # targets = torch.sum(targets, 1) - 1 # no multilabel target in regression
         targets = targets.type(torch.LongTensor)
-        outputs = outputs.flatten() # [n, 1] -> [n]
+        outputs = outputs.flatten()  # [n, 1] -> [n]
         # outputs = torch.sum((outputs > 0.5), 1) - 1
 
-        #pdb.set_trace()
+        # pdb.set_trace()
         self.targets.extend(targets.tolist())
         self.predictions.extend(outputs.tolist())
         # self.predictions.extend(torch.argmax(outputs, dim=1).tolist()) #[2]
 
     def get_best_thresholds(self):
-        '''Epoch over, let's get targets in np array [6]'''
+        """Epoch over, let's get targets in np array [6]"""
         self.targets = np.array(self.targets)
 
         if self.phase == "train":
@@ -137,12 +139,18 @@ class Meter:
         return self.best_thresholds
 
     def get_cm(self):
-        #pdb.set_trace()
-        thresholds = self.best_thresholds
-        self.predictions = predict(self.predictions, self.best_thresholds)
-        cm = CM(self.targets, self.predictions)
-        qwk = cohen_kappa_score(self.targets, self.predictions, weights="quadratic")
-        return cm, qwk
+        # pdb.set_trace()
+        best_preds = predict(self.predictions, self.best_thresholds)
+        best_qwk = cohen_kappa_score(self.targets, best_preds, weights="quadratic")
+        if self.phase == "val":
+            base_th = [0.5, 1.5, 2.5, 3.5]
+            base_preds = predict(self.predictions, base_th)
+            base_qwk = cohen_kappa_score(self.targets, base_preds, weights="quadratic")
+        else:
+            base_qwk = best_qwk # [9]
+
+        cm = CM(self.targets, best_preds) # Note: `best_preds` for CM
+        return cm, best_qwk, base_qwk
 
 
 def plot_ROC(roc, targets, predictions, phase, epoch, folder):
@@ -193,29 +201,29 @@ def iter_log(log, phase, epoch, iteration, epoch_size, loss, start):
 
 def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
     diff = time.time() - start
-    cm, qwk = meter.get_cm()
+    cm, best_qwk, base_qwk = meter.get_cm()
     acc = cm.overall_stat["Overall ACC"]
-    tpr = cm.overall_stat["TPR Macro"] #[7]
+    tpr = cm.overall_stat["TPR Macro"]  # [7]
     ppv = cm.overall_stat["PPV Macro"]
-    cls_tpr = cm.class_stat['TPR']
-    cls_ppv = cm.class_stat['PPV']
+    cls_tpr = cm.class_stat["TPR"]
+    cls_ppv = cm.class_stat["PPV"]
 
     print()
-    tpr = 0 if tpr is 'None' else tpr # [8]
-    ppv = 0 if ppv is 'None' else ppv
+    tpr = 0 if tpr is "None" else tpr  # [8]
+    ppv = 0 if ppv is "None" else ppv
 
     log(
-        "%s %d |  loss: %0.4f | QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f \n"
-        % (phase, epoch, epoch_loss, qwk, acc, tpr, ppv)
+        "%s %d | loss: %0.4f | best/base QWK: %0.4f/%0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f \n"
+        % (phase, epoch, epoch_loss, best_qwk, base_qwk, acc, tpr, ppv)
     )
     try:
         cls_tpr = {x: "%0.4f" % y for x, y in cls_tpr.items()}
         cls_ppv = {x: "%0.4f" % y for x, y in cls_ppv.items()}
-    except Exception as e: # [8]
+    except Exception as e:  # [8]
         print("line 196, utils.py", e)
 
-    log('Class TPR: %s' % cls_tpr)
-    log('Class PPV: %s' % cls_ppv)
+    log("Class TPR: %s" % cls_tpr)
+    log("Class PPV: %s" % cls_ppv)
     log(cm.print_normalized_matrix())
     log("Time taken for %s phase: %02d:%02d \n", phase, diff // 60, diff % 60)
 
@@ -223,15 +231,16 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
     logger = tb[phase]
     logger.log_value("loss", epoch_loss, epoch)
     logger.log_value("ACC", acc, epoch)
-    logger.log_value("QWK", qwk, epoch)
+    logger.log_value("best_QWK", best_qwk, epoch)
+    logger.log_value("base_QWK", base_qwk, epoch)
     logger.log_value("TPR", tpr, epoch)
     logger.log_value("PPV", ppv, epoch)
 
     # save pycm confusion
     obj_path = os.path.join(meter.save_folder, f"cm{phase}_{epoch}")
-    cm.save(obj_path, qwk, epoch_loss, save_stat=True, save_vector=True)
+    cm.save(obj_path, best_qwk, base_qwk, epoch_loss, save_stat=True, save_vector=True)
 
-    return qwk
+    return best_qwk
 
 
 def mkdir(folder):
@@ -242,35 +251,36 @@ def mkdir(folder):
 def save_hyperparameters(trainer, remark):
     hp_file = os.path.join(trainer.save_folder, "parameters.txt")
     time_now = datetime.now()
-    augmentations = trainer.dataloaders['train'].dataset.transform.transforms
+    augmentations = trainer.dataloaders["train"].dataset.transform.transforms
     # pdb.set_trace()
-    string_to_write =  \
-        f"Time: {time_now}\n" + \
-        f"model_name: {trainer.model_name}\n" + \
-        f"train_df_name: {trainer.train_df_name}\n" + \
-        f"images_folder: {trainer.images_folder}\n" + \
-        f"resume: {trainer.resume}\n" + \
-        f"pretrained: {trainer.pretrained}\n" + \
-        f"pretrained_path: {trainer.pretrained_path}\n" + \
-        f"folder: {trainer.folder}\n" + \
-        f"fold: {trainer.fold}\n" + \
-        f"total_folds: {trainer.total_folds}\n" + \
-        f"num_samples: {trainer.num_samples}\n" + \
-        f"sampling class weights: {trainer.class_weights}\n" + \
-        f"size: {trainer.size}\n" + \
-        f"top_lr: {trainer.top_lr}\n" + \
-        f"base_lr: {trainer.base_lr}\n" + \
-        f"num_workers: {trainer.num_workers}\n" + \
-        f"batchsize: {trainer.batch_size}\n" + \
-        f"momentum: {trainer.momentum}\n" + \
-        f"mean: {trainer.mean}\n" + \
-        f"std: {trainer.std}\n" + \
-        f"start_epoch: {trainer.start_epoch}\n" + \
-        f"batchsize: {trainer.batch_size}\n" + \
-        f"augmentations: {augmentations}\n" + \
-        f"criterion: {trainer.criterion}\n" + \
-        f"optimizer: {trainer.optimizer}\n" + \
-        f"remark: {remark}\n"
+    string_to_write = (
+        f"Time: {time_now}\n"
+        + f"model_name: {trainer.model_name}\n"
+        + f"train_df_name: {trainer.train_df_name}\n"
+        + f"images_folder: {trainer.images_folder}\n"
+        + f"resume: {trainer.resume}\n"
+        + f"pretrained: {trainer.pretrained}\n"
+        + f"pretrained_path: {trainer.pretrained_path}\n"
+        + f"folder: {trainer.folder}\n"
+        + f"fold: {trainer.fold}\n"
+        + f"total_folds: {trainer.total_folds}\n"
+        + f"num_samples: {trainer.num_samples}\n"
+        + f"sampling class weights: {trainer.class_weights}\n"
+        + f"size: {trainer.size}\n"
+        + f"top_lr: {trainer.top_lr}\n"
+        + f"base_lr: {trainer.base_lr}\n"
+        + f"num_workers: {trainer.num_workers}\n"
+        + f"batchsize: {trainer.batch_size}\n"
+        + f"momentum: {trainer.momentum}\n"
+        + f"mean: {trainer.mean}\n"
+        + f"std: {trainer.std}\n"
+        + f"start_epoch: {trainer.start_epoch}\n"
+        + f"batchsize: {trainer.batch_size}\n"
+        + f"augmentations: {augmentations}\n"
+        + f"criterion: {trainer.criterion}\n"
+        + f"optimizer: {trainer.optimizer}\n"
+        + f"remark: {remark}\n"
+    )
 
     with open(hp_file, "a") as f:
         f.write(string_to_write)
@@ -279,7 +289,7 @@ def save_hyperparameters(trainer, remark):
 
 def seed_pytorch(seed=69):
     random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
     np.random.seed(seed)
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
@@ -310,4 +320,6 @@ It can be argued ki why are we using 0.5 for train, then, well we used 0.5 for b
 [7]: macro mean average of all the classes. Micro is batch average or sth.
 
 [8]: sometimes initial values may come as "None" (str)
+
+[9]: I'm using base th for train phase, so base_qwk and best_qwk are same for train phase, helps in comparing the base_qwk and best_qwk of val phase with the train one, didn't find a way to plot base_qwk of train with best and base of val on a single plot.
 """

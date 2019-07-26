@@ -123,7 +123,8 @@ class Trainer(object):
     def resume_net(self):
         self.resume_path = os.path.join(self.save_folder, "ckpt.pth")
         self.log("Resuming training, loading {} ...".format(self.resume_path))
-        state = torch.load(self.resume_path, map_location=lambda storage, loc: storage)
+        state = torch.load(
+            self.resume_path, map_location=lambda storage, loc: storage)
         self.net.load_state_dict(state["state_dict"])
         self.optimizer.load_state_dict(state["optimizer"])
         if self.cuda:
@@ -165,7 +166,8 @@ class Trainer(object):
             outputs = outputs.detach()
             meter.update(targets.cpu(), outputs.cpu())
             if iteration % 50 == 0:
-                iter_log(self.log, phase, epoch, iteration, total_iters, loss, start)
+                iter_log(self.log, phase, epoch, iteration,
+                         total_iters, loss, start)
                 # break
         best_threshold = 0.5
         if phase == "val":
@@ -181,7 +183,8 @@ class Trainer(object):
             t_epoch_start = time.time()
             ckpt_path = os.path.join(self.save_folder, "ckpt%d.pth" % epoch)
             print("Loading ckpt: %s" % ckpt_path)
-            state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
+            state = torch.load(
+                ckpt_path, map_location=lambda storage, loc: storage)
             self.net.load_state_dict(state["state_dict"])
             val_loss, best_threshold = self.iterate(epoch, "val")
             print_time(self.log, t0, "Total time taken so far")

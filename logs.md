@@ -341,13 +341,15 @@ submissions
 fold 1, ckpt10, (array([0, 1, 2, 3, 4]), array([ 331,  195, 1145,  193,   64]))
 *same above model when submitted again, got 0.809, even after tta model predictions are +- 0.03 on LB*
 fold 1, ckpt12: LB: 0.779
+
+ensembling:
 thresholds optimized at the overall val set are giving bad results, prob because model are too confident on other's val sets, leading to overfitted ensemble. base thresholds (0.5, 1.5, 2..5, 3.5) looks great.
 submitting ensemble of f0,1,2,3 at base threshold submitted at 3:50PM, got results at 5:40 PM ~ 2 hours. LB: 0.80
 
 *Analysing ckpt10 on train set*
 
 Model is good with class 0, extremely good., 0.99 sensitivity, specificity, precision.
-*This is a multiclass confusion matrix, TNR will be higher for almost every class, it's not a good metric to go for. Class wise sensitivity (TPR) and precision (PPV) are reliable metrics here*
+*This is a multiclass confusion matrix, TNR (specificity) will be higher for almost every class, it's not a good metric to go for. Class wise sensitivity (TPR) and precision (PPV) are reliable metrics here*
 It is over confident with class 2, a lot of class 1, 3, and 4 preds go to class 2.
 
 TPR:
@@ -421,6 +423,7 @@ Analysed data augmentation, RandomScale was useless, all it did was resize the i
 * `21-7_efficientnet-b5-fold1_bgccpo300aug2`: with changed aug as mentioned above. lr: 5e-5
 ep 15-25 look good, selecting 15 for submission, adding aug snippet to inference kernel.
 
+### 23 July
 
 Will train on old data, with new data a validation, img size 300
 Have a list of hard examples, gotta give them higher weight in data sampling.
@@ -444,7 +447,56 @@ class weight: 1, 1, 1, 1, 2: array([1351,  262,  737,  143,  417]))
 class weight: 1, 1, 1, 1, 2.5: array([1226,  285,  723,  152,  524]))
 
 
-* `23-7_efficientnet-b5_fold1_po300c4`: class 4 weighted to 2.5, rest to 1.
+* `23-7_efficientnet-b5_fold1_po300c4`: class 4 weighted to 2.5, rest to 1., predictions look bad.
+* `23-7_efficientnet-b5_fold1_po300he`: hard examples weight: 2, same as previous, predictions look bad.
+
+* `23-7_efficientnet-b5_fold1_oscw`: sampled old as train df, new dataset as val df.
+sampling counts:
+count_dict = {
+    0: 6000,
+    2: 5292,
+    1: 2443,
+    3: 873,
+    4: 708
+}  # notice the order of keys
+class weight: [1, 1, 1, 1, 1.3]
+ckpt25 looks good.
+
+### 24 July
+* `24-7_efficientnet-b5_fold1_poscw`: finetuning previous model's ckpt25, on new data only, with duplicates. No cw, no sampling, with lr: 5e-6
+predictions are kinda off wrt class 4.
+* `24-7_efficientnet-b5_fold1_poscwwd`: without duplicates. same results as previous one
+
+### 25 July
+
+Why is there so much of variance in test predictions? Gotta find out.
+so, with tta=0, I do get consistent results, which is obvious, but with tta the results vary a lot. Even with same number of ttas across multiple runs.
+
+### 26 July
+
+add two categories of val qwk in tensorboard, one with base th and one with best th,
+I was thinking, outputing a sigmoid output with base thresholds as [0.2, 0.4, 0.6, 0.8], as the current linear output may not be stable wrt classes 3 and 4. But what about the loss?
+
+* Due to a bug, pretraining of oscw model was not done on sampled data, instead on whole of old data *
+* `26-7_efficientnet-b5_fold1_os`: pretraining on old sampled with following dict count:
+new count dict:
+count_dict = {
+    0: 6000,
+    2: 5292,
+    1: 2443,
+    3: 873,
+    4: 708
+}  # notice the order of keys
+old as train, new as val, lr: 1e-5
+totals to 18k images in train set and new train dataset 3k in val set. Preloading all npy files in dataloaders takes about 12GB memory. training time decreased significantly. Eventually leads to memory overflow.
+There was bug in base_qwk, have fixed it, but I'm not retraining. choosing ckpt 31
+
+* `26-7_efficientnet-b5_fold1_pos`: started from ckpt31 of previous model, with lr: 5e-6,
+
+
+
+
+
 
 
 # Questions and Ideas:

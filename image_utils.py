@@ -10,13 +10,14 @@ def load_image(path, size):
 
 
 def load_ben_color(path, size, sigmaX=10, crop=False):
-    '''if crop=True: center crop retina'''
+    """if crop=True: center crop retina"""
     image = cv2.imread(path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     if crop:
         image = crop_image_from_gray(image)
     image = cv2.resize(image, (size, size))
-    image = cv2.addWeighted(image, 4, cv2.GaussianBlur(image, (0, 0), sigmaX), -4, 128)
+    image = cv2.addWeighted(image, 4, cv2.GaussianBlur(
+        image, (0, 0), sigmaX), -4, 128)
     return image
 
 
@@ -27,7 +28,7 @@ def load_ben_gray(path, size):
     image = cv2.addWeighted(
         image, 4, cv2.GaussianBlur(image, (0, 0), size / 10), -4, 128
     )  # Ben Graham's preprocessing method [1]
-    ## (IMG_SIZE, IMG_SIZE) -> (IMG_SIZE, IMG_SIZE, 3)
+    # (IMG_SIZE, IMG_SIZE) -> (IMG_SIZE, IMG_SIZE, 3)
     image = image.reshape(size, size, 1)
     image = np.repeat(image, 3, axis=-1)
     return image
@@ -51,23 +52,20 @@ def crop_image_from_gray(img, tol=7):
         return img
 
 
-
-def get_transforms(phase, size,  mean, std):
+def get_transforms(phase, size, mean, std):
     list_transforms = []
 
     if phase == "train":
-        list_transforms.extend([
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomVerticalFlip()
+        list_transforms.extend(
+            [transforms.RandomHorizontalFlip(), transforms.RandomVerticalFlip()]
+        )
+
+    list_transforms.extend(
+        [
+            transforms.Resize((size, size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean, std),
         ]
     )
 
-    list_transforms.extend([
-        transforms.Resize((size, size)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std)
-    ])
-
     return transforms.Compose(list_transforms)
-
-

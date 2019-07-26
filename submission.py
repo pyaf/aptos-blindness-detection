@@ -24,12 +24,8 @@ from image_utils import *
 
 def get_parser():
     parser = ArgumentParser()
-    parser.add_argument(
-        "-c",
-        "--ckpt_path",
-        dest="ckpt_path",
-        help="Checkpoint to use",
-    )
+    parser.add_argument("-c", "--ckpt_path",
+                        dest="ckpt_path", help="Checkpoint to use")
     parser.add_argument(
         "-p",
         "--predict_on",
@@ -53,14 +49,13 @@ class TestDataset(data.Dataset):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.RandomScale(scale_limit=0.1),
-
             ]
         )
         self.transform = albumentations.Compose(
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
                 albumentations.Resize(size, size),
-                AT.ToTensor()
+                AT.ToTensor(),
             ]
         )
 
@@ -72,7 +67,7 @@ class TestDataset(data.Dataset):
         image = load_ben_color(path, size=self.size, crop=True)
 
         images = [self.transform(image=image)["image"]]
-        for _ in range(self.tta): # perform ttas
+        for _ in range(self.tta):  # perform ttas
             aug_img = self.TTA(image=image)["image"]
             aug_img = self.transform(image=aug_img)["image"]
             images.append(aug_img)
@@ -88,12 +83,13 @@ def get_predictions(model, testset, tta):
     predictions = []
     for i, batch in enumerate(tqdm(testset)):
         if tta:
-            for images in batch:  # images.shape [n, 3, 96, 96] where n is num of 1+tta
-                preds = model(images.to(device)) # [n, num_classes]
+            # images.shape [n, 3, 96, 96] where n is num of 1+tta
+            for images in batch:
+                preds = model(images.to(device))  # [n, num_classes]
                 predictions.append(preds.mean(dim=0).detach().tolist())
         else:
             preds = model(batch[:, 0].to(device))
-            preds = preds.detach().tolist() #[1]
+            preds = preds.detach().tolist()  # [1]
             predictions.extend(preds)
 
     return np.array(predictions)
@@ -109,9 +105,9 @@ def get_model_name_fold(ckpt_path):
 
 
 if __name__ == "__main__":
-    '''
+    """
     use given ckpt to generate final predictions using the corresponding best thresholds.
-    '''
+    """
     parser = get_parser()
     args = parser.parse_args()
     ckpt_path = args.ckpt_path
@@ -124,14 +120,14 @@ if __name__ == "__main__":
         sample_submission_path = "data/train.csv"
 
     sub_path = ckpt_path.replace(".pth", f"{predict_on}.csv")
-    tta = 4 # number of augs in tta
+    tta = 4  # number of augs in tta
 
     root = f"data/{predict_on}_images/"
     size = 256
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0, 0, 0)
-    #std = (1, 1, 1)
+    # mean = (0, 0, 0)
+    # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
     num_workers = 8
@@ -176,8 +172,8 @@ if __name__ == "__main__":
     print("Predictions saved!")
 
 
-'''
+"""
 Footnotes
 
 [1] a cuda variable can be converted to python list with .detach() (i.e., grad no longer required) then .tolist(), apart from that a cuda variable can be converted to numpy variable only by copying the tensor to host memory by .cpu() and then .numpy
-'''
+"""

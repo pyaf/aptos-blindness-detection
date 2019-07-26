@@ -20,7 +20,9 @@ from sklearn.metrics import cohen_kappa_score
 from models import Model, get_model
 from utils import *
 from image_utils import *
-#from submission import get_best_threshold
+
+# from submission import get_best_threshold
+
 
 def get_parser():
     parser = ArgumentParser()
@@ -49,18 +51,17 @@ class Dataset(data.Dataset):
         self.tta = tta
         self.TTA = albumentations.Compose(
             [
-                #albumentations.RandomRotate90(p=1),
+                # albumentations.RandomRotate90(p=1),
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.RandomScale(scale_limit=0.1),
-
             ]
         )
         self.transform = albumentations.Compose(
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
                 albumentations.Resize(size, size),
-                AT.ToTensor()
+                AT.ToTensor(),
             ]
         )
 
@@ -72,7 +73,7 @@ class Dataset(data.Dataset):
         image = load_ben_color(path, size=self.size, crop=True)
 
         images = [self.transform(image=image)["image"]]
-        for _ in range(self.tta): # perform ttas
+        for _ in range(self.tta):  # perform ttas
             aug_img = self.TTA(image=image)["image"]
             aug_img = self.transform(image=aug_img)["image"]
             images.append(aug_img)
@@ -88,12 +89,13 @@ def get_predictions(model, testset, tta):
     predictions = []
     for i, batch in enumerate(tqdm(testset)):
         if tta:
-            for images in batch:  # images.shape [n, 3, 96, 96] where n is num of 1+tta
-                preds = model(images.to(device)) # [n, num_classes]
+            # images.shape [n, 3, 96, 96] where n is num of 1+tta
+            for images in batch:
+                preds = model(images.to(device))  # [n, num_classes]
                 predictions.append(preds.mean(dim=0).detach().tolist())
         else:
             preds = model(batch[:, 0].to(device))
-            preds = preds.detach().tolist() #[1]
+            preds = preds.detach().tolist()  # [1]
             predictions.extend(preds)
 
     return np.array(predictions)
@@ -113,7 +115,8 @@ def get_load_model(model_name, ckpt_path, num_classes):
 
 def get_model_name_fold(model_folder_path):
     # example ckpt_path = weights/9-7_{modelname}_fold0_text/
-    model_folder = model_folder_path.split("/")[1]  # 9-7_{modelname}_fold0_text
+    model_folder = model_folder_path.split(
+        "/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
     fold = fold.split("fold")[-1]  # 0
@@ -121,31 +124,31 @@ def get_model_name_fold(model_folder_path):
 
 
 if __name__ == "__main__":
-    '''
+    """
     Uses a list of ckpts, predicts on whole train set, averages the predictions and finds optimized thresholds based on train qwk
-    '''
+    """
     model_name = "efficientnet-b5"
     ckpt_path_list = [
-        #"weights/19-7_efficientnet-b5_fold0_bgccpold/ckpt20.pth",
-        #"weights/19-7_efficientnet-b5_fold1_bgccpold/ckpt10.pth",
-        #"weights/19-7_efficientnet-b5_fold2_bgccpold/ckpt30.pth",
-        #"weights/19-7_efficientnet-b5_fold3_bgccpold/ckpt15.pth"
+        # "weights/19-7_efficientnet-b5_fold0_bgccpold/ckpt20.pth",
+        # "weights/19-7_efficientnet-b5_fold1_bgccpold/ckpt10.pth",
+        # "weights/19-7_efficientnet-b5_fold2_bgccpold/ckpt30.pth",
+        # "weights/19-7_efficientnet-b5_fold3_bgccpold/ckpt15.pth"
         "weights/21-7_efficientnet-b5_fold1_bgccpo300/ckpt20.pth"
     ]
 
-    #folds = [0, 1, 2, 3] # for extracting val sets, used for thr optimization
+    # folds = [0, 1, 2, 3] # for extracting val sets, used for thr optimization
     folds = [1]
     sample_submission_path = "data/train.csv"
 
-    tta = 4 # number of augs in tta
+    tta = 4  # number of augs in tta
     total_folds = 7
 
     root = f"data/train_images/"
     size = 300
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0, 0, 0)
-    #std = (1, 1, 1)
+    # mean = (0, 0, 0)
+    # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
     num_workers = 8
@@ -159,14 +162,14 @@ if __name__ == "__main__":
 
     df = pd.read_csv(sample_submission_path)
 
-    #kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
-    #index_list = list(kfold.split(df["id_code"], df["diagnosis"]))
+    # kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
+    # index_list = list(kfold.split(df["id_code"], df["diagnosis"]))
 
-    #val_idx = []
-    #for fold in folds:
+    # val_idx = []
+    # for fold in folds:
     #    val_idx.extend(index_list[fold][1])
 
-    #df = df.iloc[val_idx]
+    # df = df.iloc[val_idx]
 
     dataset = DataLoader(
         Dataset(root, df, size, mean, std, tta),
@@ -184,12 +187,12 @@ if __name__ == "__main__":
         model, val_best_th = get_load_model(model_name, ckpt, num_classes)
         predictions = get_predictions(model, dataset, tta)
         all_predictions.append(predictions)
-        #break
+        # break
 
     predictions = np.mean(all_predictions, axis=0).flatten()
 
     # optimize thresholds on training set
-    targets = df['diagnosis'].values
+    targets = df["diagnosis"].values
     initial_thresholds = [0.5, 1.5, 2.5, 3.5]
     simplex = scipy.optimize.minimize(
         compute_score_inv,
@@ -214,7 +217,7 @@ if __name__ == "__main__":
 
     # now use the best_threshold on test data to generate predictions
 
-    df = pd.read_csv('data/sample_submission.csv')
+    df = pd.read_csv("data/sample_submission.csv")
     root = f"data/test_images/"
     testset = DataLoader(
         Dataset(root, df, size, mean, std, tta),
@@ -233,15 +236,15 @@ if __name__ == "__main__":
         preds = predict(predictions, best_thresholds)
         print(np.unique(preds, return_counts=True))
         all_predictions.append(predictions)
-        #break
+        # break
     predictions = np.mean(all_predictions, axis=0).flatten()
     preds = predict(predictions, best_thresholds)
     print(np.unique(preds, return_counts=True))
 
     pdb.set_trace()
 
-'''
+"""
 Footnotes
 
 [1] a cuda variable can be converted to python list with .detach() (i.e., grad no longer required) then .tolist(), apart from that a cuda variable can be converted to numpy variable only by copying the tensor to host memory by .cpu() and then .numpy
-'''
+"""

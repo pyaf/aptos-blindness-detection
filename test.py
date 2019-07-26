@@ -31,32 +31,53 @@ def get_parser():
         help="relative path to the folder where model checkpoints are saved",
     )
     parser.add_argument(
+        "-e",
+        "--epoch_range",
+        nargs="+",
+        type=int,
+        dest="epoch_range",
+        help="Epoch to start from",
+    ) # usage: -e 10 20
+
+    parser.add_argument(
         "-p",
         "--predict_on",
         dest="predict_on",
         help="predict on train or test set, options: test or train",
-        default="resnext101_32x4d",
+        default="test",
     )
     return parser
 
 
 class TestDataset(data.Dataset):
-    def __init__(self, root, df, size, mean, std, tta=4):
+    def __init__(self, root, df, size, mean, std, phase, tta=4):
         self.root = root
         self.size = size
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
+        print("Loading images...")
+        if phase=="train":
+            self.images = np.load('data/all_train_bgcc300.npy')
+        else:
+            self.images = np.load('data/all_test_bgcc300.npy')
+        print("Done")
+        #self.images = []  # because small dataset.
+        #for fname in tqdm(self.fnames):
+        #    path = os.path.join(self.root, fname + ".png")
+        #    image = load_ben_color(path, size=self.size, crop=True)
+        #    self.images.append(image)
+
         self.TTA = albumentations.Compose(
             [
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.ShiftScaleRotate(
-                    shift_limit=0, # no resizing
+                    shift_limit=0,  # no resizing
                     scale_limit=0.1,
                     rotate_limit=120,
                     p=0.5,
-                    border_mode=cv2.BORDER_CONSTANT
+                    border_mode=cv2.BORDER_CONSTANT,
                 ),
                 albumentations.RandomBrightnessContrast(p=0.25),
             ]
@@ -65,17 +86,18 @@ class TestDataset(data.Dataset):
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
                 albumentations.Resize(size, size),
-                AT.ToTensor()
+                AT.ToTensor(),
             ]
         )
 
     def __getitem__(self, idx):
-        fname = self.fnames[idx]
-        path = os.path.join(self.root, fname + ".png")
-        image = load_ben_color(path, size=self.size, crop=True)
+        # fname = self.fnames[idx]
+        # path = os.path.join(self.root, fname + ".png")
+        # image = load_ben_color(path, size=self.size, crop=True)
+        image = self.images[idx]
 
         images = [self.transform(image=image)["image"]]
-        for _ in range(self.tta): # perform ttas
+        for _ in range(self.tta):  # perform ttas
             aug_img = self.TTA(image=image)["image"]
             aug_img = self.transform(image=aug_img)["image"]
             images.append(aug_img)
@@ -91,12 +113,13 @@ def get_predictions(model, testset, tta):
     predictions = []
     for i, batch in enumerate(tqdm(testset)):
         if tta:
-            for images in batch:  # images.shape [n, 3, 96, 96] where n is num of 1+tta
-                preds = model(images.to(device)) # [n, num_classes]
+            # images.shape [n, 3, 96, 96] where n is num of 1+tta
+            for images in batch:
+                preds = model(images.to(device))  # [n, num_classes]
                 predictions.append(preds.mean(dim=0).detach().tolist())
         else:
             preds = model(batch[:, 0].to(device))
-            preds = preds.detach().tolist() #[1]
+            preds = preds.detach().tolist()  # [1]
             predictions.extend(preds)
 
     return np.array(predictions)
@@ -104,7 +127,8 @@ def get_predictions(model, testset, tta):
 
 def get_model_name_fold(model_folder_path):
     # example ckpt_path = weights/9-7_{modelname}_fold0_text/
-    model_folder = model_folder_path.split("/")[1]  # 9-7_{modelname}_fold0_text
+    model_folder = model_folder_path.split(
+        "/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
     fold = fold.split("fold")[-1]  # 0
@@ -112,15 +136,16 @@ def get_model_name_fold(model_folder_path):
 
 
 if __name__ == "__main__":
-    '''
+    """
     Generates predictions on train/test set using the ckpts saved in the model folder path
     and saves them in npy_folder in npy format which can be analyses later for different
     thresholds
-    '''
+    """
     parser = get_parser()
     args = parser.parse_args()
     model_folder_path = args.model_folder_path
     predict_on = args.predict_on
+    start_epoch, end_epoch = args.epoch_range
     model_name, fold = get_model_name_fold(model_folder_path)
 
     if predict_on == "test":
@@ -128,16 +153,13 @@ if __name__ == "__main__":
     else:
         sample_submission_path = "data/train.csv"
 
-    tta = 4 # number of augs in tta
-    start_epoch = 0
-    end_epoch = 30
-
+    tta = 10  # number of augs in tta
     root = f"data/{predict_on}_images/"
     size = 300
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0, 0, 0)
-    #std = (1, 1, 1)
+    # mean = (0, 0, 0)
+    # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
     num_workers = 8
@@ -149,10 +171,10 @@ if __name__ == "__main__":
     else:
         torch.set_default_tensor_type("torch.FloatTensor")
 
-    best_sub = 'weights/submission812.csv'
+    best_sub = "weights/submission812.csv"
     df = pd.read_csv(sample_submission_path)
     testset = DataLoader(
-        TestDataset(root, df, size, mean, std, tta),
+        TestDataset(root, df, size, mean, std, predict_on, tta),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -178,27 +200,28 @@ if __name__ == "__main__":
 
     base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
 
-    for epoch in range(start_epoch, end_epoch+1):
+    for epoch in range(start_epoch, end_epoch + 1):
         print(f"Using ckpt{epoch}.pth")
         ckpt_path = os.path.join(model_folder_path, "ckpt%d.pth" % epoch)
-        state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
+        state = torch.load(
+            ckpt_path, map_location=lambda storage, loc: storage)
         model.load_state_dict(state["state_dict"])
         best_thresholds = state["best_thresholds"]
         print(f"Best thresholds: {best_thresholds}")
-        preds = get_predictions(model, testset, tta)
+        for i in range(5):
+            preds = get_predictions(model, testset, tta)
+            pred1 = predict(preds, best_thresholds)
+            pred2 = predict(preds, base_thresholds)
+            print("best:", np.unique(pred1, return_counts=True)[1])
+            print("base:", np.unique(pred2, return_counts=True)[1])
+            mat_to_save = [preds, best_thresholds]
+            np.save(os.path.join(
+                npy_folder, f"{predict_on}_ckpt{epoch}_{i}.npy"), mat_to_save)
+            print("Predictions saved!")
 
-        pred1 = predict(preds, best_thresholds)
-        pred2 = predict(preds, base_thresholds)
-        print('best:', np.unique(pred1, return_counts=True)[1])
-        print('base:', np.unique(pred2, return_counts=True)[1])
 
-        mat_to_save = [preds, best_thresholds]
-        np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)
-        print("Predictions saved!")
-
-
-'''
+"""
 Footnotes
 
 [1] a cuda variable can be converted to python list with .detach() (i.e., grad no longer required) then .tolist(), apart from that a cuda variable can be converted to numpy variable only by copying the tensor to host memory by .cpu() and then .numpy
-'''
+"""
