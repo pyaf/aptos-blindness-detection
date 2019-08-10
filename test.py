@@ -153,7 +153,7 @@ if __name__ == "__main__":
     else:
         sample_submission_path = "data/train.csv"
 
-    tta = 10  # number of augs in tta
+    tta = 0  # number of augs in tta
     root = f"data/{predict_on}_images/"
     size = 300
     mean = (0.485, 0.456, 0.406)
@@ -208,16 +208,16 @@ if __name__ == "__main__":
         model.load_state_dict(state["state_dict"])
         best_thresholds = state["best_thresholds"]
         print(f"Best thresholds: {best_thresholds}")
-        for i in range(5):
-            preds = get_predictions(model, testset, tta)
-            pred1 = predict(preds, best_thresholds)
-            pred2 = predict(preds, base_thresholds)
-            print("best:", np.unique(pred1, return_counts=True)[1])
-            print("base:", np.unique(pred2, return_counts=True)[1])
-            mat_to_save = [preds, best_thresholds]
-            np.save(os.path.join(
-                npy_folder, f"{predict_on}_ckpt{epoch}_{i}.npy"), mat_to_save)
-            print("Predictions saved!")
+        #for i in range(5):
+        preds = get_predictions(model, testset, tta)
+        pred1 = predict(preds, best_thresholds)
+        pred2 = predict(preds, base_thresholds)
+        print("best:", np.unique(pred1, return_counts=True)[1])
+        print("base:", np.unique(pred2, return_counts=True)[1])
+        mat_to_save = [preds, best_thresholds]
+        np.save(os.path.join(
+            npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)
+        print("Predictions saved!")
 
 
 """

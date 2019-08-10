@@ -1,0 +1,26 @@
+fold: 1
+total_folds: 7
+size: 300
+top_lr: 5e-6
+class_weights: None
+num_samples: None
+model_name: efficientnet-b5
+ext_text: test
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+resume: False
+pretrained: False
+pretrained_path: weights/98_efficientnet-b5_f1_test/ckpt10.pth
+#resume_path:
+df_path: data/train.csv
+data_folder: data/npy_files/bgcc300
+batch_size:
+    train: 16
+    val: 8
+num_workers: 12
+num_classes: 1
+ep2unfreeze: 0
+num_epochs: 40
+base_lr: None
+momentum: 0.95
+patience: 3

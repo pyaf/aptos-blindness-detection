@@ -1,0 +1,36 @@
+fold: 1
+total_folds: 7
+size: 456
+top_lr: 5e-6
+class_weights: None
+num_samples: None
+model_name: efficientnet-b5
+ext_text: test
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+resume: False
+pretrained: False
+pretrained_path: weights/98_efficientnet-b5_f1_test/ckpt10.pth
+#resume_path:
+df_path: data/train_old.csv
+data_folder: data/npy_files/bgcc456
+batch_size:
+    train: 8
+    val: 4
+num_workers: 12
+num_classes: 1
+ep2unfreeze: 0
+num_epochs: 40
+base_lr: None
+momentum: 0.95
+patience: 3
+dups_wsd: data/dups_with_same_diagnosis.npy
+bad_idx: data/bad_train_indices.npy
+sample: True
+count_dict:
+    0: 8000
+    2: 5292
+    1: 2443
+    3: 873
+    4: 708
+

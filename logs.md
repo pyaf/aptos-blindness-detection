@@ -144,15 +144,15 @@ I've been playing with densenet keras starter kernel on kaggle, key takeaways ar
 
 ** What about 5 thresholds optimised for each class?
 
-So, now I've resnext101_32x4d_v0/1 pretrained on old data, gotta use them as basemodels to train on org data.
+[So](So), now I've resnext101_32x4d_v0/1 pretrained on old data, gotta use them as basemodels to train on org data.
 
 
 * `13-7_resnext101_32x4d_v1_fold0_bgpreold` : training on bgcolor with lr 1e-5, starting with model pretrained on bgcolor old data (weights/12-7_resnext101_32x4d_v1_fold0_bgcold/ckpt16.pth), val set best thresholding has been set to 0.5. total_folds = 7 (val set: ~15%), model being saved according to best loss, qwk is unstable metric to save upon. I won't be training it for long, can't afford overfitting. >> So, I submitted ckpt26.pth with threshold optimised with best performing public submission.csv: LB: 0.687 The model is getting biased towards class 0
 
 The distribution of old data is different than present data, we can't just add them up and train a model based on that, so now I'm gonna sample out data from old data such that it resembles the original data distribution
 
-Org data distribution, class wise, normalized: array([0.49290005, 0.10103768, 0.27280175, 0.05270344, 0.08055707])
-old data distribution, class wise, normalized: array([0.73478335, 0.06954962, 0.15065763, 0.02485338, 0.02015601])
+*Org data distribution, class wise, normalized: [0.49290005, 0.10103768, 0.27280175, 0.05270344, 0.08055707]*
+*Old data distribution, class wise, normalized: [0.73478335, 0.06954962, 0.15065763, 0.02485338, 0.02015601]*
 
 As it can be seen, old data is heavily biased towards class 0, the reason for my previous model's behaviour.
 
@@ -186,7 +186,7 @@ epoch 23: val loss > train loss but the val loss is still decreasing. choosing c
 
 * `14_7-resnext101_32x4d_v1_fold0_bgcpos` : starting with previous models ckpt27.pth, total_folds=6, training on bgc of current data. val loss > train loss at ckpt 12., submitted ckpt15.pth with optimised kappa (wrt submission.csv): LB: 0.71
 
-The LB scores are generated on a private test set, so those public submission.csvs are not that useful, they don't represent the true picture..
+The LB scores are generated on a private test set, so those public submission.csvs are not that useful, they don't represent the true picture.. < Wrong, those LB scores are calc on public test set only.
 
 Now, optimising 5 coefficient thresholds one for each class. Looks promising. Will be plotting the val qwk using optimized thresholds (5, one for each class) from now on. Still, best model will be saved using val loss, anyway I'm not using the best model for any of my submissions, gotta analyse the outputs of all the ckpts before deciding which one to choose and which thresholds to choose. Look at the optimised thresholds for ckpt13: [0.44824953 0.65033665 0.54202567 0.40581288 0.47455201], all these thresholds vary so much, it's imp to use class wise optimised thresholds.
 
@@ -209,7 +209,7 @@ category 3: old competition dataset, jpeg images ~ 33k
 
 `15-7_resnext101_32x4d_v0_fold0_bgcold256`: Will be pretraining a model on sampled cat 2 dataset, with 256 img size, resnext_v0. (not v1), total_folds=7,
 Will be training a model pretrained on cat 2 dataset, on cat 1 and 3 combined dataset with img_size: 256
-takeaway: 1e-4 for pretraing is too high, retraining with 3e-5.
+*takeaway: 1e-4 for pretraing is too high, retraining with 3e-5.*
 
 ### 15 Jul
 
@@ -273,7 +273,7 @@ ckpt
 ckpt 4, .89/.88, 0.785, (array([0, 1, 2, 3, 4]), array([ 299,  174, 1188,  207,   60]))
 ckpt 5, , 0.875
 ckpt 7 Not submitted, the public test predictions are not promising.
-ckpt 11, 0.784
+ckpt 11, , 0.784
 ckpt 20, , 0.785
 
 
@@ -313,13 +313,13 @@ As you are selecting models based on test pred count, and not the loss, chances 
 Retraining fold1,2,3 all duplicates in train set only.
 
 fold1: Earlier I had added duplicates in the df (before train/val split), this time only good duplicates in train df, and mistakenly bad duplicates were not removed from the df before train/val split, plots are little bad compared to previous one obviously because the previous model had train val leak.
-retraining: Without bad duplicates, duplicates in train set only, with lr 1e-4, (as 1e-5 is way to low, model takes 50 epochs to converge)
+retraining: Without bad duplicates, duplicates in train set only, with lr *1e-4, (as 1e-5 is way to low, model takes 50 epochs to converge)*
 The model plots are showing significant improvement compared to previous models.
 The lr was reduced to 1e-5 at ep 12, 1e-6 at ep 16, 1e-7 at ep 20
 
 submitted fold1, ckpt 10: LB: 0.812 *MIND BLOWN*
 
-I think 1e-5 is way too high lr, testing 3e-5 for fold2
+*I think 1e-5 is way too high lr, testing 3e-5 for fold2* (LOL)
 
 meanwhile creating bengrahms color cropped 300 sized images at `data/train_images/bgcc300/`
 
@@ -493,7 +493,14 @@ There was bug in base_qwk, have fixed it, but I'm not retraining. choosing ckpt 
 
 * `26-7_efficientnet-b5_fold1_pos`: started from ckpt31 of previous model, with lr: 5e-6,
 
+### 10 Aug
 
+I'm back xD, meanwhile participated in two other segmentation problems, published 3 kernels which currently have 2 silver and 1 bronze, :)
+I see, I've come down to 42nd rank, koi nai, your boi is gonna beam 'em again.
+
+Preparing `bgcc456`, idea expected size for efficientnet-b5, have added yaml config file support, default is conf.yaml, make a copy, edit the hyper-parameters, save it with the name of weights folder name, call it as arg for train.py
+
+Analysed that model is doing fine on blurry images, no need to remove them.
 
 
 
@@ -501,25 +508,34 @@ There was bug in base_qwk, have fixed it, but I'm not retraining. choosing ckpt 
 
 # Questions and Ideas:
 
-* A new experiment can be this: pretrain on a balanced external data, then use that model on to the original data,  what's say?
-* ** What about analysing the images in training data where the model is failing, the ones which are good enough but model completely fails to recognize, we can give them more weights in the data sampler, what other techniques can be used?
+* A new experiment can be this: pretrain on a balanced external data, then use that model on to the original data,  what's say? DONE
+* ** What about analysing the images in training data where the model is failing, the ones which are good enough but model completely fails to recognize, we can give them more weights in the data sampler, what other techniques can be used? DONE
 
-* Train on old, use new data as validation set!!
-* What about using Adam?, started using it in Resnext101_32x16d models
-* People have had successes with 320 image size.
+* Train on old, use new data as validation set!! : DONE
+* What about using Adam?, started using it in Resnext101_32x16d models DONE
+* People have had successes with 300 image size. DONE
 * People are talking about resizing such that aspect ratio remains intact. Hmmm.
 * CV for resnext101_32x16d model
-* multilabel stratified cross validation.
+* multilabel stratified cross validation. DONE
 * go through this: https://www.kaggle.com/c/aptos2019-blindness-detection/discussion/97860#579277
 * https://www.kaggle.com/kosiew/rank-averaging-script
-* Good coders are participating in multiple competitions at a time.
+* Good coders are participating in multiple competitions at a time. DONE
 * Should the distance between the categories be same? like is mild DR equally spaced to Moderate as it is to No DR
+* using old data original image for bgcc extraction? DONE
+* read .png files instead of npys???
+
+* Larger image size than 300.
+* Data augmentation
+* Read related research papers. IMP
+*
+
+
 
 # TODO:
 
-[] Add kappa optimizer
+[x] Add kappa optimizer
 [x] Insure val set and train set are disjoints, watch-out for duplicates!
-[] Crop images in datapipeline, add external data too
+[x] Crop images in datapipeline, add external data too
 [] Analyse the heatmaps of the basemodel of a trained model, I think AdaptiveAvgPooling is detrimental to the model learning,
 [] checkout for duplicates in external data too
 [] print all the hyperparameters and initial infos you can about the model training , it helps trust me
@@ -572,22 +588,21 @@ There was bug in base_qwk, have fixed it, but I'm not retraining. choosing ckpt 
 
 # Files informations:
 
-* data/bad_train_indices.npy: list of indices in the train.csv which have a duplicate in the training data and that duplicate has a different diagnosis. We don't want our model to train on these images.
-* data/duplicates.npy: list of lists containing id_code's of duplicates in train.csv, i.e., all duplicates in train.csv
-* data/dups_with_same_diagnosis.npy: list of indices in train.csv which belong to images which have duplicates in train_images and their diagnosis is same
-* data/duplicate_test_ids: buggy, it has hashes of duplicate test images, gotta fix it
-* data/train_images/npy * files are images after cv2.read, BGR2GRAY, resize (224), addWeighted gaussian blur, reshape, repeat, save
-* data/train_images/npy_rgb * files are images after cv2.read, BGR2RGB, resize (224), save
-* data/train_images/npy_bengrahm : files images, preprocesses according to ben grahm's preprocessing technique, read, bgr2gray, resize, addweighted, reshape, repeat, img size = 224
-* data/train_images/npy_bengrahm_color : all data (internal + external) using bengrahm's color method, no cropping of retina, only 224 resizing
+* data/npy_files/bgcc300: bengrahm color center cropped images of size 300,
+* data/npy_files/bgcc256: bengrahm color center cropped images of size 256
+* data/npy_files/bgcc456: bengrahm color center cropped images of size 456, tol=10
+* data/npy_files/bad_train_indices.npy: list of indices in the train.csv which have a duplicate in the training data and that duplicate has a different diagnosis. We don't want our model to train on these images.
+* data/npy_files/duplicates.npy: list of lists containing id_code's of duplicates in train.csv, i.e., all duplicates in train.csv
+* data/npy_files/dups_with_same_diagnosis.npy: list of indices in train.csv which belong to images which have duplicates in train_images and their diagnosis is same
+* data/npy_files/duplicate_test_ids: buggy, it has hashes of duplicate test images, gotta fix it
 * data/train_all.csv: contains train df of all data (internal and external), train.csv of external appended to train.csv of internal data, so bad indices still hold correct, I gotta checkout for duplicates in external data also
 * data/train_old.csv: contains id_code and diagnosis of external data only
 * data/train12.csv: train.csv and train_messidor.csv combined, i.e., category 1 and category 2 dataset labels combined
 * data/train_meta.csv: train images shapes and related information
 * data/test_meta.csv: test images' shapes and related information, though I need to write shape extraction functions in the inference scripts also as kernel is run on hidden test data.
 * data/train32.csv: old + messidor data
-* data/hard_examples1.npy : hard examples in train set category 1. Evaluated on 21-7_efficientnet-b5-fold1_bgccpo300aug2, ckpt15 LB 0.798
-* data/extremely_bad_examples1.npy : extremely hard examples, pred and actual difference > 1, ^
+* data/npy_files/hard_examples1.npy : hard examples in train set category 1. Evaluated on 21-7_efficientnet-b5-fold1_bgccpo300aug2, ckpt15 LB 0.798
+* data/npy_files/extremely_bad_examples1.npy : extremely hard examples, pred and actual difference > 1, ^
 
 
 # remarks shortcut/keywords

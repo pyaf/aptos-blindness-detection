@@ -10,14 +10,13 @@ from torch.utils.data import DataLoader, Dataset, sampler
 from torchvision.datasets.folder import pil_loader
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from utils import to_multi_label
-import albumentations
-from albumentations import torch as AT
+from augmentations import get_transforms
 
 
 class ImageDataset(Dataset):
     """training dataset."""
 
-    def __init__(self, df, images_folder, size, mean, std, phase="train"):
+    def __init__(self, df, phase, cfg):
         """
         Args:
                 fold: for k fold CV
@@ -27,8 +26,6 @@ class ImageDataset(Dataset):
                 on a sample.
         """
         self.phase = phase
-        self.size = size
-        self.images_folder = images_folder
         self.df = df
         self.num_samples = self.df.shape[0]
         self.fnames = self.df["id_code"].values
@@ -36,7 +33,9 @@ class ImageDataset(Dataset):
         self.num_classes = len(np.unique(self.labels))
         # self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
         # self.labels = np.eye(self.num_classes)[self.labels]
-        self.transform = get_transforms(phase, size, mean, std)
+        self.transform = get_transforms(phase, cfg)
+        self.root = cfg['data_folder']
+
         '''
         self.images = []
         for fname in tqdm(self.fnames):
@@ -45,52 +44,22 @@ class ImageDataset(Dataset):
             self.images.append(image)
         '''
 
-
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
-        path = os.path.join(self.images_folder, "bgcc300", fname + ".npy")
+        path = os.path.join(self.root, fname + ".npy")
         image = np.load(path)
         #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label
 
     def __len__(self):
-        # return 100
+        #return 100
         return len(self.df)
 
 
-def get_transforms(phase, size, mean, std):
-    list_transforms = [
-        # albumentations.Resize(size, size) # now doing this in __getitem__()
-    ]
-    if phase == "train":
-        list_transforms.extend(
-            [
-                albumentations.Transpose(p=0.5),
-                albumentations.Flip(p=0.5),
-                albumentations.ShiftScaleRotate(
-                    shift_limit=0,  # no resizing
-                    scale_limit=0.1,
-                    rotate_limit=120,
-                    p=0.5,
-                    border_mode=cv2.BORDER_CONSTANT
-                ),
-                albumentations.RandomBrightnessContrast(p=0.25),
-            ]
-        )
-    list_transforms.extend(
-        [
-
-            albumentations.Normalize(mean=mean, std=std, p=1),
-            #albumentations.Resize(size, size),
-            AT.ToTensor(normalize=None),  # [6]
-        ]
-    )
-    return albumentations.Compose(list_transforms)
-
-
-def get_sampler(df, class_weights=[1, 1, 1, 1, 1]):
+def get_sampler(df, cfg):
+    class_weights = cfg['class_weights']
     print("weights", class_weights)
     dataset_weights = [class_weights[idx] for idx in df["diagnosis"]]
     #dataset_weights = df["weight"].values
@@ -99,83 +68,75 @@ def get_sampler(df, class_weights=[1, 1, 1, 1, 1]):
     return datasampler
 
 
-def resampled(df):
-    ''' resample `total` data points from old data, following the dist of org data '''
+def resampled(df, cfg):
+    ''' resample from df with replace=False'''
     def sample(obj):  # [5]
         return obj.sample(n=count_dict[obj.name], replace=False)
 
-    count_dict = {
-        0: 6000,
-        2: 5292,
-        1: 2443,
-        3: 873,
-        4: 708
-    }  # notice the order of keys
-
-    sampled_df = df.groupby('diagnosis').apply(
-        sample).reset_index(drop=True)
+    count_dict = cfg['count_dict']
+    sampled_df = df.groupby('diagnosis').apply(sample).reset_index(drop=True)
 
     return sampled_df
 
 
-def provider(
-    fold,
-    total_folds,
-    images_folder,
-    df_path,
-    phase,
-    size,
-    mean,
-    std,
-    class_weights=None,
-    batch_size=8,
-    num_workers=4,
-    num_samples=4000,
-):
+def provider(phase, cfg):
+    fold = cfg['fold']
+    total_folds = cfg['total_folds']
+    data_folder = cfg['data_folder']
+    df_path = cfg['df_path']
+    class_weights = eval(cfg['class_weights'])
+    batch_size = cfg['batch_size'][phase]
+    num_workers = cfg['num_workers']
+    num_samples = cfg['num_samples']
+
     df = pd.read_csv(df_path)
     HOME = os.path.abspath(os.path.dirname(__file__))
 
     #hard_examples = np.load('data/hard_examples1.npy')  # [9]
     #df['weight'] = 1
     #df.at[hard_examples, 'weight'] = 2
-
-    #bad_indices = np.load(os.path.join(HOME, "data/bad_train_indices.npy"))
-    #dup_indices = np.load(
-    #    os.path.join(HOME, "data/dups_with_same_diagnosis.npy")
-    #)  # [3]
-    #duplicates = df.iloc[dup_indices]
-
-    #all_dups = np.array(list(bad_indices) + list(dup_indices))
-    #df = df.drop(df.index[all_dups])  # remove duplicates and split train/val
-
-    '''later appended also'''
-    #print('num_samples:', num_samples)
-    #if num_samples:  # [4]
-    #    df = df.iloc[:num_samples]
+    if cfg['tc_dups']:
+        bad_indices = np.load(os.path.join(HOME, cfg["bad_idx"]))
+        dup_indices = np.load(os.path.join(HOME, cfg["dups_wsd"]))  # [3]
+        duplicates = df.iloc[dup_indices]
+        all_dups = np.array(list(bad_indices) + list(dup_indices))
+        df = df.drop(df.index[all_dups])  # remove duplicates and split train/val
 
     #''' to be used only with old data training '''
-    #df = resampled(df)
-    #print(f'sampled df shape: {df.shape}')
-    #print('data dist:\n',  df['diagnosis'].value_counts(normalize=True))
+    if cfg['sample']:
+        df = resampled(df, cfg)
+        print(f'sampled df shape: {df.shape}')
+        print('data dist:\n',  df['diagnosis'].value_counts(normalize=True))
 
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(
         df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
 
-    #train_df = train_df.append(duplicates, ignore_index=True)  # add all
+    if cfg['tc_dups']:
+        train_df = train_df.append(duplicates, ignore_index=True)  # add all
 
     #train_df = pd.read_csv('data/train32.csv')
     #train_df = df.copy()
-    #val_df = pd.read_csv('data/train.csv')
+    val_new_df = pd.read_csv('data/train.csv')
 
-    df = train_df if phase == "train" else val_df
+    if 'folder' in cfg.keys():
+        # save for analysis, later on
+        train_df.to_csv(os.path.join(cfg['folder'], 'train.csv'), index=False)
+        val_df.to_csv(os.path.join(cfg['folder'], 'val.csv'), index=False)
 
-    image_dataset = ImageDataset(df, images_folder, size, mean, std, phase)
+    if phase == "train":
+        df = train_df
+    elif phase == "val":
+        df = val_df
+    elif phase == "val_new":
+        df = val_new_df
+
+    image_dataset = ImageDataset(df, phase, cfg)
 
     datasampler = None
     if phase == "train" and class_weights:
-        datasampler = get_sampler(df, class_weights=class_weights)
+        datasampler = get_sampler(df, cfg)
     print('datasampler:', datasampler)
 
     dataloader = DataLoader(
@@ -196,42 +157,21 @@ if __name__ == "__main__":
     start = time.time()
     #phase = "train"
     phase = "val"
-    num_workers = 8
-    fold = 0
-    total_folds = 5
-    mean = (0.485, 0.456, 0.406)
-    std = (0.229, 0.224, 0.225)
-    #mean = (0.5, 0.5, 0.5)
-    #std = (0.5, 0.5, 0.5)
 
-    size = 300
-
-    root = os.path.dirname(__file__)  # data folder
-    data_folder = "data"
-    train_df_name = 'train.csv'
-    #train_df_name = "train12.csv"
-    #train_df_name = 'train_old.csv'
-    num_samples = None  # 5000
-    class_weights = True  # [1, 1, 1, 1, 1]
-    batch_size = 16
-    # data_folder = 'external_data'
-    images_folder = os.path.join(root, data_folder, "train_images/")  #
-    df_path = os.path.join(root, data_folder, train_df_name)  #
-
-    dataloader = provider(
-        fold,
-        total_folds,
-        images_folder,
-        df_path,
-        phase,
-        size,
-        mean,
-        std,
-        class_weights=class_weights,
-        batch_size=batch_size,
-        num_workers=num_workers,
-        num_samples=num_samples,
-    )
+    cfg = {
+        "num_workers": 8,
+        "fold": 0,
+        "total_folds": 5,
+        "mean": "(0.485, 0.456, 0.406)",
+        "std": "(0.229, 0.224, 0.225)",
+        "size": 300,
+        "data_folder": "data/npy_files/bgcc300",
+        "df_path": 'data/train.csv',
+        "num_samples": "None",
+        "class_weights": "None",
+        "batch_size": {"train": 16, "val": 8},
+    }
+    dataloader = provider(phase, cfg)
     total_labels = []
     total_len = len(dataloader)
     from collections import defaultdict
@@ -243,7 +183,7 @@ if __name__ == "__main__":
 
         print("%d/%d" % (idx, total_len), images.shape, labels.shape)
         total_labels.extend(labels.tolist())
-        # pdb.set_trace()
+        #pdb.set_trace()
     print(np.unique(total_labels, return_counts=True))
     diff = time.time() - start
     print('Time taken: %02d:%02d' % (diff//60, diff % 60))

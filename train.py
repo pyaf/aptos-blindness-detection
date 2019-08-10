@@ -10,7 +10,7 @@ import torch
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
 from collections import defaultdict
-
+from tqdm import tqdm
 # from ssd import build_ssd
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -19,8 +19,8 @@ from utils import *
 from dataloader import provider
 from shutil import copyfile
 from models import Model, get_model
-
-seed_pytorch()
+from extras import *
+from pathlib import Path
 
 
 warnings.filterwarnings("ignore")
@@ -32,60 +32,48 @@ date = "%s-%s" % (now.day, now.month)
 
 class Trainer(object):
     def __init__(self):
-        # remark = open("remark.txt", "r").read()
-        remark = ""
-        self.fold = 1
-        self.total_folds = 7
-        self.class_weights = None #[1, 1, 1, 1, 1.3]
-        # self.model_name = "resnext101_32x4d_v0"
-        # self.model_name = "resnext101_32x16d"
-        # self.model_name = "se_resnet50_v0"
-        # self.model_name = "densenet121"
-        self.model_name = "efficientnet-b5"
-        ext_text = "pos"
-        self.num_samples = None  # 5000
-        self.folder = f"weights/{date}_{self.model_name}_fold{self.fold}_{ext_text}"
-        self.resume = False
-        self.pretrained = True
-        self.pretrained_path = "weights/26-7_efficientnet-b5_fold1_os/ckpt31.pth"
-        self.resume_path = os.path.join(HOME, self.folder, "ckpt4.pth")
-        self.train_df_name = "train.csv"
-        #self.train_df_name = "train12.csv"
-        #self.train_df_name = "train32.csv"
-        #self.train_df_name = "train_old.csv"
-        #data_folder = 'external_data'
-        self.num_workers = 12
-        self.batch_size = {"train": 16, "val": 8}
-        self.num_classes = 1
-        self.top_lr = 5e-6
-        self.ep2unfreeze = 0
-        self.num_epochs = 40
-        # self.base_lr = self.top_lr * 0.001
-        self.base_lr = None
-        self.momentum = 0.95
-        self.size = 300
-        self.mean = (0.485, 0.456, 0.406)
-        self.std = (0.229, 0.224, 0.225)
-        # self.mean = (0, 0, 0)
-        # self.std = (1, 1, 1)
-        # self.epoch_2_lr = {1: 2, 3: 5, 5: 2, 6:5, 7:2, 9:5} # factor to scale base_lr
-        # self.weight_decay = 5e-4
+        seed_pytorch()
+        self.args = get_parser()
+        cfg = load_cfg(self.args)
+        self.fold = cfg['fold']
+        self.total_folds = cfg['total_folds']
+        self.class_weights = cfg['class_weights']
+        self.model_name = cfg['model_name']
+        ext_text = cfg['ext_text']
+        self.num_samples = cfg['num_samples']
+        self.filename = Path(self.args.filepath).stem
+        #{date}_{self.model_name}_f{self.fold}_{ext_text}
+        self.folder = f"weights/{self.filename}"
+        cfg['folder'] = self.folder
+        self.resume = cfg['resume']
+        self.pretrained = cfg['pretrained']
+        self.pretrained_path = cfg['pretrained_path']
+        self.num_workers = cfg['num_workers']
+        self.batch_size = cfg['batch_size']
+        self.accumulation_steps = {x: 32//bs for x, bs in self.batch_size.items()}
+        self.num_classes = cfg['num_classes']
+        self.top_lr = eval(cfg['top_lr'])
+        self.ep2unfreeze = cfg['ep2unfreeze']
+        self.num_epochs = cfg['num_epochs']
+        self.base_lr = cfg['base_lr']
+        self.momentum = cfg['momentum']
+        self.size = cfg['size']
+        self.mean = eval(cfg['mean'])
+        self.std = eval(cfg['std'])
+        self.phases = cfg['phases']
+        self.cfg = cfg
+        self.start_epoch = 0
         self.best_qwk = 0
         self.best_loss = float("inf")
-        self.start_epoch = 0
-        self.phases = ["train", "val"]
         self.cuda = torch.cuda.is_available()
         torch.set_num_threads(12)
-        self.device = torch.device("cuda:0" if self.cuda else "cpu")
-        data_folder = "data"
-        self.images_folder = os.path.join(HOME, data_folder, "train_images")
-        self.df_path = os.path.join(HOME, data_folder, self.train_df_name)
+        self.device = torch.device("cuda" if self.cuda else "cpu")
+        self.data_folder = cfg['data_folder']
+        self.df_path = cfg['df_path']
+        self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
         self.save_folder = os.path.join(HOME, self.folder)
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
-        self.tensor_type = "torch%s.FloatTensor" % (
-            ".cuda" if self.cuda else "")
-        torch.set_default_tensor_type(self.tensor_type)
         self.net = get_model(self.model_name, self.num_classes)
         # self.criterion = torch.nn.CrossEntropyLoss()
         # self.criterion = torch.nn.BCELoss() # requires sigmoid pred inputs
@@ -115,32 +103,17 @@ class Trainer(object):
         self.net, self.optimizer = amp.initialize(
             self.net, self.optimizer, opt_level="O1", verbosity=0
         )
-
-        if self.cuda:
-            cudnn.benchmark = True
+        if self.cuda: cudnn.benchmark = True
         self.tb = {
             x: Logger(os.path.join(self.save_folder, "logs", x))
-            for x in ["train", "val"]
+            for x in self.phases
         }  # tensorboard logger, see [3]
         mkdir(self.save_folder)
         self.dataloaders = {
-            phase: provider(
-                self.fold,
-                self.total_folds,
-                self.images_folder,
-                self.df_path,
-                phase,
-                self.size,
-                self.mean,
-                self.std,
-                class_weights=self.class_weights,
-                batch_size=self.batch_size[phase],
-                num_workers=self.num_workers,
-                num_samples=self.num_samples,
-            )
-            for phase in ["train", "val"]
+            phase: provider(phase, cfg) for phase in self.phases
         }
-        save_hyperparameters(self, remark)
+        print_cfg(cfg, self)
+        #save_hyperparameters(self, "")
 
     def load_state(self):  # [4]
         if self.resume:
@@ -184,34 +157,32 @@ class Trainer(object):
         return loss, outputs
 
     def iterate(self, epoch, phase):
+        start = time.strftime("%H:%M:%S")
+        self.log(f"Starting epoch: {epoch} | phase: {phase} | ⏰: {start}")
         meter = Meter(phase, epoch, self.save_folder)
-        self.log("Starting epoch: %d | phase: %s " % (epoch, phase))
         batch_size = self.batch_size[phase]
-        start = time.time()
         self.net.train(phase == "train")
         dataloader = self.dataloaders[phase]
         running_loss = 0
-        total_iters = len(dataloader)
-        total_images = len(dataloader)
-        for iteration, batch in enumerate(dataloader):
+        total_batches = len(dataloader)
+        tk0 = tqdm(dataloader, total=total_batches)
+        accu_steps = self.accumulation_steps[phase]
+        self.optimizer.zero_grad()
+        for itr, batch in enumerate(tk0):
             fnames, images, targets = batch
-            # pdb.set_trace()
-            self.optimizer.zero_grad()
             loss, outputs = self.forward(images, targets)
+            loss = loss / accu_steps
             if phase == "train":
                 with amp.scale_loss(loss, self.optimizer) as scaled_loss:
                     scaled_loss.backward()
-                # loss.backward()
-                self.optimizer.step()
+                if (itr + 1 ) % accu_steps == 0:
+                    self.optimizer.step()
+                    self.optimizer.zero_grad()
             running_loss += loss.item()
-            # pdb.set_trace()
             meter.update(targets, outputs.detach())
-            if iteration % 100 == 0:
-                iter_log(self.log, phase, epoch, iteration,
-                         total_iters, loss, start)
-                # break
+            tk0.set_postfix(loss=((running_loss * accu_steps ) / ((itr + 1))))
         best_thresholds = meter.get_best_thresholds()
-        epoch_loss = running_loss / total_images
+        epoch_loss = (running_loss * accu_steps) / total_batches
         qwk = epoch_log(self.log, self.tb, phase,
                         epoch, epoch_loss, meter, start)
         torch.cuda.empty_cache()
@@ -235,6 +206,7 @@ class Trainer(object):
                 "state_dict": self.net.state_dict(),
                 "optimizer": self.optimizer.state_dict(),
             }
+            self.iterate(epoch, "val_new")
             val_loss, val_qwk, best_thresholds = self.iterate(epoch, "val")
             state["best_thresholds"] = best_thresholds
             torch.save(state, self.ckpt_path)  # [2]
@@ -249,9 +221,12 @@ class Trainer(object):
                 self.ckpt_path, os.path.join(
                     self.save_folder, "ckpt%d.pth" % epoch)
             )
-            print_time(self.log, t_epoch_start, "Time taken by the epoch")
+            if epoch==0 and len(self.dataloaders['train']) > 100:
+                # make sure train/val ran error free, and it's not debugging
+                commit(self.filename)
+            #print_time(self.log, t_epoch_start, "Time taken by the epoch")
             print_time(self.log, t0, "Total time taken so far")
-            self.log("\n" + "=" * 60 + "\n")
+            #self.log("\n" + "=" * 60 + "\n")
 
 
 if __name__ == "__main__":
