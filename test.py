@@ -92,7 +92,7 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        path = os.path.join(self.root, fname + ".png")
+        path = os.path.join(self.root, fname + ".tif")
         image = load_ben_color(path, size=self.size, crop=True)
         #image = self.images[idx]
 
@@ -148,11 +148,15 @@ if __name__ == "__main__":
 
     if predict_on == "test":
         sample_submission_path = "data/sample_submission.csv"
-    else:
+    elif predict_on == "train":
         sample_submission_path = "data/train.csv"
+    elif predict_on == "train_mess":
+        sample_submission_path = "data/train_messidor.csv"
 
     tta = 0  # number of augs in tta
     root = f"data/{predict_on}_images/"
+    if predict_on == "train_mess":
+        root = "external_data/messidor/train_images/"
     size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
@@ -206,7 +210,6 @@ if __name__ == "__main__":
         model.load_state_dict(state["state_dict"])
         best_thresholds = state["best_thresholds"]
         print(f"Best thresholds: {best_thresholds}")
-        #for i in range(5):
         preds = get_predictions(model, testset, tta)
         pred1 = predict(preds, best_thresholds)
         pred2 = predict(preds, base_thresholds)

@@ -524,6 +524,13 @@ the model is not performing good. out of total 750 mis preds in train.csv, more 
 *lr matters a lot, use 5e-6 for finetuning purposes*
 forgot to start with ckpt14, started with ckpt10 instead.
 
+`118_efficientnet-b5_f1_postraug2`: same as postraug, but with lr: 5e-6
+ckpt 13, 16 look good.
+
+There are no class 4 in messidor??? wtf, is there any difference in nomenclature?
+model is missing 350 cases out of 1200.
+
+`118_efficientnet-b5_f1_postraugnm`: same as above without messidor.
 
 
 
