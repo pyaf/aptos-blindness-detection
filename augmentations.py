@@ -51,7 +51,7 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                strong_aug(),
+                #strong_aug(),
                 #Transpose(p=0.5),
                 #Flip(p=0.5),
                 #ShiftScaleRotate(
@@ -75,3 +75,40 @@ def get_transforms(phase, cfg):
     return Compose(list_transforms)
 
 
+def get_test_transforms(size, mean, std):
+
+    list_transforms = []
+    list_transforms.extend(
+        [
+            strong_aug(),
+            #ShiftScaleRotate(
+            #    shift_limit=0,  # no resizing
+            #    scale_limit=0.1,
+            #    rotate_limit=120,
+            #    p=0.5,
+            #    border_mode=cv2.BORDER_CONSTANT
+            #),
+        ]
+    )
+    return Compose(list_transforms)
+
+
+'''
+        self.TTA = albumentations.Compose(
+            [
+                albumentations.Rotate(limit=180, p=0.5),
+                albumentations.Transpose(p=0.5),
+                albumentations.Flip(p=0.5),
+                albumentations.RandomScale(scale_limit=0.1),
+            ]
+        )
+        self.transform = albumentations.Compose(
+            [
+                albumentations.Normalize(mean=mean, std=std, p=1),
+                albumentations.Resize(size, size),
+                AT.ToTensor(),
+            ]
+        )
+
+
+'''

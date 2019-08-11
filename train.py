@@ -139,7 +139,7 @@ class Trainer(object):
 
     def iterate(self, epoch, phase):
         start = time.strftime("%H:%M:%S")
-        self.log(f"Starting epoch: {epoch} | phase: {phase} | ⏰: {start}")
+        self.log(f"Starting epoch: {epoch} | phase: {phase} | {start}")
         meter = Meter(phase, epoch, self.save_folder)
         batch_size = self.batch_size[phase]
         self.net.train(phase == "train")

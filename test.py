@@ -57,10 +57,10 @@ class TestDataset(data.Dataset):
         self.num_samples = len(self.fnames)
         self.tta = tta
         print("Loading images...")
-        if phase=="train":
-            self.images = np.load('data/all_train_bgcc300.npy')
-        else:
-            self.images = np.load('data/all_test_bgcc300.npy')
+        #if phase=="train":
+        #    self.images = np.load('data/all_train_bgcc300.npy')
+        #else:
+        #    self.images = np.load('data/all_test_bgcc300.npy')
         print("Done")
         #self.images = []  # because small dataset.
         #for fname in tqdm(self.fnames):
@@ -91,10 +91,10 @@ class TestDataset(data.Dataset):
         )
 
     def __getitem__(self, idx):
-        # fname = self.fnames[idx]
-        # path = os.path.join(self.root, fname + ".png")
-        # image = load_ben_color(path, size=self.size, crop=True)
-        image = self.images[idx]
+        fname = self.fnames[idx]
+        path = os.path.join(self.root, fname + ".png")
+        image = load_ben_color(path, size=self.size, crop=True)
+        #image = self.images[idx]
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -131,15 +131,13 @@ def get_model_name_fold(model_folder_path):
         "/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
-    fold = fold.split("fold")[-1]  # 0
+    fold = fold.split("f")[-1]  # 0
     return model_name, int(fold)
 
 
 if __name__ == "__main__":
     """
-    Generates predictions on train/test set using the ckpts saved in the model folder path
-    and saves them in npy_folder in npy format which can be analyses later for different
-    thresholds
+    Generates predictions on train/test set using the ckpts saved in the model folder path and saves them in npy_folder in npy format which can be analyses later for different thresholds
     """
     parser = get_parser()
     args = parser.parse_args()
@@ -155,7 +153,7 @@ if __name__ == "__main__":
 
     tta = 0  # number of augs in tta
     root = f"data/{predict_on}_images/"
-    size = 300
+    size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
     # mean = (0, 0, 0)

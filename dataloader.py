@@ -133,6 +133,7 @@ def provider(phase, cfg):
     elif phase == "val_new":
         df = pd.read_csv('data/train.csv')
 
+    #df = pd.read_csv(cfg['diff_path'])
     print(f"{phase}: {df.shape}")
 
     image_dataset = ImageDataset(df, phase, cfg)

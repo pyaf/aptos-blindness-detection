@@ -141,7 +141,6 @@ def commit(model_name):
     cmd2 = f'git commit -m "{model_name}"'
     process = subprocess.Popen(cmd1.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
-    print(output)
     if error:
         print(error)
     process = subprocess.Popen(cmd2.split(), stdout=subprocess.PIPE)

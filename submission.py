@@ -20,6 +20,7 @@ from sklearn.metrics import cohen_kappa_score
 from models import Model, get_model
 from utils import *
 from image_utils import *
+from augmentations import *
 
 
 def get_parser():
@@ -43,14 +44,7 @@ class TestDataset(data.Dataset):
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
-        self.TTA = albumentations.Compose(
-            [
-                albumentations.Rotate(limit=180, p=0.5),
-                albumentations.Transpose(p=0.5),
-                albumentations.Flip(p=0.5),
-                albumentations.RandomScale(scale_limit=0.1),
-            ]
-        )
+        self.TTA = get_test_transforms(size, mean, std)
         self.transform = albumentations.Compose(
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
@@ -62,8 +56,6 @@ class TestDataset(data.Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         path = os.path.join(self.root, fname + ".png")
-        # image = load_image(path, size)
-        # image = load_ben_gray(path)
         image = load_ben_color(path, size=self.size, crop=True)
 
         images = [self.transform(image=image)["image"]]
@@ -100,7 +92,7 @@ def get_model_name_fold(ckpt_path):
     model_folder = ckpt_path.split("/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
-    fold = fold.split("fold")[-1]  # 0
+    fold = fold.split("f")[-1]  # 0
     return model_name, int(fold)
 
 
@@ -113,17 +105,17 @@ if __name__ == "__main__":
     ckpt_path = args.ckpt_path
     predict_on = args.predict_on
     model_name, fold = get_model_name_fold(ckpt_path)
-
+    model_name = "efficientnet-b5"
     if predict_on == "test":
         sample_submission_path = "data/sample_submission.csv"
     else:
         sample_submission_path = "data/train.csv"
 
     sub_path = ckpt_path.replace(".pth", f"{predict_on}.csv")
-    tta = 4  # number of augs in tta
+    tta = 0  # number of augs in tta
 
     root = f"data/{predict_on}_images/"
-    size = 256
+    size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
     # mean = (0, 0, 0)
@@ -159,18 +151,24 @@ if __name__ == "__main__":
 
     state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
     model.load_state_dict(state["state_dict"])
-    best_thresholds = state["best_thresholds"]
-    print(f"Best thresholds: {best_thresholds}")
-    preds = get_predictions(model, testset, tta)
+    #best_thresholds = state["best_thresholds"]
+    base_thresholds = [0.5, 1.5, 2.5, 3.5]
+    best_thresholds = base_thresholds
+    print("best_thresholds:", best_thresholds)
 
-    pred_labels = predict(preds, best_thresholds)
-    print(np.unique(pred_labels, return_counts=True))
+    predictions = get_predictions(model, testset, tta)
+    best_preds = predict(predictions, np.array(best_thresholds))
+    base_preds = predict(predictions, np.array(base_thresholds))
+    print("best:", np.unique(best_preds, return_counts=True)[1])
+    print("base:", np.unique(base_preds, return_counts=True)[1])
+
     pdb.set_trace()
-    df.loc[:, "diagnosis"] = pred_labels
+    df.loc[:, "diagnosis"] = base_preds
     print(f"Saving predictions at {sub_path}")
     df.to_csv(sub_path, index=False)
     print("Predictions saved!")
 
+    #print(np.unique(predict(predictions, np.array([0.5, 1.5, 2.5, 3.5])), return_counts=True)[1])
 
 """
 Footnotes
