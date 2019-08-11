@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader, Dataset, sampler
 from torchvision.datasets.folder import pil_loader
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from utils import to_multi_label
+from extras import *
 from augmentations import get_transforms
 
 
@@ -116,9 +117,9 @@ def provider(phase, cfg):
     if cfg['tc_dups']:
         train_df = train_df.append(duplicates, ignore_index=True)  # add all
 
-    #train_df = pd.read_csv('data/train32.csv')
-    #train_df = df.copy()
-    val_new_df = pd.read_csv('data/train.csv')
+    if cfg['messidor_in_train']:
+        mes_df = pd.read_csv(cfg['mes_df'])
+        train_df = train_df.append(mes_df, ignore_index=True)
 
     if 'folder' in cfg.keys():
         # save for analysis, later on
@@ -130,7 +131,9 @@ def provider(phase, cfg):
     elif phase == "val":
         df = val_df
     elif phase == "val_new":
-        df = val_new_df
+        df = pd.read_csv('data/train.csv')
+
+    print(f"{phase}: {df.shape}")
 
     image_dataset = ImageDataset(df, phase, cfg)
 
@@ -155,22 +158,10 @@ def provider(phase, cfg):
 if __name__ == "__main__":
     import time
     start = time.time()
-    #phase = "train"
-    phase = "val"
-
-    cfg = {
-        "num_workers": 8,
-        "fold": 0,
-        "total_folds": 5,
-        "mean": "(0.485, 0.456, 0.406)",
-        "std": "(0.229, 0.224, 0.225)",
-        "size": 300,
-        "data_folder": "data/npy_files/bgcc300",
-        "df_path": 'data/train.csv',
-        "num_samples": "None",
-        "class_weights": "None",
-        "batch_size": {"train": 16, "val": 8},
-    }
+    phase = "train"
+    #phase = "val"
+    args = get_parser()
+    cfg = load_cfg(args)
     dataloader = provider(phase, cfg)
     total_labels = []
     total_len = len(dataloader)

@@ -502,6 +502,29 @@ Preparing `bgcc456`, idea expected size for efficientnet-b5, have added yaml con
 
 Analysed that model is doing fine on blurry images, no need to remove them.
 
+`108_efficientnet-b5_f1_ostraug`: training on old data (train/val) and new data (val_new), without cw, forgot to set `sample`=True in config file -_-, so training on whole of old data.
+class 1 is getting biased towards 0 in val, and towards 2 in val_new.
+The thing is all the val metrics are being logged using best_thresholds. Which makes them fluctuating.
+I'm gonna add plots for both best and base metrics.
+ep2unfreeze was set 0 -_-,
+folds 1/7, train/val: 87.5/12.5
+
+*From now on, before starting any experiment, create a new yaml file with the name of the experiment*
+`118_efficientnet-b5_f1_postraug`
+starting with ckpt14 of ostraug model., lr: 1e-6
+folds: 1/5: 80/20, train = train1's 80% + messidor data, val=train1's 20%
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -582,7 +605,7 @@ Analysed that model is doing fine on blurry images, no need to remove them.
 
 1. Previous competition data: https://www.kaggle.com/tanlikesmath/diabetic-retinopathy-resized
 2. Model training slow? (GPU utilization low?), speed up the dataloader, the __getitem__() is the culprit, too much preprocessing before transformation? save the damn thing in npy files bro --> 95% + utilization of GPU
-3.
+3. Copy/paste replacing a word in vim with the one in clipboard. yiw, ciw CTRL-R 0, or viwp
 
 
 

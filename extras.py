@@ -30,14 +30,24 @@ def get_parser():
 def load_cfg(args):
     filepath = args.filepath
     with open(filepath, 'r') as stream:
-        cfg = yaml.load(stream)
+        try:
+            cfg = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(cfg)
     return cfg
 
 
-def print_cfg(cfg, trainer):
-    print(f'Folder: {trainer.folder}')
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(cfg)
+def save_cfg(cfg, trainer):
+    augmentations = trainer.dataloaders["train"].dataset.transform.transforms
+    text = (
+        f"model_name: {trainer.model_name}\n"
+        + f"augmentations: {augmentations}\n"
+        + f"criterion: {trainer.criterion}\n"
+        + f"optimizer: {trainer.optimizer}\n"
+    )
+    print(text)
     filepath = trainer.args.filepath
     filename = os.path.basename(filepath)
     cp_file = os.path.join(trainer.save_folder, filename)
@@ -110,46 +120,6 @@ def iter_log(log, phase, epoch, iteration, epoch_size, loss, start):
 def mkdir(folder):
     if not os.path.exists(folder):
         os.mkdir(folder)
-
-
-
-def save_hyperparameters(trainer, remark):
-    hp_file = os.path.join(trainer.save_folder, "parameters.txt")
-    time_now = datetime.now()
-    augmentations = trainer.dataloaders["train"].dataset.transform.transforms
-    # pdb.set_trace()
-    string_to_write = (
-        f"Time: {time_now}\n"
-        + f"model_name: {trainer.model_name}\n"
-        + f"train_df_name: {trainer.train_df_name}\n"
-        + f"images_folder: {trainer.images_folder}\n"
-        + f"resume: {trainer.resume}\n"
-        + f"pretrained: {trainer.pretrained}\n"
-        + f"pretrained_path: {trainer.pretrained_path}\n"
-        + f"folder: {trainer.folder}\n"
-        + f"fold: {trainer.fold}\n"
-        + f"total_folds: {trainer.total_folds}\n"
-        + f"num_samples: {trainer.num_samples}\n"
-        + f"sampling class weights: {trainer.class_weights}\n"
-        + f"size: {trainer.size}\n"
-        + f"top_lr: {trainer.top_lr}\n"
-        + f"base_lr: {trainer.base_lr}\n"
-        + f"num_workers: {trainer.num_workers}\n"
-        + f"batchsize: {trainer.batch_size}\n"
-        + f"momentum: {trainer.momentum}\n"
-        + f"mean: {trainer.mean}\n"
-        + f"std: {trainer.std}\n"
-        + f"start_epoch: {trainer.start_epoch}\n"
-        + f"batchsize: {trainer.batch_size}\n"
-        + f"augmentations: {augmentations}\n"
-        + f"criterion: {trainer.criterion}\n"
-        + f"optimizer: {trainer.optimizer}\n"
-        + f"remark: {remark}\n"
-    )
-
-    with open(hp_file, "a") as f:
-        f.write(string_to_write)
-    print(string_to_write)
 
 
 def seed_pytorch(seed=69):
