@@ -95,6 +95,7 @@ class Trainer(object):
         self.dataloaders = {
             phase: provider(phase, cfg) for phase in self.phases
         }
+        check_sanctity(self.dataloaders)
         save_cfg(cfg, self)
 
     def load_state(self):  # [4]

@@ -55,7 +55,7 @@ class ImageDataset(Dataset):
         return fname, image, label
 
     def __len__(self):
-        #return 100
+        #return 1000
         return len(self.df)
 
 
@@ -78,7 +78,7 @@ def get_sampler(df, cfg):
 def resampled(df, cfg):
     ''' resample from df with replace=False'''
     def sample(obj):  # [5]
-        return obj.sample(n=count_dict[obj.name], replace=False)
+        return obj.sample(n=count_dict[obj.name], replace=False, random_state=69)
 
     count_dict = cfg['count_dict']
     sampled_df = df.groupby('diagnosis').apply(sample).reset_index(drop=True)
@@ -136,12 +136,11 @@ def provider(phase, cfg):
         val_df.to_csv(os.path.join(cfg['folder'], 'val.csv'), index=False)
 
     if phase == "train":
-        df = train_df
+        df = train_df.copy()
     elif phase == "val":
-        df = val_df
+        df = val_df.copy()
     elif phase == "val_new":
         df = pd.read_csv('data/train.csv')
-
     #df = pd.read_csv(cfg['diff_path'])
     print(f"{phase}: {df.shape}")
 
@@ -166,13 +165,31 @@ def provider(phase, cfg):
 
 
 if __name__ == "__main__":
+    ''' doesn't work, gotta set seeds at function level
+    seed = 69
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    '''
+
+
     import time
     start = time.time()
     phase = "train"
-    #phase = "val"
     args = get_parser()
     cfg = load_cfg(args)
     dataloader = provider(phase, cfg)
+    ''' train val set sanctity
+    #pdb.set_trace()
+    tdf = dataloader.dataset.df
+    phase = "val"
+    dataloader = provider(phase, cfg)
+    vdf = dataloader.dataset.df
+    print(len([x for x in tdf.id_code.tolist() if x in vdf.id_code.tolist()]))
+    exit()
+    '''
     total_labels = []
     total_len = len(dataloader)
     from collections import defaultdict
@@ -190,7 +207,7 @@ if __name__ == "__main__":
     print('Time taken: %02d:%02d' % (diff//60, diff % 60))
 
     print(np.unique(list(fnames_dict.values()), return_counts=True))
-    pdb.set_trace()
+    #pdb.set_trace()
 
 
 """

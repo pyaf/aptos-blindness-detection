@@ -56,18 +56,21 @@ class TestDataset(data.Dataset):
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
+        '''
         self.ext = ".tif" if predict_on == "train_mess" else ".png"
         print("Loading images...")
-        #if predict_on =="train":
-        #    self.images = np.load('data/all_train_bgcc300.npy')
-        #else:
-        #    self.images = np.load('data/all_test_bgcc300.npy')
+        if predict_on =="train":
+            self.images = np.load('data/all_train_bgcc456.npy')
+        elif predict_on == "test":
+            self.images = np.load('data/all_test_bgcc456.npy')
+        else:
+            print('line 66 err')
         self.images = []  # because small dataset.
         for fname in tqdm(self.fnames):
             path = os.path.join(self.root, fname + self.ext)
             image = load_ben_color(path, size=self.size, crop=True)
             self.images.append(image)
-
+        '''
         print("Done")
         self.TTA = albumentations.Compose(
             [
@@ -95,7 +98,8 @@ class TestDataset(data.Dataset):
         fname = self.fnames[idx]
         #path = os.path.join(self.root, fname + self.ext)
         #image = load_ben_color(path, size=self.size, crop=True)
-        image = self.images[idx]
+        #image = self.images[idx]
+        path = os.path.join(self.root, fname + '.npy')
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -155,9 +159,12 @@ if __name__ == "__main__":
         sample_submission_path = "data/train_messidor.csv"
 
     tta = 0  # number of augs in tta
+    '''
     root = f"data/{predict_on}_images/"
     if predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
+    '''
+    root = 'data/npy_files/bgcc456'
     size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)

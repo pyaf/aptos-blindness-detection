@@ -568,10 +568,17 @@ Actual
 selecting ckpt21 for finetuning.
 
 `128_efficientnet-b5_f1_postraugs`: finetuning previous models' ckpt21 on new data. fold/total: 1/5
+as there was no augmentations, my bad, model is failing badly at class 4, over conf with class 1.
 
 
+I've added bgcc456 images for test images too in `bgcc456`, useful in inference.
+Analysing the ben preprocessing method, I see
+image = cv2.addWeighted(gray_image, 4, gauss_img ,-4 , 128) # the trick is to add this line
+here alpha and beta are 4 and -4 respectively. I see that increasing abs values of these to 10, increases the sharpness of the image.
+*BUG*
+The old data training was doing so well on val set because obj.sample function didn't have random_seed set. Global seed setting may not work.
 
-
+`128_efficientnet-b5_f1_ostraug`: Retraining from scratch, mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
 
 
 # Questions and Ideas:

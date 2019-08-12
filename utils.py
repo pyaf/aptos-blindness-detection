@@ -207,6 +207,19 @@ def get_stats(cm):
     return acc, tpr, ppv, cls_tpr, cls_ppv
 
 
+def check_sanctity(dataloaders):
+    phases = dataloaders.keys()
+    if len(phases) > 1:
+        tnames = dataloaders['train'].dataset.fnames
+        vnames = dataloaders['val'].dataset.fnames
+        common = [x for x in tnames if x in vnames]
+        if len(common):
+            print('TRAIN AND VAL SET NOT DISJOINT')
+            exit()
+    else:
+        print('No sanctity check')
+
+
 """Footnotes:
 
 [1]: https://stackoverflow.com/questions/21884271/warning-about-too-many-open-figures

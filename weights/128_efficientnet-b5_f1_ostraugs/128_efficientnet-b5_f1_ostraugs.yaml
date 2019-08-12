@@ -40,5 +40,5 @@ count_dict:
     1: 2443
     3: 873
     4: 708
-messidor_in_train: False
+messidor_in_train: True
 mes_df: data/train_messidor.csv

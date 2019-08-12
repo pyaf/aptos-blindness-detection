@@ -1,3 +1,4 @@
+import cv2
 from albumentations import (
     HorizontalFlip, IAAPerspective, ShiftScaleRotate, CLAHE, RandomRotate90,
     Transpose, ShiftScaleRotate, Blur, OpticalDistortion, GridDistortion, HueSaturationValue,
@@ -11,9 +12,6 @@ from albumentations.torch import ToTensor
 
 def strong_aug(p=1):
     return Compose([
-        RandomRotate90(),
-        Flip(),
-        Transpose(),
         OneOf([
             IAAAdditiveGaussianNoise(),
             GaussNoise(),
@@ -23,7 +21,7 @@ def strong_aug(p=1):
             MedianBlur(blur_limit=3, p=.1),
             Blur(blur_limit=3, p=.1),
         ], p=0.2),
-        ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.2, rotate_limit=45, p=.2),
+        #ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.2, rotate_limit=45, p=.2),
         OneOf([
             OpticalDistortion(p=0.3),
             GridDistortion(p=.1),
@@ -51,17 +49,17 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                #strong_aug(),
-                #Transpose(p=0.5),
-                #Flip(p=0.5),
-                #ShiftScaleRotate(
-                #    shift_limit=0,  # no resizing
-                #    scale_limit=0.1,
-                #    rotate_limit=120,
-                #    p=0.5,
-                #    border_mode=cv2.BORDER_CONSTANT
-                #),
+                Transpose(p=0.5),
+                Flip(p=0.5),
+                ShiftScaleRotate(
+                    shift_limit=0,  # no resizing
+                    scale_limit=0.1,
+                    rotate_limit=120,
+                    p=0.5,
+                    border_mode=cv2.BORDER_CONSTANT
+                ),
                 #RandomBrightnessContrast(p=0.25),
+                strong_aug(),
             ]
         )
     list_transforms.extend(
