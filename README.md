@@ -537,8 +537,37 @@ val loss didn't improve!
 `218_test` starting with previous models' ckpt21, with 1.5 weight to hard examples.
 *don't do random experiments, read papers.*
 
+`128_efficientnet-b5_f1_ostraugs`: sampled old data training, forgot to add `straug`, training on no augmentations at all, normalize and totensor.
+after ckpt21:
+val set:
 
+base: QWK: 0.9101 | ACC: 0.8165 | TPR: 0.8259 | PPV: 0.8188
+Class TPR: {0: 0.7778, 1: 0.8367, 2: 0.8638, 3: 0.8, 4: 0.8515}
+Class PPV: {0: 0.9368, 1: 0.4875, 2: 0.9236, 3: 0.7576, 4: 0.9885}
+Predict       0             1             2             3             4
+Actual
+0             0.77778       0.2091        0.01225       0.00087       0.0
+1             0.13467       0.83668       0.02865       0.0           0.0
+2             0.0172        0.08995       0.86376       0.02778       0.00132
+3             0.0           0.0           0.2           0.8           0.0
+4             0.0           0.0           0.0495        0.09901       0.85149
 
+val_new set:
+
+base: QWK: 0.8399 | ACC: 0.6322 | TPR: 0.4512 | PPV: 0.5304
+Class TPR: {0: 0.8017, 1: 0.2054, 2: 0.6617, 3: 0.4145, 4: 0.1729}
+Class PPV: {0: 0.9938, 1: 0.1561, 2: 0.5912, 3: 0.1498, 4: 0.7612}
+Predict       0             1             2             3             4
+Actual
+0             0.80166       0.18726       0.01108       0.0           0.0
+1             0.01892       0.20541       0.6973        0.07297       0.00541
+2             0.002         0.06507       0.66166       0.26927       0.002
+3             0.0           0.01036       0.51295       0.41451       0.06218
+4             0.0           0.02034       0.27119       0.53559       0.17288
+
+selecting ckpt21 for finetuning.
+
+`128_efficientnet-b5_f1_postraugs`: finetuning previous models' ckpt21 on new data. fold/total: 1/5
 
 
 
