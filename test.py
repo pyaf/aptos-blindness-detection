@@ -50,24 +50,25 @@ def get_parser():
 
 
 class TestDataset(data.Dataset):
-    def __init__(self, root, df, size, mean, std, phase, tta=4):
+    def __init__(self, root, df, size, mean, std, predict_on, tta=4):
         self.root = root
         self.size = size
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
+        self.ext = ".tif" if predict_on == "train_mess" else ".png"
         print("Loading images...")
-        #if phase=="train":
+        #if predict_on =="train":
         #    self.images = np.load('data/all_train_bgcc300.npy')
         #else:
         #    self.images = np.load('data/all_test_bgcc300.npy')
-        print("Done")
-        #self.images = []  # because small dataset.
-        #for fname in tqdm(self.fnames):
-        #    path = os.path.join(self.root, fname + ".png")
-        #    image = load_ben_color(path, size=self.size, crop=True)
-        #    self.images.append(image)
+        self.images = []  # because small dataset.
+        for fname in tqdm(self.fnames):
+            path = os.path.join(self.root, fname + self.ext)
+            image = load_ben_color(path, size=self.size, crop=True)
+            self.images.append(image)
 
+        print("Done")
         self.TTA = albumentations.Compose(
             [
                 albumentations.Transpose(p=0.5),
@@ -92,9 +93,9 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        path = os.path.join(self.root, fname + ".tif")
-        image = load_ben_color(path, size=self.size, crop=True)
-        #image = self.images[idx]
+        #path = os.path.join(self.root, fname + self.ext)
+        #image = load_ben_color(path, size=self.size, crop=True)
+        image = self.images[idx]
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -145,7 +146,7 @@ if __name__ == "__main__":
     predict_on = args.predict_on
     start_epoch, end_epoch = args.epoch_range
     model_name, fold = get_model_name_fold(model_folder_path)
-
+    model_name = "efficientnet-b5"
     if predict_on == "test":
         sample_submission_path = "data/sample_submission.csv"
     elif predict_on == "train":

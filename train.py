@@ -63,7 +63,8 @@ class Trainer(object):
         self.device = torch.device("cuda" if self.cuda else "cpu")
         self.data_folder = cfg['data_folder']
         self.df_path = cfg['df_path']
-        self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
+        #self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
+        self.resume_path = cfg['resume_path']
         self.save_folder = os.path.join(HOME, self.folder)
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")

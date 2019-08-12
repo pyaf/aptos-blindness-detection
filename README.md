@@ -531,9 +531,11 @@ There are no class 4 in messidor??? wtf, is there any difference in nomenclature
 model is missing 350 cases out of 1200.
 
 `118_efficientnet-b5_f1_postraugnm`: same as above without messidor.
+val loss didn't improve!
 
 
-
+`218_test` starting with previous models' ckpt21, with 1.5 weight to hard examples.
+*don't do random experiments, read papers.*
 
 
 
@@ -620,6 +622,7 @@ model is missing 350 cases out of 1200.
 1. Previous competition data: https://www.kaggle.com/tanlikesmath/diabetic-retinopathy-resized
 2. Model training slow? (GPU utilization low?), speed up the dataloader, the __getitem__() is the culprit, too much preprocessing before transformation? save the damn thing in npy files bro --> 95% + utilization of GPU
 3. Copy/paste replacing a word in vim with the one in clipboard. yiw, ciw CTRL-R 0, or viwp
+4. da" delete content inside " including "
 
 
 

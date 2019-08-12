@@ -60,14 +60,20 @@ class ImageDataset(Dataset):
 
 
 def get_sampler(df, cfg):
-    class_weights = cfg['class_weights']
-    print("weights", class_weights)
-    dataset_weights = [class_weights[idx] for idx in df["diagnosis"]]
-    #dataset_weights = df["weight"].values
-    datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
-
+    if cfg['cw_sampling']:
+        '''sampler using class weights (cw)'''
+        class_weights = cfg['class_weights']
+        print("weights", class_weights)
+        dataset_weights = [class_weights[idx] for idx in df["diagnosis"]]
+        datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
+    if cfg['he_sampling']:
+        '''sampler using hard examples (he)'''
+        print('Hard example sampling')
+        dataset_weights = df["weight"].values
+        datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
+    else:
+        datasampler = None
     return datasampler
-
 
 def resampled(df, cfg):
     ''' resample from df with replace=False'''
@@ -92,10 +98,12 @@ def provider(phase, cfg):
 
     df = pd.read_csv(df_path)
     HOME = os.path.abspath(os.path.dirname(__file__))
+    df['weight'] = 1 # [10]
+    if cfg['he_sampling']:
+        hard_examples = pd.read_csv(cfg['hard_df']).index.tolist()
+        #hard_examples = np.load('data/hard_examples1.npy')  # [9]
+        df.at[hard_examples, 'weight'] = cfg['hard_ex_weight']
 
-    #hard_examples = np.load('data/hard_examples1.npy')  # [9]
-    #df['weight'] = 1
-    #df.at[hard_examples, 'weight'] = 2
     if cfg['tc_dups']:
         bad_indices = np.load(os.path.join(HOME, cfg["bad_idx"]))
         dup_indices = np.load(os.path.join(HOME, cfg["dups_wsd"]))  # [3]
@@ -119,6 +127,7 @@ def provider(phase, cfg):
 
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])
+        mes_df['weight'] = 1
         train_df = train_df.append(mes_df, ignore_index=True)
 
     if 'folder' in cfg.keys():
@@ -139,7 +148,7 @@ def provider(phase, cfg):
     image_dataset = ImageDataset(df, phase, cfg)
 
     datasampler = None
-    if phase == "train" and class_weights:
+    if phase == "train":
         datasampler = get_sampler(df, cfg)
     print('datasampler:', datasampler)
 
@@ -197,4 +206,5 @@ https://github.com/btgraham/SparseConvNet/tree/kaggle_Diabetic_Retinopathy_compe
 
 [6]: albumentations.Normalize will divide by 255, subtract mean and divide by std. output dtype = float32. ToTensor converts to torch tensor and divides by 255 if input dtype is uint8.
 [7]: indices of hard examples, evaluated using 0.81 scoring model.
+[8]: messidor df append will throw err when doing hard ex sampling.
 """
