@@ -579,6 +579,7 @@ here alpha and beta are 4 and -4 respectively. I see that increasing abs values 
 The old data training was doing so well on val set because obj.sample function didn't have random_seed set. Global seed setting may not work.
 
 `128_efficientnet-b5_f1_ostraug`: Retraining from scratch, mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
+ckpt15 looks good.
 
 
 # Questions and Ideas:
