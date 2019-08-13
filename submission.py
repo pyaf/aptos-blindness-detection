@@ -32,7 +32,7 @@ def get_parser():
         "--predict_on",
         dest="predict_on",
         help="predict on train or test set, options: test or train",
-        default="resnext101_32x4d",
+        default="test",
     )
     return parser
 
@@ -55,8 +55,11 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        path = os.path.join(self.root, fname + ".png")
-        image = load_ben_color(path, size=self.size, crop=True)
+        #path = os.path.join(self.root, fname + ".png")
+        #image = load_ben_color(path, size=self.size, crop=True)
+        path = os.path.join(self.root, fname + '.npy')
+        image = np.load(path)
+
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -112,9 +115,10 @@ if __name__ == "__main__":
         sample_submission_path = "data/train.csv"
 
     sub_path = ckpt_path.replace(".pth", f"{predict_on}.csv")
-    tta = 0  # number of augs in tta
+    tta = 4  # number of augs in tta
 
-    root = f"data/{predict_on}_images/"
+    #root = f"data/{predict_on}_images/"
+    root = "data/npy_files/bgcc456"
     size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
@@ -122,8 +126,8 @@ if __name__ == "__main__":
     # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
-    num_workers = 8
-    batch_size = 16
+    num_workers = 2
+    batch_size = 4
     device = torch.device("cuda" if use_cuda else "cpu")
     if use_cuda:
         cudnn.benchmark = True
@@ -148,12 +152,13 @@ if __name__ == "__main__":
     print(f"Predicting on: {predict_on} set")
     print(f"Root: {root}")
     print(f"Using tta: {tta}\n")
+    print(f"batch_size: {batch_size}")
 
     state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
     model.load_state_dict(state["state_dict"])
-    #best_thresholds = state["best_thresholds"]
+    best_thresholds = state["best_thresholds"]
     base_thresholds = [0.5, 1.5, 2.5, 3.5]
-    best_thresholds = base_thresholds
+    #best_thresholds = base_thresholds
     print("best_thresholds:", best_thresholds)
 
     predictions = get_predictions(model, testset, tta)

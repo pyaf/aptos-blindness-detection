@@ -578,8 +578,14 @@ here alpha and beta are 4 and -4 respectively. I see that increasing abs values 
 *BUG*
 The old data training was doing so well on val set because obj.sample function didn't have random_seed set. Global seed setting may not work.
 
-`128_efficientnet-b5_f1_ostraug`: Retraining from scratch, mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
+`128_efficientnet-b5_f1_ostraugs`: Retraining from scratch, sampled old data,  mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
 ckpt15 looks good.
+
+`128_efficientnet-b5_f1_postraugs`: Started with ckpt15 of the previous model.
+
+bhai augmentations try karne se pehle ek ek function ko samjh to liya kar, try to karliya kar..
+
+*READ again about messidor, there are only 4 classes (0, 1, 2, 3) only*
 
 
 # Questions and Ideas:

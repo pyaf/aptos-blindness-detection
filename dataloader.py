@@ -99,31 +99,32 @@ def provider(phase, cfg):
     df = pd.read_csv(df_path)
     HOME = os.path.abspath(os.path.dirname(__file__))
     df['weight'] = 1 # [10]
+
     if cfg['he_sampling']:
         hard_examples = pd.read_csv(cfg['hard_df']).index.tolist()
-        #hard_examples = np.load('data/hard_examples1.npy')  # [9]
         df.at[hard_examples, 'weight'] = cfg['hard_ex_weight']
 
     if cfg['tc_dups']:
-        bad_indices = np.load(os.path.join(HOME, cfg["bad_idx"]))
-        dup_indices = np.load(os.path.join(HOME, cfg["dups_wsd"]))  # [3]
-        duplicates = df.iloc[dup_indices]
-        all_dups = np.array(list(bad_indices) + list(dup_indices))
-        df = df.drop(df.index[all_dups])  # remove duplicates and split train/val
+        '''remove dups before train/val split'''
+        bad_dups = np.load(os.path.join(HOME, cfg["bad_idx"]))
+        good_dups = np.load(os.path.join(HOME, cfg["dups_wsd"]))  # [3]
+        good_dups_df = df.iloc[good_dups] # to be added later on
+        all_dups = np.array(list(bad_dups) + list(dup_dups))
+        df = df.drop(df.index[all_dups])
 
-    #''' to be used only with old data training '''
     if cfg['sample']:
+        '''used in old data training'''
         df = resampled(df, cfg)
         print(f'sampled df shape: {df.shape}')
-        print('data dist:\n',  df['diagnosis'].value_counts(normalize=True))
+        print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
 
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
-    train_idx, val_idx = list(kfold.split(
-        df["id_code"], df["diagnosis"]))[fold]
+    train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
 
     if cfg['tc_dups']:
-        train_df = train_df.append(duplicates, ignore_index=True)  # add all
+        '''add good duplicates'''
+        train_df = train_df.append(good_dups_df, ignore_index=False)
 
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])
@@ -139,8 +140,9 @@ def provider(phase, cfg):
         df = train_df.copy()
     elif phase == "val":
         df = val_df.copy()
-    elif phase == "val_new":
+    elif phase == "val_new": # [11]
         df = pd.read_csv('data/train.csv')
+
     #df = pd.read_csv(cfg['diff_path'])
     print(f"{phase}: {df.shape}")
 
@@ -149,7 +151,7 @@ def provider(phase, cfg):
     datasampler = None
     if phase == "train":
         datasampler = get_sampler(df, cfg)
-    print('datasampler:', datasampler)
+    print(f'datasampler: {datasampler}')
 
     dataloader = DataLoader(
         image_dataset,
@@ -223,5 +225,6 @@ https://github.com/btgraham/SparseConvNet/tree/kaggle_Diabetic_Retinopathy_compe
 
 [6]: albumentations.Normalize will divide by 255, subtract mean and divide by std. output dtype = float32. ToTensor converts to torch tensor and divides by 255 if input dtype is uint8.
 [7]: indices of hard examples, evaluated using 0.81 scoring model.
-[8]: messidor df append will throw err when doing hard ex sampling.
+[10]: messidor df append will throw err when doing hard ex sampling.
+[11]: using current comp's data as val set in old data training.
 """

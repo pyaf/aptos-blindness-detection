@@ -100,6 +100,7 @@ class TestDataset(data.Dataset):
         #image = load_ben_color(path, size=self.size, crop=True)
         #image = self.images[idx]
         path = os.path.join(self.root, fname + '.npy')
+        image = np.load(path)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas

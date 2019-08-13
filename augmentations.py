@@ -4,13 +4,14 @@ from albumentations import (
     Transpose, ShiftScaleRotate, Blur, OpticalDistortion, GridDistortion, HueSaturationValue,
     IAAAdditiveGaussianNoise, GaussNoise, MotionBlur, MedianBlur, IAAPiecewiseAffine,
     IAASharpen, IAAEmboss, RandomContrast, RandomBrightness, Flip, OneOf, Compose, RandomGamma, ElasticTransform, ChannelShuffle,RGBShift, Rotate,
-    Normalize
+    Normalize, RandomBrightnessContrast
 )
 
 from albumentations.torch import ToTensor
 
 
 def strong_aug(p=1):
+    '''for reference, doesn't help'''
     return Compose([
         OneOf([
             IAAAdditiveGaussianNoise(),
@@ -49,17 +50,16 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                Transpose(p=0.5),
-                Flip(p=0.5),
+                #Transpose(p=0.5),
+                #Flip(p=0.5),
                 ShiftScaleRotate(
-                    shift_limit=0,  # no resizing
+                    shift_limit=0.1,
                     scale_limit=0.1,
-                    rotate_limit=120,
+                    rotate_limit=360,
                     p=0.5,
-                    border_mode=cv2.BORDER_CONSTANT
+                    #border_mode=cv2.BORDER_CONSTANT
                 ),
-                #RandomBrightnessContrast(p=0.25),
-                strong_aug(),
+                RandomBrightnessContrast(p=0.5),
             ]
         )
     list_transforms.extend(
@@ -78,14 +78,17 @@ def get_test_transforms(size, mean, std):
     list_transforms = []
     list_transforms.extend(
         [
+            Transpose(p=0.5),
+            Flip(p=0.5),
+            ShiftScaleRotate(
+                shift_limit=0.1,
+                scale_limit=0.1,
+                rotate_limit=360,
+                p=0.5,
+                #border_mode=cv2.BORDER_CONSTANT
+            ),
+
             strong_aug(),
-            #ShiftScaleRotate(
-            #    shift_limit=0,  # no resizing
-            #    scale_limit=0.1,
-            #    rotate_limit=120,
-            #    p=0.5,
-            #    border_mode=cv2.BORDER_CONSTANT
-            #),
         ]
     )
     return Compose(list_transforms)
