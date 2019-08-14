@@ -588,10 +588,9 @@ bhai augmentations try karne se pehle ek ek function ko samjh to liya kar, try t
 *READ again about messidor, there are only 4 classes (0, 1, 2, 3) only*
 limit old data training num_epochs to 20 epochs only, short of space.
 
-`138_efficientnet-b5_f1_o`
+`138_efficientnet-b5_f1_o`, without straug, modified old aug only shiftscalerotate, randombrightnesscontrast,
 selecting ckpt15
-`138_efficientnet-b5_f1_po` looks bad.
-
+`148_efficientnet-b5_f1_po` looks bad.
 
 Fuck it.
 I'm gonna read papers now and understand DR.
@@ -603,6 +602,8 @@ Instead of gaussian filtering, I'm gonna use median filtering:
  A median filter is very effective in seperating small or narrow objects from a relatively continous background. As a result, the blood vessels and small objects are much more apparant in the third column compared to the first two. That may be useful (or not!). It is also relatively succesful in removing color from the image, which may make images shot with different cameras more comparable (or removes potentially usefull information!). [link](https://www.kaggle.com/joorarkesteijn/fast-cropping-preprocessing-and-augmentation)
 
 I'm gonna combine these two. See [this](https://www.kaggle.com/rishabhiitbhu/fast-cropping-preprocessing-and-augmentation) kernel
+
+`148_efficient-b5_f1_omag`: sampled old, median filter, aug, green clahe, without messidor.
 
 
 
