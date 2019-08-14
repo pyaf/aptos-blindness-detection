@@ -588,8 +588,13 @@ bhai augmentations try karne se pehle ek ek function ko samjh to liya kar, try t
 *READ again about messidor, there are only 4 classes (0, 1, 2, 3) only*
 limit old data training num_epochs to 20 epochs only, short of space.
 
+`138_efficientnet-b5_f1_o`
+selecting ckpt15
+`138_efficientnet-b5_f1_po` looks bad.
 
 
+Fuck it.
+I'm gonna read papers now and understand DR.
 
 
 # Questions and Ideas:

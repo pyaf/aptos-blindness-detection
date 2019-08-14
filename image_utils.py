@@ -1,6 +1,17 @@
 import cv2
 import numpy as np
 
+#CLAHE: https://en.wikipedia.org/wiki/Adaptive_histogram_equalization#Contrast_Limited_AHE
+def toCLAHEgreen(img):
+    clipLimit=2.0
+    tileGridSize=(8, 8)
+    img = np.array(img)
+    green_channel = img[:, :, 1]
+    clahe = cv2.createCLAHE(clipLimit=clipLimit, tileGridSize=tileGridSize)
+    cla = clahe.apply(green_channel)
+    cla=clahe.apply(cla)
+    return cla
+
 
 def load_image(path, size):
     image = cv2.imread(path)

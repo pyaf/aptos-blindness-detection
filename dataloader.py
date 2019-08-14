@@ -11,6 +11,7 @@ from torchvision.datasets.folder import pil_loader
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from utils import to_multi_label
 from extras import *
+from image_utils import *
 from augmentations import get_transforms
 
 
@@ -50,6 +51,10 @@ class ImageDataset(Dataset):
         label = self.labels[idx]
         path = os.path.join(self.root, fname + ".npy")
         image = np.load(path)
+        image = toCLAHEgreen(image)
+        image = np.expand_dims(image, -1)
+        image = np.repeat(image, 3, -1)
+
         #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label
