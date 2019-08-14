@@ -109,7 +109,7 @@ def provider(phase, cfg):
         bad_dups = np.load(os.path.join(HOME, cfg["bad_idx"]))
         good_dups = np.load(os.path.join(HOME, cfg["dups_wsd"]))  # [3]
         good_dups_df = df.iloc[good_dups] # to be added later on
-        all_dups = np.array(list(bad_dups) + list(dup_dups))
+        all_dups = np.array(list(bad_dups) + list(good_dups))
         df = df.drop(df.index[all_dups])
 
     if cfg['sample']:
@@ -121,10 +121,12 @@ def provider(phase, cfg):
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
+    #pdb.set_trace()
 
     if cfg['tc_dups']:
         '''add good duplicates'''
-        train_df = train_df.append(good_dups_df, ignore_index=False)
+        #train_df = train_df.append(good_dups_df, ignore_index=False)
+        pass # Tom's the boss
 
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])

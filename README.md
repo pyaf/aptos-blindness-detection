@@ -586,6 +586,10 @@ ckpt15 looks good.
 bhai augmentations try karne se pehle ek ek function ko samjh to liya kar, try to karliya kar..
 
 *READ again about messidor, there are only 4 classes (0, 1, 2, 3) only*
+limit old data training num_epochs to 20 epochs only, short of space.
+
+
+
 
 
 # Questions and Ideas:
