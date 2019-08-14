@@ -1,0 +1,36 @@
+17:01:31 Starting epoch: 0 | phase: train | 17:01:31
+17:02:30 Starting epoch: 0 | phase: train | 17:02:30
+17:02:54 Starting epoch: 0 | phase: train | 17:02:54
+17:08:27 base: QWK: 0.0055 | ACC: 0.3103 | TPR: 0.1990 | PPV: 0.0000
+17:08:27 Class TPR: {0: 0.516, 1: 0.4532, 2: 0.026, 3: 0.0, 4: 0.0}
+17:08:27 Class PPV: {0: 0.4631, 1: 0.1386, 2: 0.3315, 3: 'None', 4: 'None'}
+17:08:27 lr: 5e-05
+17:08:27 Starting epoch: 0 | phase: val_new | 17:08:27
+17:19:26 Starting epoch: 0 | phase: train | 17:19:26
+17:24:54 base: QWK: 0.0244 | ACC: 0.3132 | TPR: 0.2014 | PPV: 0.0000
+17:24:54 Class TPR: {0: 0.5203, 1: 0.4613, 2: 0.0251, 3: 0.0, 4: 0.0}
+17:24:54 Class PPV: {0: 0.4761, 1: 0.1381, 2: 0.3257, 3: 'None', 4: 'None'}
+17:24:54 lr: 5e-05
+17:24:54 Starting epoch: 0 | phase: val_new | 17:24:54
+17:29:52 Starting epoch: 0 | phase: train | 17:29:52
+17:35:42 base: QWK: 0.0081 | ACC: 0.3182 | TPR: 0.2017 | PPV: 0.0000
+17:35:42 Class TPR: {0: 0.5374, 1: 0.4499, 2: 0.0212, 3: 0.0, 4: 0.0}
+17:35:42 Class PPV: {0: 0.4706, 1: 0.1401, 2: 0.331, 3: 'None', 4: 'None'}
+17:35:42 lr: 5e-05
+17:35:42 Starting epoch: 0 | phase: val_new | 17:35:42
+17:40:06 best: QWK: 0.1438 | ACC: 0.3048 | TPR: 0.2466 | PPV: 0.0000
+17:40:06 Class TPR: {0: 0.4598, 1: 0.773, 2: 0.0, 3: 0.0, 4: 0.0}
+17:40:06 Class PPV: {0: 0.6957, 1: 0.1158, 2: 'None', 3: 'None', 4: 'None'}
+17:40:06 base: QWK: 0.0492 | ACC: 0.4773 | TPR: 0.2169 | PPV: 0.0000
+17:40:06 Class TPR: {0: 0.9385, 1: 0.1459, 2: 0.0, 3: 0.0, 4: 0.0}
+17:40:06 Class PPV: {0: 0.5263, 1: 0.1219, 2: 'None', 3: 'None', 4: 'None'}
+17:40:06 lr: 5e-05
+17:40:06 Starting epoch: 0 | phase: val | 17:40:06
+17:40:53 best: QWK: 0.0084 | ACC: 0.4426 | TPR: 0.2020 | PPV: 0.0000
+17:40:53 Class TPR: {0: 0.9353, 1: 0.0745, 2: 0.0, 3: 0.0, 4: 0.0}
+17:40:53 Class PPV: {0: 0.4662, 1: 0.1436, 2: 'None', 3: 'None', 4: 'None'}
+17:40:53 base: QWK: 0.0040 | ACC: 0.4369 | TPR: 0.2019 | PPV: 0.0000
+17:40:53 Class TPR: {0: 0.9178, 1: 0.0917, 2: 0.0, 3: 0.0, 4: 0.0}
+17:40:53 Class PPV: {0: 0.464, 1: 0.1502, 2: 'None', 3: 'None', 4: 'None'}
+17:40:53 lr: 5e-05
+17:40:53 ******** New optimal found, saving state ********

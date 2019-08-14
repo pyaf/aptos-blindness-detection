@@ -1,0 +1,47 @@
+remark: Median filter, aug, green clahe
+#home: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/
+home: /home/eee/ug/15084015/aptos/
+fold: 1
+total_folds: 5
+size: 456
+top_lr: 1e-5
+class_weights: None
+cw_sampling: False
+he_sampling: False
+hard_ex_weight: 2
+hard_df: weights/118_efficientnet-b5_f1_postraug2/diff.csv
+num_samples: None
+model_name: efficientnet-b5
+ext_text: test
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+resume: False
+pretrained: False
+pretrained_path: weights/138_efficientnet-b5_f1_o/ckpt15.pth
+resume_path: weights/
+df_path: data/train.csv
+#data_folder: data/npy_files/bgcc456
+data_folder: data/train_images/
+phases: ["train", "val"]
+batch_size:
+    train: 4
+    val: 4
+num_workers: 12
+num_classes: 1
+ep2unfreeze: 3
+num_epochs: 40
+base_lr: None
+momentum: 0.95
+patience: 4
+tc_dups: True # take care of dups
+dups_wsd: data/npy_files/good_duplicates.npy
+bad_idx: data/npy_files/all_bad_duplicates.npy
+sample: False
+count_dict:
+    0: 8000
+    2: 5292
+    1: 2443
+    3: 873
+    4: 708
+messidor_in_train: False
+mes_df: data/train_messidor.csv

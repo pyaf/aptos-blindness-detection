@@ -29,6 +29,7 @@ class ImageDataset(Dataset):
         """
         self.phase = phase
         self.df = df
+        self.size = cfg['size']
         self.num_samples = self.df.shape[0]
         self.fnames = self.df["id_code"].values
         self.labels = self.df["diagnosis"].values.astype("int64")
@@ -36,7 +37,8 @@ class ImageDataset(Dataset):
         # self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
         # self.labels = np.eye(self.num_classes)[self.labels]
         self.transform = get_transforms(phase, cfg)
-        self.root = cfg['data_folder']
+        self.new_root = os.path.join(cfg['home'], cfg['new_data_folder'])
+        self.old_root = os.path.join(cfg['home'], cfg['old_data_folder'])
 
         '''
         self.images = []
@@ -49,12 +51,20 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
-        path = os.path.join(self.root, fname + ".npy")
-        image = np.load(path)
-        image = toCLAHEgreen(image)
-        image = np.expand_dims(image, -1)
-        image = np.repeat(image, 3, -1)
-
+        #path = os.path.join(self.root, fname + ".npy")
+        #image = np.load(path)
+        #image = toCLAHEgreen(image)
+        if self.phase == "val_new":
+            path = os.path.join(self.new_root, fname + ".png")
+        else:
+            path = os.path.join(self.old_root, fname + ".jpeg")
+        #print(path)
+        image = id_to_image(path,
+                resize=True,
+                size=self.size,
+                augmentation=True,
+                subtract_median=True,
+                clahe_green=True)
         #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label
@@ -92,17 +102,8 @@ def resampled(df, cfg):
 
 
 def provider(phase, cfg):
-    fold = cfg['fold']
-    total_folds = cfg['total_folds']
-    data_folder = cfg['data_folder']
-    df_path = cfg['df_path']
-    class_weights = eval(cfg['class_weights'])
-    batch_size = cfg['batch_size'][phase]
-    num_workers = cfg['num_workers']
-    num_samples = cfg['num_samples']
-
-    df = pd.read_csv(df_path)
-    HOME = os.path.abspath(os.path.dirname(__file__))
+    HOME = cfg['home']
+    df = pd.read_csv(os.path.join(HOME, cfg['df_path']))
     df['weight'] = 1 # [10]
 
     if cfg['he_sampling']:
@@ -117,19 +118,18 @@ def provider(phase, cfg):
         all_dups = np.array(list(bad_dups) + list(good_dups))
         df = df.drop(df.index[all_dups])
 
-    if cfg['sample']:
-        '''used in old data training'''
+    if cfg['sample']: #used in old data training
         df = resampled(df, cfg)
         print(f'sampled df shape: {df.shape}')
         print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
 
+    fold = cfg['fold']
+    total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
-    #pdb.set_trace()
 
-    if cfg['tc_dups']:
-        '''add good duplicates'''
+    if cfg['tc_dups']: # add good duplicates
         #train_df = train_df.append(good_dups_df, ignore_index=False)
         pass # Tom's the boss
 
@@ -140,8 +140,8 @@ def provider(phase, cfg):
 
     if 'folder' in cfg.keys():
         # save for analysis, later on
-        train_df.to_csv(os.path.join(cfg['folder'], 'train.csv'), index=False)
-        val_df.to_csv(os.path.join(cfg['folder'], 'val.csv'), index=False)
+        train_df.to_csv(os.path.join(HOME, cfg['folder'], 'train.csv'), index=False)
+        val_df.to_csv(os.path.join(HOME, cfg['folder'], 'val.csv'), index=False)
 
     if phase == "train":
         df = train_df.copy()
@@ -160,6 +160,8 @@ def provider(phase, cfg):
         datasampler = get_sampler(df, cfg)
     print(f'datasampler: {datasampler}')
 
+    batch_size = cfg['batch_size'][phase]
+    num_workers = cfg['num_workers']
     dataloader = DataLoader(
         image_dataset,
         batch_size=batch_size,
@@ -189,6 +191,10 @@ if __name__ == "__main__":
     phase = "train"
     args = get_parser()
     cfg = load_cfg(args)
+    cfg["num_workers"] = 0
+    cfg["batch_size"]["train"] = 2
+    cfg["batch_size"]["val"] = 2
+
     dataloader = provider(phase, cfg)
     ''' train val set sanctity
     #pdb.set_trace()

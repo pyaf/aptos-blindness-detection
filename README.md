@@ -596,6 +596,15 @@ selecting ckpt15
 Fuck it.
 I'm gonna read papers now and understand DR.
 
+New preprocessing technique:
+Green channel: Green Channel of the three color channels in the image (Red, Green, and Blue) the contrast between the blood vessels, exudates and hemorrhages is best seen in the green channel and this channels neither under- illuminated nor over-saturated like the other two. [link](http://biomedpharmajournal.org/vol10no2/diabetic-retinal-fundus-images-preprocessing-and-feature-extraction-for-early-detection-of-diabetic-retinopathy/)
+
+Instead of gaussian filtering, I'm gonna use median filtering:
+ A median filter is very effective in seperating small or narrow objects from a relatively continous background. As a result, the blood vessels and small objects are much more apparant in the third column compared to the first two. That may be useful (or not!). It is also relatively succesful in removing color from the image, which may make images shot with different cameras more comparable (or removes potentially usefull information!). [link](https://www.kaggle.com/joorarkesteijn/fast-cropping-preprocessing-and-augmentation)
+
+I'm gonna combine these two. See [this](https://www.kaggle.com/rishabhiitbhu/fast-cropping-preprocessing-and-augmentation) kernel
+
+
 
 # Questions and Ideas:
 
@@ -618,7 +627,9 @@ I'm gonna read papers now and understand DR.
 * Larger image size than 300.
 * Data augmentation
 * Read related research papers. IMP
+* CLAHEgreen training
 *
+
 
 
 
