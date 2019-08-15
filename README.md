@@ -618,6 +618,14 @@ total 38k images.
 id_to_image augmentation, then randombrightnesscontrast(p=1)
 
 updated, csv's to include extension of the images. old data moved to data/2015, 2015.csv
+ckpt8 looks good.
+
+
+
+
+
+
+
 
 # Questions and Ideas:
 
