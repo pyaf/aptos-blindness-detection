@@ -603,9 +603,21 @@ Instead of gaussian filtering, I'm gonna use median filtering:
 
 I'm gonna combine these two. See [this](https://www.kaggle.com/rishabhiitbhu/fast-cropping-preprocessing-and-augmentation) kernel
 
-`148_efficient-b5_f1_omag`: sampled old, median filter, aug, green clahe, without messidor.
+`148_efficient-b5_f1_omag`: sampled old, aug, median filter, extract green, apply clahe, without messidor.
+`148_efficient-b5_f1_pomag`: doesn't help.
 
+OKAY, why the heck was I not using the 2015's test set? the test labels were made available in the discussion forum!!
 
+`148_efficient-b5_f1_omag3`: with train+test data sampled. with *300* sized images,
+0    0.391043
+2    0.342892
+1    0.161761
+3    0.054407
+4    0.049897
+total 38k images.
+id_to_image augmentation, then randombrightnesscontrast(p=1)
+
+updated, csv's to include extension of the images. old data moved to data/2015, 2015.csv
 
 # Questions and Ideas:
 

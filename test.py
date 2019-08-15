@@ -99,8 +99,16 @@ class TestDataset(data.Dataset):
         #path = os.path.join(self.root, fname + self.ext)
         #image = load_ben_color(path, size=self.size, crop=True)
         #image = self.images[idx]
-        path = os.path.join(self.root, fname + '.npy')
-        image = np.load(path)
+        #path = os.path.join(self.root, fname + '.npy')
+        #image = np.load(path)
+        path = os.path.join(self.root, fname + ".png")
+        #print(path)
+        image = id_to_image(path,
+                resize=True,
+                size=self.size,
+                augmentation=False,
+                subtract_median=True,
+                clahe_green=True)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -160,12 +168,10 @@ if __name__ == "__main__":
         sample_submission_path = "data/train_messidor.csv"
 
     tta = 0  # number of augs in tta
-    '''
     root = f"data/{predict_on}_images/"
     if predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
-    '''
-    root = 'data/npy_files/bgcc456'
+    #root = 'data/npy_files/bgcc456'
     size = 456
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
@@ -174,7 +180,7 @@ if __name__ == "__main__":
     use_cuda = True
     num_classes = 1
     num_workers = 8
-    batch_size = 16
+    batch_size = 8
     device = torch.device("cuda" if use_cuda else "cpu")
     if use_cuda:
         cudnn.benchmark = True

@@ -188,6 +188,7 @@ class Trainer(object):
                 "state_dict": self.net.state_dict(),
                 "optimizer": self.optimizer.state_dict(),
             }
+            torch.save(state, self.ckpt_path)  # [2]
             if "val_new" in self.phases:
                 self.iterate(epoch, "val_new")
             val_loss, val_qwk, best_thresholds = self.iterate(epoch, "val")

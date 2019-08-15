@@ -55,11 +55,11 @@ def get_transforms(phase, cfg):
                 #ShiftScaleRotate(
                 #    shift_limit=0.1,
                 #    scale_limit=0.1,
-                #    rotate_limit=360,
+                #    rotate_limit=180,
                 #    p=0.5,
                 #    #border_mode=cv2.BORDER_CONSTANT
                 #),
-                #RandomBrightnessContrast(p=0.5),
+                RandomBrightnessContrast(p=1),
             ]
         )
     list_transforms.extend(

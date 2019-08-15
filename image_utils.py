@@ -119,20 +119,3 @@ def id_to_image(path,
         im = toCLAHEgreen(im)
     return im
 
-def get_transforms(phase, size, mean, std):
-    list_transforms = []
-
-    if phase == "train":
-        list_transforms.extend(
-            [transforms.RandomHorizontalFlip(), transforms.RandomVerticalFlip()]
-        )
-
-    list_transforms.extend(
-        [
-            transforms.Resize((size, size)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean, std),
-        ]
-    )
-
-    return transforms.Compose(list_transforms)

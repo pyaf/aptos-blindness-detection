@@ -38,10 +38,8 @@ class ImageDataset(Dataset):
         # self.labels = np.eye(self.num_classes)[self.labels]
         self.transform = get_transforms(phase, cfg)
         self.root = os.path.join(cfg['home'], cfg['new_data_folder'])
-        self.ext = ".png"
-        if cfg['old_data_pretraining']:
+        if cfg['old_data_pretraining'] and phase != "val_new":
             self.root = os.path.join(cfg['home'], cfg['old_data_folder'])
-            if self.phase != "new_val": self.ext = ".jpeg"
 
         '''
         self.images = []
@@ -54,15 +52,16 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
+        #fname = fname.split('.')[0]
         #path = os.path.join(self.root, fname + ".npy")
         #image = np.load(path)
         #image = toCLAHEgreen(image)
-        path = os.path.join(self.root, fname + self.ext)
+        path = os.path.join(self.root, fname)
         #print(path)
         image = id_to_image(path,
                 resize=True,
                 size=self.size,
-                augmentation=True,
+                augmentation=False,
                 subtract_median=True,
                 clahe_green=True)
         #image = self.images[idx]

@@ -1,2 +1,0 @@
-15:16:24 Starting epoch: 0 | phase: train 
-15:16:31 train epoch: 0 (0/197) loss: 3.5450 || 00:07
