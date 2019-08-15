@@ -134,6 +134,7 @@ class Trainer(object):
         targets = targets.type(torch.FloatTensor).to(self.device)
         targets = targets.view(-1, 1)  # [n] -> [n, 1] V. imp for MSELoss
         outputs = self.net(images)
+        outputs = torch.clamp(outputs, 0, 4)
         # outputs = torch.sigmoid(outputs) # no sigmoid for regression mode
         loss = self.criterion(outputs, targets)
         return loss, outputs

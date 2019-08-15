@@ -615,7 +615,7 @@ OKAY, why the heck was I not using the 2015's test set? the test labels were mad
 3    0.054407
 4    0.049897
 total 38k images.
-id_to_image augmentation, then randombrightnesscontrast(p=1)
+id_to_image augmentation(forgot -_-), then randombrightnesscontrast(p=1)
 
 updated, csv's to include extension of the images. old data moved to data/2015, 2015.csv
 ckpt8 looks good.
@@ -628,6 +628,7 @@ ckpt8 looks good.
 4    0.190309
 0    0.156802
 
+`168_efficientnet-b5_f1_oma`: old sampled, id_to_image, aug, median, no green, 300, 1e-4
 
 
 
@@ -686,14 +687,8 @@ ckpt8 looks good.
 
 # Things to check, just before starting the model training:
 
-* train_df_name
-* model_name
-* fold and total fold (for val %)
-* npy_folder_name for dataloader's __getitem__() function
-* are you resampling images?
-* self.size, self.top_lr, self.std, self.mean -> insta trained weights used so be careful
-* self.ep2unfreeze
-*
+* config
+* get item in dataloader.
 
 
 

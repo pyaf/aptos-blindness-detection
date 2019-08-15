@@ -1,4 +1,2 @@
-python train.py -f config/168_efficientnet-b5_f0_pomag3.yaml
-python train.py -f config/168_efficientnet-b5_f2_pomag3.yaml
-python train.py -f config/168_efficientnet-b5_f3_pomag3.yaml
-python train.py -f config/168_efficientnet-b5_f4_pomag3.yaml
+python train.py -f configs/168_efficientnet-b5_f1_oma.yaml
+python train.py -f configs/168_efficientnet-b5_f1_poma.yaml

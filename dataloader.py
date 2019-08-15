@@ -59,9 +59,9 @@ class ImageDataset(Dataset):
         image = id_to_image(path,
                 resize=True,
                 size=self.size,
-                augmentation=False,
+                augmentation=True,
                 subtract_median=True,
-                clahe_green=True)
+                clahe_green=False)
         #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label
@@ -126,12 +126,12 @@ def provider(phase, cfg):
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
 
-    '''test'''
-    extra = pd.read_csv('data/2015.csv')
-    sampled_extra = resampled(extra, cfg)
-    train_df = train_df.append(sampled_extra, ignore_index=False)
-    print(f'data dist:\n {train_df["diagnosis"].value_counts(normalize=True)}\n')
-    '''test over'''
+    #'''test'''
+    #extra = pd.read_csv('data/2015.csv')
+    #sampled_extra = resampled(extra, cfg)
+    #train_df = train_df.append(sampled_extra, ignore_index=False)
+    #print(f'data dist:\n {train_df["diagnosis"].value_counts(normalize=True)}\n')
+    #'''test over'''
 
     if cfg['tc_dups']: # add good duplicates
         #train_df = train_df.append(good_dups_df, ignore_index=False)
