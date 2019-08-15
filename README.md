@@ -608,7 +608,7 @@ I'm gonna combine these two. See [this](https://www.kaggle.com/rishabhiitbhu/fas
 
 OKAY, why the heck was I not using the 2015's test set? the test labels were made available in the discussion forum!!
 
-`148_efficient-b5_f1_omag3`: with train+test data sampled. with *300* sized images,
+`158_efficient-b5_f1_omag3`: with train+test data sampled. with *300* sized images,
 0    0.391043
 2    0.342892
 1    0.161761
@@ -619,9 +619,14 @@ id_to_image augmentation, then randombrightnesscontrast(p=1)
 
 updated, csv's to include extension of the images. old data moved to data/2015, 2015.csv
 ckpt8 looks good.
+`168_efficient-b5_f1_pomag3`: finetuning on new data., lr:1e-5, 300,
 
-
-
+`168_efficientnet-b5_f1_pomag3test`, new + sampled old combined.
+ 2    0.256706
+1    0.205523
+3    0.190660
+4    0.190309
+0    0.156802
 
 
 
@@ -727,6 +732,7 @@ ckpt8 looks good.
 * data/train32.csv: old + messidor data
 * data/npy_files/hard_examples1.npy : hard examples in train set category 1. Evaluated on 21-7_efficientnet-b5-fold1_bgccpo300aug2, ckpt15 LB 0.798
 * data/npy_files/extremely_bad_examples1.npy : extremely hard examples, pred and actual difference > 1, ^
+* data/all_images/ contains 2015 train+test and 2018 train images.
 
 
 # remarks shortcut/keywords

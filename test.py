@@ -172,7 +172,7 @@ if __name__ == "__main__":
     if predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
     #root = 'data/npy_files/bgcc456'
-    size = 456
+    size = 300
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
     # mean = (0, 0, 0)

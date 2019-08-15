@@ -37,9 +37,7 @@ class ImageDataset(Dataset):
         # self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
         # self.labels = np.eye(self.num_classes)[self.labels]
         self.transform = get_transforms(phase, cfg)
-        self.root = os.path.join(cfg['home'], cfg['new_data_folder'])
-        if cfg['old_data_pretraining'] and phase != "val_new":
-            self.root = os.path.join(cfg['home'], cfg['old_data_folder'])
+        self.root = os.path.join(cfg['home'], cfg['data_folder'])
 
         '''
         self.images = []
@@ -121,6 +119,13 @@ def provider(phase, cfg):
         df = resampled(df, cfg)
         print(f'sampled df shape: {df.shape}')
         print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
+
+    '''test'''
+    extra = pd.read_csv('data/2015.csv')
+    sampled_extra = resampled(extra, cfg)
+    df = df.append(sampled_extra, ignore_index=False)
+    print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
+    '''test over'''
 
     fold = cfg['fold']
     total_folds = cfg['total_folds']
