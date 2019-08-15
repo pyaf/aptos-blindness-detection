@@ -120,18 +120,18 @@ def provider(phase, cfg):
         print(f'sampled df shape: {df.shape}')
         print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
 
-    '''test'''
-    extra = pd.read_csv('data/2015.csv')
-    sampled_extra = resampled(extra, cfg)
-    df = df.append(sampled_extra, ignore_index=False)
-    print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
-    '''test over'''
-
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
+
+    '''test'''
+    extra = pd.read_csv('data/2015.csv')
+    sampled_extra = resampled(extra, cfg)
+    train_df = train_df.append(sampled_extra, ignore_index=False)
+    print(f'data dist:\n {train_df["diagnosis"].value_counts(normalize=True)}\n')
+    '''test over'''
 
     if cfg['tc_dups']: # add good duplicates
         #train_df = train_df.append(good_dups_df, ignore_index=False)
