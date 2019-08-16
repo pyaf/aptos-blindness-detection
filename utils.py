@@ -163,7 +163,8 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
     # tensorboard
     logger = tb[phase]
     logger.log_value("loss", epoch_loss, epoch)
-    logger.log_value("lr", lr, epoch)
+    if phase == "train":
+        logger.log_value("lr", lr, epoch)
     metrics = [acc, base_qwk, tpr, ppv]
     log_metrics(tb[phase], metrics, epoch, "base")
 

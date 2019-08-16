@@ -502,7 +502,7 @@ Preparing `bgcc456`, idea expected size for efficientnet-b5, have added yaml con
 
 Analysed that model is doing fine on blurry images, no need to remove them.
 
-`108_efficientnet-b5_f1_ostraug`: training on `bgcc456`, old data (train/val) and new data (val_new), without cw, forgot to set `sample`=True in config file -_-, so training on whole of old data.
+* `108_efficientnet-b5_f1_ostraug`: training on `bgcc456`, old data (train/val) and new data (val_new), without cw, forgot to set `sample`=True in config file -_-, so training on whole of old data.
 class 1 is getting biased towards 0 in val, and towards 2 in val_new.
 The thing is all the val metrics are being logged using best_thresholds. Which makes them fluctuating.
 I'm gonna add plots for both best and base metrics.
@@ -510,7 +510,7 @@ ep2unfreeze was set 0 -_-,
 folds 1/7, train/val: 87.5/12.5
 
 *From now on, before starting any experiment, create a new yaml file with the name of the experiment*
-`118_efficientnet-b5_f1_postraug`
+* `118_efficientnet-b5_f1_postraug`
 starting with ckpt14 of ostraug model., lr: 1e-6
 folds: 1/5: 80/20, train = train1's 80% + messidor data, val=train1's 20%
 *FROM now on, val set should be from train.csv only and should remain the same, will make comparision easier*
@@ -519,25 +519,25 @@ aptos folder is 588 GB now :O
 
 the model is not performing good. out of total 750 mis preds in train.csv, more than 400 go for 2.
 
-`118_test` on the cases in train.csv where model failed
-`118_test2` same as above without strong aug, *lr: 5e-6* works best for finetuning.
+* `118_test` on the cases in train.csv where model failed
+* `118_test2` same as above without strong aug, *lr: 5e-6* works best for finetuning.
 *lr matters a lot, use 5e-6 for finetuning purposes*
 forgot to start with ckpt14, started with ckpt10 instead.
 
-`118_efficientnet-b5_f1_postraug2`: same as postraug, but with lr: 5e-6
+* `118_efficientnet-b5_f1_postraug2`: same as postraug, but with lr: 5e-6
 ckpt 13, 16 look good.
 
 There are no class 4 in messidor??? wtf, is there any difference in nomenclature?
 model is missing 350 cases out of 1200.
 
-`118_efficientnet-b5_f1_postraugnm`: same as above without messidor.
+* `118_efficientnet-b5_f1_postraugnm`: same as above without messidor.
 val loss didn't improve!
 
 
-`218_test` starting with previous models' ckpt21, with 1.5 weight to hard examples.
+* `218_test` starting with previous models' ckpt21, with 1.5 weight to hard examples.
 *don't do random experiments, read papers.*
 
-`128_efficientnet-b5_f1_ostraugs`: sampled old data training, forgot to add `straug`, training on no augmentations at all, normalize and totensor.
+* `128_efficientnet-b5_f1_ostraugs`: sampled old data training, forgot to add `straug`, training on no augmentations at all, normalize and totensor.
 after ckpt21:
 val set:
 
@@ -567,7 +567,7 @@ Actual
 
 selecting ckpt21 for finetuning.
 
-`128_efficientnet-b5_f1_postraugs`: finetuning previous models' ckpt21 on new data. fold/total: 1/5
+* `128_efficientnet-b5_f1_postraugs`: finetuning previous models' ckpt21 on new data. fold/total: 1/5
 as there was no augmentations, my bad, model is failing badly at class 4, over conf with class 1.
 
 
@@ -578,19 +578,19 @@ here alpha and beta are 4 and -4 respectively. I see that increasing abs values 
 *BUG*
 The old data training was doing so well on val set because obj.sample function didn't have random_seed set. Global seed setting may not work.
 
-`128_efficientnet-b5_f1_ostraugs`: Retraining from scratch, sampled old data,  mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
+* `128_efficientnet-b5_f1_ostraugs`: Retraining from scratch, sampled old data,  mess data in train, 5e-5, ep2unfreeze 3, straug, with previous augs,
 ckpt15 looks good.
 
-`128_efficientnet-b5_f1_postraugs`: Started with ckpt15 of the previous model.
+* `128_efficientnet-b5_f1_postraugs`: Started with ckpt15 of the previous model.
 
 bhai augmentations try karne se pehle ek ek function ko samjh to liya kar, try to karliya kar..
 
 *READ again about messidor, there are only 4 classes (0, 1, 2, 3) only*
 limit old data training num_epochs to 20 epochs only, short of space.
 
-`138_efficientnet-b5_f1_o`, without straug, modified old aug only shiftscalerotate, randombrightnesscontrast,
+* `138_efficientnet-b5_f1_o`, without straug, modified old aug only shiftscalerotate, randombrightnesscontrast,
 selecting ckpt15
-`148_efficientnet-b5_f1_po` looks bad.
+* `148_efficientnet-b5_f1_po` looks bad.
 
 Fuck it.
 I'm gonna read papers now and understand DR.
@@ -603,12 +603,12 @@ Instead of gaussian filtering, I'm gonna use median filtering:
 
 I'm gonna combine these two. See [this](https://www.kaggle.com/rishabhiitbhu/fast-cropping-preprocessing-and-augmentation) kernel
 
-`148_efficient-b5_f1_omag`: sampled old, aug, median filter, extract green, apply clahe, without messidor.
-`148_efficient-b5_f1_pomag`: doesn't help.
+* `148_efficient-b5_f1_omag`: sampled old, aug, median filter, extract green, apply clahe, without messidor.
+* `148_efficient-b5_f1_pomag`: doesn't help.
 
 OKAY, why the heck was I not using the 2015's test set? the test labels were made available in the discussion forum!!
 
-`158_efficient-b5_f1_omag3`: with train+test data sampled. with *300* sized images,
+* `158_efficient-b5_f1_omag3`: with train+test data sampled. with *300* sized images,
 0    0.391043
 2    0.342892
 1    0.161761
@@ -619,17 +619,18 @@ id_to_image augmentation(forgot -_-), then randombrightnesscontrast(p=1)
 
 updated, csv's to include extension of the images. old data moved to data/2015, 2015.csv
 ckpt8 looks good.
-`168_efficient-b5_f1_pomag3`: finetuning on new data., lr:1e-5, 300,
+* `168_efficient-b5_f1_pomag3`: finetuning on new data., lr:1e-5, 300,
 
-`168_efficientnet-b5_f1_pomag3test`, new + sampled old combined.
+* `168_efficientnet-b5_f1_pomag3test`, new + sampled old combined.
  2    0.256706
 1    0.205523
 3    0.190660
 4    0.190309
 0    0.156802
+not good.
 
-`168_efficientnet-b5_f1_oma`: old sampled, id_to_image, aug, median, no green, 300, 1e-4
-`168_efficientnet-b5_f1_poma`, from ckpt10 of previous, ckpt14 scores 0.806.
+* `168_efficientnet-b5_f1_oma`: old sampled, id_to_image, aug, median, no green, 300, 1e-4
+* `168_efficientnet-b5_f1_poma`, from ckpt10 of previous, ckpt14 scores 0.806.
 I've made sure, the folds shared with tom matches with what my model is training on.
 Gotta train all folds. Will jump to multilabel classification afterwards.
 
