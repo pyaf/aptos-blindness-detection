@@ -635,6 +635,22 @@ I've made sure, the folds shared with tom matches with what my model is training
 Gotta train all folds. Will jump to multilabel classification afterwards.
 
 
+* `178_efficientnet-b5_f1_poma`: progressive resizing, 128->256->512 each for 5 epochs.
+512 is bad for training.
+
+* `178_efficientnet-b5_f1_omaeq`: pretraining on 66622 sample for each class, 256 sized images.
+data dist:
+1    0.277517, 6k
+2    0.275191, 6k
+0    0.268348, 6k
+3    0.093340, 2k
+4    0.085603, 2k
+
+
+
+
+
+
 
 
 # Questions and Ideas:
