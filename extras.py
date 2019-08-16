@@ -23,6 +23,11 @@ def get_parser():
                         help="experiment config file",
                         metavar="FILE",
                         required=True)
+    parser.add_argument("-r", "--resume",
+                        dest="resume",
+                        help="Use when to resume from ckpt.pth",
+                        action='store_true') # use -r when to resume, else don't
+
     args = parser.parse_args()
     return args
 

@@ -41,7 +41,8 @@ class Trainer(object):
         #{date}_{self.model_name}_f{self.fold}_{ext_text}
         self.folder = f"weights/{self.filename}"
         cfg['folder'] = self.folder
-        self.resume = cfg['resume']
+        #self.resume = cfg['resume']
+        self.resume = self.args.resume
         self.pretrained = cfg['pretrained']
         self.pretrained_path = cfg['pretrained_path']
         self.batch_size = cfg['batch_size']
@@ -62,8 +63,8 @@ class Trainer(object):
         torch.set_num_threads(12)
         self.device = torch.device("cuda" if self.cuda else "cpu")
         self.df_path = cfg['df_path']
-        #self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
-        self.resume_path = cfg['resume_path']
+        self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
+        #self.resume_path = cfg['resume_path']
         self.save_folder = os.path.join(HOME, self.folder)
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")

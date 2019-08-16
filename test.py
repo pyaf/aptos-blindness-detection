@@ -108,7 +108,7 @@ class TestDataset(data.Dataset):
                 size=self.size,
                 augmentation=False,
                 subtract_median=True,
-                clahe_green=True)
+                clahe_green=False)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
