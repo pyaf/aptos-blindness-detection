@@ -1,0 +1,736 @@
+Time: 2019-08-16 21:06:00.444595
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 12
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:06:15.562975
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 12
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:06:32.332192
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 12
+batchsize: {'train': 16, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 16, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:07:39.895532
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 8
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:10:45.008545
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 8
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:11:21.082332
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 8
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:12:12.997700
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:13:05.436050
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:14:05.136833
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:15:39.424965
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:16:04.083557
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:16:13.994603
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:16:51.268304
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:17:11.300875
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:17:41.096982
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:17:56.568377
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:18:16.348412
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:18:30.659276
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:18:44.533745
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:20:29.489928
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:22:37.411192
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:23:16.600744
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 8, 'val': 8}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 8, 'val': 8}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
+Time: 2019-08-16 21:25:04.667399
+model_name: efficientnet-b5
+train_df_name: train.csv
+resume: False
+pretrained: False
+pretrained_path: weights/18-7_efficientnet-b5_fold0_bgccold/ckpt19.pth
+folder: weights/16-8_efficientnet-b5_f1_test
+fold: 1
+total_folds: 7
+num_samples: None
+sampling class weights: None
+size: 300
+top_lr: 3e-05
+base_lr: None
+num_workers: 0
+batchsize: {'train': 4, 'val': 4}
+momentum: 0.95
+mean: (0.485, 0.456, 0.406)
+std: (0.229, 0.224, 0.225)
+start_epoch: 0
+batchsize: {'train': 4, 'val': 4}
+augmentations: [Normalize(always_apply=False, p=1, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0), ToTensor(always_apply=True, p=1.0, num_classes=1, sigmoid=True, normalize=None)]
+criterion: BCEWithLogitsLoss()
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 3e-05
+    weight_decay: 0
+)
+remark: 
