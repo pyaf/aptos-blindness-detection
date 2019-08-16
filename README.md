@@ -629,6 +629,9 @@ ckpt8 looks good.
 0    0.156802
 
 `168_efficientnet-b5_f1_oma`: old sampled, id_to_image, aug, median, no green, 300, 1e-4
+`168_efficientnet-b5_f1_poma`, from ckpt10 of previous, ckpt14 scores 0.806.
+I've made sure, the folds shared with tom matches with what my model is training on.
+Gotta train all folds. Will jump to multilabel classification afterwards.
 
 
 
