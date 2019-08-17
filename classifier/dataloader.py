@@ -119,6 +119,10 @@ def provider(
 ):
     df = pd.read_csv(df_path)
     df['label'] = df.diagnosis.apply(lambda x: 1 if x == 4 else 0)
+    df_with_4 = df[df["diagnosis"] == 1]
+    df_without_4 = df[df["diagnosis"] != 1]
+    df_without_4_sampled = df_without_4.sample(1000)
+    df = pd.concat([df_with_4, df_without_4_sampled])
 
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(

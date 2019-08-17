@@ -1,0 +1,16 @@
+14:26:36 loading pretrained, weights/178_efficientnet-b5_f1_pomaeq/ckpt10.pth ...
+14:27:19 loading pretrained, weights/178_efficientnet-b5_f1_omaeq/ckpt10.pth ...
+14:27:25 Starting epoch: 0 | phase: train | 14:27:25
+14:30:46 base: QWK: 0.6231 | ACC: 0.4004 | TPR: 0.3541 | PPV: 0.3752
+14:30:46 Class TPR: {0: 0.4642, 1: 0.3457, 2: 0.3497, 3: 0.3881, 4: 0.2227}
+14:30:46 Class PPV: {0: 0.9285, 1: 0.1095, 2: 0.4016, 3: 0.1229, 4: 0.3133}
+14:30:46 lr: 1e-05
+14:30:46 Starting epoch: 0 | phase: val | 14:30:46
+14:31:40 best: QWK: 0.7765 | ACC: 0.5532 | TPR: 0.4643 | PPV: 0.5321
+14:31:40 Class TPR: {0: 0.6919, 1: 0.4265, 2: 0.4348, 3: 0.6176, 4: 0.1509}
+14:31:40 Class PPV: {0: 0.9724, 1: 0.1747, 2: 0.6349, 3: 0.1511, 4: 0.7273}
+14:31:40 base: QWK: 0.7660 | ACC: 0.5546 | TPR: 0.4582 | PPV: 0.4863
+14:31:40 Class TPR: {0: 0.6555, 1: 0.4412, 2: 0.5163, 3: 0.4706, 4: 0.2075}
+14:31:40 Class PPV: {0: 0.975, 1: 0.1667, 2: 0.6376, 3: 0.1524, 4: 0.5}
+14:31:40 lr: 1e-05
+14:31:42 ******** New optimal found, saving state ********

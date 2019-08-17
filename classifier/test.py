@@ -135,10 +135,10 @@ if __name__ == "__main__":
         root = f"../data/all_images/"
 
     tta = 4 # number of augs in tta
-    start_epoch = 8
-    end_epoch = 20
+    start_epoch = 10
+    end_epoch = 30
 
-    size = 300
+    size = 256
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
     #mean = (0, 0, 0)

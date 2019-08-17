@@ -39,7 +39,7 @@ class Trainer(object):
         self.total_folds = 7
         self.class_weights = None #[1, 1.5, 1, 1.5, 1.5]
         self.model_name = "efficientnet-b5"
-        ext_text = "focal"
+        ext_text = "focalsamp"
         self.num_samples = None #5000
         self.folder = f"weights/{date}_{self.model_name}_f{self.fold}_{ext_text}"
         self.resume = False
