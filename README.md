@@ -635,7 +635,7 @@ I've made sure, the folds shared with tom matches with what my model is training
 Gotta train all folds. Will jump to multilabel classification afterwards.
 
 
-* `178_efficientnet-b5_f1_poma`: progressive resizing, 128->256->512 each for 5 epochs.
+* `178_efficientnet-b5_f1_poma`: progressive resizing, 128->256->512(x)(384 instead) each for 5 epochs.
 512 is bad for training.
 
 * `178_efficientnet-b5_f1_omaeq`: pretraining on 66622 sample for each class, 256 sized images.
@@ -648,6 +648,24 @@ data dist:
 
 * `178_efficientnet-b5_f1_pomaeq` 128->224->256->300
 
+doesn't look good.
+
+
+Prof. Clarisa Sanchez, Radboud University Medical Cente
+
+So, We are given a training set of size 3662 images and 1928 public test images, each with one of the four labels:
+
+    0 - No DR
+
+    1 - Mild
+
+    2 - Moderate
+
+    3 - Severe
+
+    4 - Proliferative DR
+
+I'm working on efficientnets and my team mate Tom Aindow is working on ResNext models. So far we have achieved a local 5-fold cross validation quadratic weighted kappa score (qwk) of 0.92, Our best model ensemble has scored a quadratic weighted kappa score of 0.820 on Public leaderboard, currently ranked 32 among 2533 teams globally. We have used gaussian/median filtering and currently experimenting with CLAHE on Green channels.
 
 
 

@@ -41,12 +41,13 @@ def get_parser():
 
 
 class TestDataset(data.Dataset):
-    def __init__(self, root, df, size, mean, std, tta=4):
+    def __init__(self, root, df, size, mean, std, predict_on, tta=4):
         self.root = root
         self.size = size
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
+        self.ext = ".png" if predict_on == "test" else ""
         self.TTA = albumentations.Compose(
             [
                 albumentations.Rotate(limit=180, p=0.5),
@@ -66,7 +67,7 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        path = os.path.join(self.root, fname + ".png")
+        path = os.path.join(self.root, fname + self.ext)
         # image = load_image(path, size)
         # image = load_ben_gray(path)
         #image = load_ben_color(path, size=self.size, crop=True)
@@ -156,7 +157,7 @@ if __name__ == "__main__":
 
     df = pd.read_csv(sample_submission_path)
     testset = DataLoader(
-        TestDataset(root, df, size, mean, std, tta),
+        TestDataset(root, df, size, mean, std, predict_on, tta),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,

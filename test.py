@@ -46,6 +46,14 @@ def get_parser():
         help="predict on train or test set, options: test or train",
         default="test",
     )
+    parser.add_argument(
+        "-s",
+        "--size",
+        dest="size",
+        help="image size to use",
+        default=300,
+    )
+
     return parser
 
 
@@ -172,7 +180,7 @@ if __name__ == "__main__":
     if predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
     #root = 'data/npy_files/bgcc456'
-    size = 300
+    size = int(args.size)
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
     # mean = (0, 0, 0)
@@ -202,7 +210,7 @@ if __name__ == "__main__":
     model.to(device)
     model.eval()
 
-    npy_folder = os.path.join(model_folder_path, "%s_npy" % predict_on)
+    npy_folder = os.path.join(model_folder_path, f"{predict_on}_npy/{size}")
     mkdir(npy_folder)
 
     print(f"\nUsing model: {model_name} | fold: {fold}")

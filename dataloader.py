@@ -61,7 +61,7 @@ class ImageDataset(Dataset):
                 size=self.size,
                 augmentation=True,
                 subtract_median=True,
-                clahe_green=False)
+                clahe_green=True)
         #image = self.images[idx]
         image = self.transform(image=image)["image"]
         return fname, image, label

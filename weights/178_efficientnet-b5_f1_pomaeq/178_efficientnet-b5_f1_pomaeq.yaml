@@ -3,7 +3,7 @@ home: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/
 #home: /home/eee/ug/15084015/aptos/
 fold: 1
 total_folds: 5
-size: 128
+size: 256
 top_lr: 1e-5
 class_weights: None
 cw_sampling: False
@@ -29,7 +29,7 @@ batch_size:
 num_workers: 12
 num_classes: 1
 ep2unfreeze: 0
-num_epochs: 5
+num_epochs: 15
 base_lr: None
 momentum: 0.95
 patience: 4

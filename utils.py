@@ -162,6 +162,18 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
 
     # tensorboard
     logger = tb[phase]
+
+    for cls in cls_tpr.keys():
+        ctpr = cls_tpr[cls]
+        ctpr = 0 if ctpr == "None" else ctpr
+        logger.log_value("TPR_%s" % cls, float(ctpr), epoch)
+
+    for cls in cls_ppv.keys():
+        cppv = cls_ppv[cls]
+        cppv = 0 if cppv == "None" else cppv
+        logger.log_value("PPV_%s" % cls, float(cppv), epoch)
+
+
     logger.log_value("loss", epoch_loss, epoch)
     if phase == "train":
         logger.log_value("lr", lr, epoch)
