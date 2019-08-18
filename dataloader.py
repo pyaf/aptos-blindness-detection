@@ -63,7 +63,7 @@ class ImageDataset(Dataset):
         #        subtract_median=True,
         #        clahe_green=True)
         #image = self.images[idx]
-        image = PP1(path)
+        image = PP1(path, self.size)
         image = self.transform(image=image)["image"]
         return fname, image, label
 

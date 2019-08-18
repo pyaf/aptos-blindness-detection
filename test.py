@@ -51,7 +51,7 @@ def get_parser():
         "--size",
         dest="size",
         help="image size to use",
-        default=300,
+        default=256,
     )
 
     return parser
@@ -112,13 +112,13 @@ class TestDataset(data.Dataset):
         #image = np.load(path)
         path = os.path.join(self.root, fname + self.ext)
         #print(path)
-        image = id_to_image(path,
-                resize=True,
-                size=self.size,
-                augmentation=False,
-                subtract_median=True,
-                clahe_green=True)
-
+        #image = id_to_image(path,
+        #        resize=True,
+        #        size=self.size,
+        #        augmentation=False,
+        #        subtract_median=True,
+        #        clahe_green=True)
+        image = PP1(path)
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
             aug_img = self.TTA(image=image)["image"]

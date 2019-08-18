@@ -111,7 +111,7 @@ def id_to_image(path,
 
 
 
-def PP1(path):
+def PP1(path, size):
     '''
     PP1: preprocessing method 1
     read image, crop black area, bgr-lab -> apply CLAHE, lab-rbg, apply median filter
@@ -119,6 +119,7 @@ def PP1(path):
     try:
         bgr = cv2.imread(path)
         bgr = crop_image(bgr)
+        bgr = cv2.resize(bgr, (size, size))
         # CLAHE
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
         lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)

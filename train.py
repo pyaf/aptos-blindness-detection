@@ -32,7 +32,7 @@ date = "%s-%s" % (now.day, now.month)
 
 class Trainer(object):
     def __init__(self):
-        seed_pytorch()
+        #seed_pytorch()
         self.args = get_parser()
         cfg = load_cfg(self.args)
         self.model_name = cfg['model_name']
