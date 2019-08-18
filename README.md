@@ -654,6 +654,7 @@ Prof. Clarisa Sanchez, Radboud University Medical Cente
 
 * `178_efficientnet-b5_f1_omag.yaml` omag model with 256 sized sampled old images.
 has lower performance comparedto  `168_efficientnet-b5_f1_oma` model.
+*green clahe repeated 3 times doesn't work.*
 idea: R, clahe with green, B image training?
 
 

@@ -4,7 +4,7 @@ from albumentations import (
     Transpose, ShiftScaleRotate, Blur, OpticalDistortion, GridDistortion, HueSaturationValue,
     IAAAdditiveGaussianNoise, GaussNoise, MotionBlur, MedianBlur, IAAPiecewiseAffine,
     IAASharpen, IAAEmboss, RandomContrast, RandomBrightness, Flip, OneOf, Compose, RandomGamma, ElasticTransform, ChannelShuffle,RGBShift, Rotate,
-    Normalize, RandomBrightnessContrast
+    Normalize, RandomBrightnessContrast, Resize
 )
 
 from albumentations.torch import ToTensor
@@ -50,23 +50,23 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                #Transpose(p=0.5),
-                #Flip(p=0.5),
-                #ShiftScaleRotate(
-                #    shift_limit=0.1,
-                #    scale_limit=0.1,
-                #    rotate_limit=180,
-                #    p=0.5,
-                #    #border_mode=cv2.BORDER_CONSTANT
-                #),
-                RandomBrightnessContrast(p=1),
+                Transpose(p=0.5),
+                Flip(p=0.5),
+                ShiftScaleRotate(
+                    shift_limit=0.1,
+                    scale_limit=(-0.1, 0.3),
+                    rotate_limit=180,
+                    p=0.5,
+                ),
+
+               RandomBrightnessContrast(0.1, 0.1, p=1),
             ]
         )
     list_transforms.extend(
         [
 
             Normalize(mean=mean, std=std, p=1),
-            #Resize(size, size),
+            Resize(size, size),
             ToTensor(normalize=None),  # [6]
         ]
     )
@@ -82,8 +82,8 @@ def get_test_transforms(size, mean, std):
             Flip(p=0.5),
             ShiftScaleRotate(
                 shift_limit=0.1,
-                scale_limit=0.1,
-                rotate_limit=360,
+                scale_limit=(-0.1, 0.3),
+                rotate_limit=180,
                 p=0.5,
                 #border_mode=cv2.BORDER_CONSTANT
             ),

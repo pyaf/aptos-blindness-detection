@@ -13,27 +13,15 @@ def load_ben_color(path, size, sigmaX=10, crop=False):
     image = cv2.imread(path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     if crop:
-        image = crop_image_from_gray(image)
+        image = crop_image(image)
     image = cv2.resize(image, (size, size))
     image = cv2.addWeighted(image, 4, cv2.GaussianBlur(
         image, (0, 0), sigmaX), -4, 128)
     return image
 
 
-def load_ben_gray(path, size):
-    image = cv2.imread(path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    image = cv2.resize(image, (size, size))
-    image = cv2.addWeighted(
-        image, 4, cv2.GaussianBlur(image, (0, 0), size / 10), -4, 128
-    )  # Ben Graham's preprocessing method [1]
-    # (IMG_SIZE, IMG_SIZE) -> (IMG_SIZE, IMG_SIZE, 3)
-    image = image.reshape(size, size, 1)
-    image = np.repeat(image, 3, axis=-1)
-    return image
-
-
-def crop_image_from_gray(img, tol=7):
+def crop_image(img, tol=10):
+    '''remove the black area'''
     if img.ndim == 2:
         mask = img > tol
         return img[np.ix_(mask.any(1), mask.any(0))]
@@ -99,12 +87,14 @@ def toCLAHEgreen(img):
     cla = np.repeat(cla, 3, -1)
     return cla
 
+
 def id_to_image(path,
         resize=True,
         size=456,
         augmentation=False,
         subtract_gaussian=False,
         subtract_median=False,
+        clahe=False,
         clahe_green=False
     ):
     im = cv2.imread(path)
@@ -118,4 +108,45 @@ def id_to_image(path,
     if clahe_green:
         im = toCLAHEgreen(im)
     return im
+
+
+
+def PP1(path):
+    '''
+    PP1: preprocessing method 1
+    read image, crop black area, bgr-lab -> apply CLAHE, lab-rbg, apply median filter
+    '''
+    try:
+        bgr = cv2.imread(path)
+        bgr = crop_image(bgr)
+        # CLAHE
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)
+        lab[...,0] = clahe.apply(lab[...,0])
+        rgb = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+        # Median filtering
+        rgb = subtract_median_bg_image(rgb)
+    except Exception as e:
+        print(path)
+        rgb = np.zeros([256, 256, 3])
+    return rgb
+
+
+def PP2(path):
+    '''
+    read image, crop black area, apply CLAHE to each channel, apply median filter
+    '''
+    bgr = cv2.imread(path)
+    bgr = crop_image(bgr)
+    # CLAHE
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    bgr[...,0] = clahe.apply(bgr[...,0])
+    bgr[...,1] = clahe.apply(bgr[...,1])
+    bgr[...,2] = clahe.apply(bgr[...,2])
+    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+    # Median filtering
+    rgb = subtract_median_bg_image(rgb)
+    return rgb
+
+
 

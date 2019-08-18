@@ -64,6 +64,7 @@ class TestDataset(data.Dataset):
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
+        self.ext = ".png" if predict_on ==  "test" else ""
         '''
         self.ext = ".tif" if predict_on == "train_mess" else ".png"
         print("Loading images...")
@@ -109,14 +110,14 @@ class TestDataset(data.Dataset):
         #image = self.images[idx]
         #path = os.path.join(self.root, fname + '.npy')
         #image = np.load(path)
-        path = os.path.join(self.root, fname + ".png")
+        path = os.path.join(self.root, fname + self.ext)
         #print(path)
         image = id_to_image(path,
                 resize=True,
                 size=self.size,
                 augmentation=False,
                 subtract_median=True,
-                clahe_green=False)
+                clahe_green=True)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -176,8 +177,10 @@ if __name__ == "__main__":
         sample_submission_path = "data/train_messidor.csv"
 
     tta = 0  # number of augs in tta
-    root = f"data/{predict_on}_images/"
-    if predict_on == "train_mess":
+    root = "data/test_images/"
+    if predict_on == "train":
+        root = "data/all_images/"
+    elif predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
     #root = 'data/npy_files/bgcc456'
     size = int(args.size)

@@ -56,13 +56,14 @@ class ImageDataset(Dataset):
         #image = toCLAHEgreen(image)
         path = os.path.join(self.root, fname)
         #print(path)
-        image = id_to_image(path,
-                resize=True,
-                size=self.size,
-                augmentation=True,
-                subtract_median=True,
-                clahe_green=True)
+        #image = id_to_image(path,
+        #        resize=True,
+        #        size=self.size,
+        #        augmentation=True,
+        #        subtract_median=True,
+        #        clahe_green=True)
         #image = self.images[idx]
+        image = PP1(path)
         image = self.transform(image=image)["image"]
         return fname, image, label
 
@@ -87,14 +88,11 @@ def get_sampler(df, cfg):
         datasampler = None
     return datasampler
 
-def resampled(df, cfg):
+def resampled(df, count_dict):
     ''' resample from df with replace=False'''
     def sample(obj):  # [5]
         return obj.sample(n=count_dict[obj.name], replace=False, random_state=69)
-
-    count_dict = cfg['count_dict']
     sampled_df = df.groupby('diagnosis').apply(sample).reset_index(drop=True)
-
     return sampled_df
 
 
@@ -116,15 +114,20 @@ def provider(phase, cfg):
         df = df.drop(df.index[all_dups])
 
     if cfg['sample']: #used in old data training
-        df = resampled(df, cfg)
-        print(f'sampled df shape: {df.shape}')
-        print(f'data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
+        count_dict = cfg['count_dict']
+        df = resampled(df, count_dict)
 
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
+
+    if cfg['add_old_samples'] and phase == "train":
+        sample_dict = cfg['sample_dict']
+        df_old = pd.read_csv(cfg['old_df_path'])
+        sampled_df_old = resampled(df_old, sample_dict)
+        train_df = train_df.append(sampled_df_old, ignore_index=False)
 
     #'''test'''
     #extra = pd.read_csv('data/2015.csv')
@@ -154,8 +157,10 @@ def provider(phase, cfg):
     elif phase == "val_new": # [11]
         df = pd.read_csv('data/train.csv')
 
-    #df = pd.read_csv(cfg['diff_path'])
     print(f"{phase}: {df.shape}")
+    print(f'Data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
+
+    #df = pd.read_csv(cfg['diff_path'])
 
     image_dataset = ImageDataset(df, phase, cfg)
 
@@ -195,9 +200,9 @@ if __name__ == "__main__":
     phase = "train"
     args = get_parser()
     cfg = load_cfg(args)
-    cfg["num_workers"] = 0
-    cfg["batch_size"]["train"] = 2
-    cfg["batch_size"]["val"] = 2
+    cfg["num_workers"] = 4
+    cfg["batch_size"]["train"] = 8
+    cfg["batch_size"]["val"] = 8
 
     dataloader = provider(phase, cfg)
     ''' train val set sanctity
