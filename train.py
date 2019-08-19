@@ -20,6 +20,7 @@ from dataloader import provider
 from shutil import copyfile
 from models import Model, get_model
 from extras import *
+from opt import RAdam
 from pathlib import Path
 
 
@@ -70,7 +71,8 @@ class Trainer(object):
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
         self.net = get_model(self.model_name, self.num_classes)
         self.criterion = torch.nn.MSELoss()
-        self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
+        #self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
+        self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
         #lr_lambda = lambda epoch: epoch // 5
         self.scheduler = ReduceLROnPlateau(
             self.optimizer, mode="min", patience=self.patience, verbose=True
