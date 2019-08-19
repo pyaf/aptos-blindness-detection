@@ -111,11 +111,6 @@ def provider(phase, cfg):
     else:
         df_path = cfg['new_df_path']
     df = pd.read_csv(os.path.join(HOME, df_path))
-
-    # remove class 0, subtract all by 1
-    df = df[df['diagnosis'] != 0]
-    df['diagnosis'] -= 1
-
     df['weight'] = 1 # [10]
 
     if cfg['he_sampling']:
@@ -129,6 +124,12 @@ def provider(phase, cfg):
         good_dups_df = df.iloc[good_dups] # to be added later on
         all_dups = np.array(list(bad_dups) + list(good_dups))
         df = df.drop(df.index[all_dups])
+
+
+    # remove class 0, subtract all by 1
+    df = df[df['diagnosis'] != 0]
+    df['diagnosis'] -= 1
+
 
     if cfg['sample']: #used in old data training
         count_dict = cfg['count_dict']
@@ -170,7 +171,7 @@ def provider(phase, cfg):
 
     #sample_dict = {
     #        2:    0.647303,
-    #        0:    0.185166,
+    #        1:    0.185166,
     #        1:    0.070539,
     #        3:    0.058091,
     #        4:    0.038900

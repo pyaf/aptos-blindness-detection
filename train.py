@@ -71,6 +71,7 @@ class Trainer(object):
         self.net = get_model(self.model_name, self.num_classes)
         self.criterion = torch.nn.MSELoss()
         self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
+        #lr_lambda = lambda epoch: epoch // 5
         self.scheduler = ReduceLROnPlateau(
             self.optimizer, mode="min", patience=self.patience, verbose=True
         )
