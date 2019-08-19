@@ -1,0 +1,16 @@
+12:20:27 Starting epoch: 0 | phase: train | 12:20:27
+13:32:31 Starting epoch: 0 | phase: train | 13:32:31
+14:09:50 Starting epoch: 0 | phase: train | 14:09:50
+14:17:55 base: QWK: -0.0012 | ACC: 0.2240 | TPR: 0.2044 | PPV: 0.0000
+14:17:55 Class TPR: {0: 0.6583, 1: 0.3335, 2: 0.0294, 3: 0.0006, 4: 0.0}
+14:17:55 Class PPV: {0: 0.2349, 1: 0.2011, 2: 0.2261, 3: 0.1667, 4: 'None'}
+14:17:55 lr: 5e-05
+14:17:55 Starting epoch: 0 | phase: val | 14:17:55
+14:18:58 best: QWK: 0.0013 | ACC: 0.1984 | TPR: 0.1984 | PPV: 0.0000
+14:18:58 Class TPR: {0: 0.95, 1: 0.0421, 2: 0.0, 3: 0.0, 4: 0.0}
+14:18:58 Class PPV: {0: 0.2008, 1: 0.1569, 2: 'None', 3: 'None', 4: 'None'}
+14:18:58 base: QWK: 0.0013 | ACC: 0.1989 | TPR: 0.1989 | PPV: 0.0000
+14:18:58 Class TPR: {0: 0.9526, 1: 0.0421, 2: 0.0, 3: 0.0, 4: 0.0}
+14:18:58 Class PPV: {0: 0.201, 1: 0.1616, 2: 'None', 3: 'None', 4: 'None'}
+14:18:58 lr: 5e-05
+14:18:58 ******** New optimal found, saving state ********

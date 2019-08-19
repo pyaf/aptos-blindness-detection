@@ -657,6 +657,13 @@ has lower performance comparedto  `168_efficientnet-b5_f1_oma` model.
 *green clahe repeated 3 times doesn't work.*
 idea: R, clahe with green, B image training?
 
+* `188_efficientnet-b5_f1_pp1mix.yaml`
+taking 1900 images from each class from old data + new training data, 256 sized images.
+*BUG* `crop_image` or `crop_image_from_gray` expected RGB images, I was giving BGR.
+model is not able to detect class 4 images, now I'm gonna eyeball on the sampled dataset,.
+
+
+*libjpeg-turbo is awesome*
 
 
 # Questions and Ideas:

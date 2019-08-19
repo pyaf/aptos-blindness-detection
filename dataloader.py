@@ -9,6 +9,8 @@ from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset, sampler
 from torchvision.datasets.folder import pil_loader
 from sklearn.model_selection import train_test_split, StratifiedKFold
+from PIL import Image
+import jpeg4py as jpeg
 from utils import to_multi_label
 from extras import *
 from image_utils import *
@@ -63,7 +65,14 @@ class ImageDataset(Dataset):
         #        subtract_median=True,
         #        clahe_green=True)
         #image = self.images[idx]
-        image = PP1(path, self.size)
+        #image = PP1(path, self.size)
+        #image = cv2.imread(path)
+        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        if path[-4:] == "jpeg":
+            image = jpeg.JPEG(path).decode()
+        else:
+            image = Image.open(path)
+            image = np.array(image)
         image = self.transform(image=image)["image"]
         return fname, image, label
 
@@ -98,7 +107,11 @@ def resampled(df, count_dict):
 
 def provider(phase, cfg):
     HOME = cfg['home']
-    df = pd.read_csv(os.path.join(HOME, cfg['df_path']))
+    if cfg['pretraining']:
+        df_path = cfg['old_df_path']
+    else:
+        df_path = cfg['new_df_path']
+    df = pd.read_csv(os.path.join(HOME, df_path))
     df['weight'] = 1 # [10]
 
     if cfg['he_sampling']:
@@ -193,15 +206,18 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     '''
-
+    import os
+    os.environ['CUDA_VISIBLE_DEVICES']=""
+    import torchvision
+    torchvision.set_image_backend('accimage')
 
     import time
     start = time.time()
     phase = "train"
     args = get_parser()
     cfg = load_cfg(args)
-    cfg["num_workers"] = 4
-    cfg["batch_size"]["train"] = 8
+    cfg["num_workers"] = 8
+    cfg["batch_size"]["train"] = 16
     cfg["batch_size"]["val"] = 8
 
     dataloader = provider(phase, cfg)

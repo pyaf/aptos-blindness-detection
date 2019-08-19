@@ -21,12 +21,12 @@ def load_ben_color(path, size, sigmaX=10, crop=False):
 
 
 def crop_image(img, tol=10):
-    '''remove the black area'''
+    '''remove the black area, input should be BGR, for 3 channels'''
     if img.ndim == 2:
         mask = img > tol
         return img[np.ix_(mask.any(1), mask.any(0))]
     elif img.ndim == 3:
-        gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         mask = gray_img > tol
         check_shape = img[:, :, 0][np.ix_(mask.any(1), mask.any(0))].shape[0]
         if check_shape == 0:  # image is too dark so that we crop out everything,
