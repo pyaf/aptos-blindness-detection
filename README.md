@@ -669,7 +669,7 @@ model is not able to detect class 4 images, now I'm gonna eyeball on the sampled
 
 *thoughts*
 train/val set have ~50% class 0 and ~25% class 2, now our models get very good with 0 (F1: 0.98), they are better with 2 (F1: 0.72) compared to 1, 3, 4, so we reach a local qwk of 0.93
-now, seeing the dist of our best submissions, the public test set has 64% class 2, then comes class 0 with 18%, so we see such a decline in LB qwk. Given, two different predictions can have same qwk, it's a unstable metric to select our models. Then the question rises, what metric to choose? how to move further?
+now, seeing the dist of our best submissions, the public test set has ~64% class 2, then comes class 0 with ~18%, as our models are not good that good with class 2 and 1,3,4 so we see such a decline in LB qwk. Given, two different predictions can have same qwk, it's a unstable metric to select our models. Then the question rises, what metric to choose? how to move further?
 
 I'm gonna create a val set with a the distribution of our public test set.
 submission80.csv:
@@ -683,6 +683,13 @@ submission80.csv:
 
 * `198_efficientnet-b5_f1_ptest`: finetuning on previous model, this time load train.csv, add messidor (without cls 3), extract val set which has same dist as sub80.csv,
 
+Funny, the optimized val qwk results in heavily skewing of thresholds: [0.49413991 0.5547372  2.45687935 4.55316238], results in higher qwk as compared to base thresholds, but with almost zero PPV, all getting classified as class 2, the majority class. This shows how unreliable is val set optimzation.
+base qwk is plateauing at 0.76
+
+*Idea*
+so, in this challenge,  metrics averaged over all classes are not reliable. We'll have to watch the class wise metrics, get the best per class performing model.
+I've an idea: What about a 2 step model, we are at F1 score of ~0.98+, if we train a bin classifier of zero-vs-others I'm pretty sure we can increase this f1 score to 0.99, after that we can train a model solely on class 1, 2, 3, 4, and focus on these rare classes. The metrics won't get biased towards class 0.
+for the 2nd step model, the labels will be one-step-below the actual 1->0, 2->1 etc.
 
 
 

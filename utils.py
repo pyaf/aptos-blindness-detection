@@ -38,23 +38,6 @@ class CM(ConfusionMatrix):
         json.dump(dump_dict, open(obj_full_path, "w"))
 
 
-def to_multi_label(target, classes):
-    """[0, 0, 1, 0] to [1, 1, 1, 0]"""
-    multi_label = np.zeros((len(target), classes))
-    for i in range(len(target)):
-        j = target[i] + 1
-        multi_label[i][:j] = 1
-    return np.array(multi_label)
-
-
-def get_preds(arr, num_cls):
-    """ takes in thresholded predictions (num_samples, num_cls) and returns (num_samples,)
-    [3], arr needs to be a numpy array, NOT torch tensor"""
-    mask = arr == 0
-    # pdb.set_trace()
-    return np.clip(np.where(mask.any(1), mask.argmax(1), num_cls) - 1, 0, num_cls - 1)
-
-
 def predict(X, coef):
     # [0.15, 2.4, ..] -> [0, 2, ..]
     X_p = np.copy(X)
@@ -65,10 +48,12 @@ def predict(X, coef):
             X_p[i] = 1
         elif pred >= coef[1] and pred < coef[2]:
             X_p[i] = 2
-        elif pred >= coef[2] and pred < coef[3]:
-            X_p[i] = 3
         else:
-            X_p[i] = 4
+            X_p[i] = 3
+        #elif pred >= coef[2] and pred < coef[3]:
+        #    X_p[i] = 3
+        #else:
+        #    X_p[i] = 4
     return X_p.astype("int")
 
 
@@ -86,7 +71,7 @@ class Meter:
         self.epoch = epoch
         self.save_folder = os.path.join(save_folder, "logs")
         # self.num_classes = 5  # hard coded, yeah, I know
-        self.base_th = [0.5, 1.5, 2.5, 3.5]
+        self.base_th = [0.5, 1.5, 2.5] # for non 0 class training
 
     def update(self, targets, outputs):
         """targets, outputs are detached CUDA tensors"""
@@ -104,6 +89,8 @@ class Meter:
     def get_best_thresholds(self):
         """Epoch over, let's get targets in np array [6]"""
         self.targets = np.array(self.targets)
+        ''' not using this function anymore '''
+        return self.base_th
 
         if self.phase == "train":
             return self.base_th
@@ -125,15 +112,18 @@ class Meter:
         base_preds = predict(self.predictions, self.base_th)
         base_qwk = cohen_kappa_score(self.targets, base_preds, weights="quadratic")
         base_cm = CM(self.targets, base_preds)
+        return base_cm, base_qwk
+        ''' not used '''
         if self.phase != "train":
             best_preds = predict(self.predictions, self.best_th)
             best_qwk = cohen_kappa_score(self.targets, best_preds, weights="quadratic")
             best_cm = CM(self.targets, best_preds)
             return base_cm, base_qwk, best_cm, best_qwk
-        return base_cm, base_qwk
 
 
 def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
+    base_cm, base_qwk = meter.get_cm()
+    '''
     if phase == "train":
         base_cm, base_qwk = meter.get_cm()
     else:
@@ -150,13 +140,16 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
         obj_path = os.path.join(meter.save_folder, f"best_cm{phase}_{epoch}")
         best_cm.save(obj_path, best_qwk, epoch_loss, save_stat=True, save_vector=True)
         print()
+    '''
 
     lr = opt.param_groups[-1]["lr"]
     # take care of base metrics
-    acc, tpr, ppv, cls_tpr, cls_ppv = get_stats(base_cm)
-    log("base: QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f" % (base_qwk, acc, tpr, ppv))
+    acc, tpr, ppv, f1, cls_tpr, cls_ppv, cls_f1 = get_stats(base_cm)
+    log("QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f | F1: %0.4f" %
+            (base_qwk, acc, tpr, ppv, f1))
     log(f"Class TPR: {cls_tpr}")
     log(f"Class PPV: {cls_ppv}")
+    log(f"Class F1: {cls_f1}")
     base_cm.print_normalized_matrix()
     log(f"lr: {lr}")
 
@@ -164,15 +157,9 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
     logger = tb[phase]
 
     for cls in cls_tpr.keys():
-        ctpr = cls_tpr[cls]
-        ctpr = 0 if ctpr == "None" else ctpr
-        logger.log_value("TPR_%s" % cls, float(ctpr), epoch)
-
-    for cls in cls_ppv.keys():
-        cppv = cls_ppv[cls]
-        cppv = 0 if cppv == "None" else cppv
-        logger.log_value("PPV_%s" % cls, float(cppv), epoch)
-
+        logger.log_value("TPR_%s" % cls, float(cls_tpr[cls]), epoch)
+        logger.log_value("PPV_%s" % cls, float(cls_ppv[cls]), epoch)
+        logger.log_value("F1_%s" % cls, float(cls_f1[cls]), epoch)
 
     logger.log_value("loss", epoch_loss, epoch)
     if phase == "train":
@@ -199,25 +186,30 @@ def get_stats(cm):
     acc = cm.overall_stat["Overall ACC"]
     tpr = cm.overall_stat["TPR Macro"]  # [7]
     ppv = cm.overall_stat["PPV Macro"]
+    f1 = cm.overall_stat["F1 Macro"]
     cls_tpr = cm.class_stat["TPR"]
     cls_ppv = cm.class_stat["PPV"]
+    cls_f1 = cm.class_stat["F1"]
 
-    tpr = 0 if tpr is "None" else tpr  # [8]
-    ppv = 0 if ppv is "None" else ppv
+    if tpr is "None": tpr = 0  # [8]
+    if ppv is "None": ppv = 0
+    if f1 is "None": f1 = 0
 
-    for x, y in cls_tpr.items():
+    cls_tpr = sanity(cls_tpr)
+    cls_ppv = sanity(cls_ppv)
+    cls_f1 = sanity(cls_f1)
+
+    return acc, tpr, ppv, f1, cls_tpr, cls_ppv, cls_f1
+
+
+def sanity(cls_dict):
+    for x, y in cls_dict.items():
         try:
-            cls_tpr[x] = float("%0.4f" % y)
+            cls_dict[x] = float("%0.4f" % y)
         except Exception as e:  # [8]
-            pass
+            cls_dict[x] = 0.0
+    return cls_dict
 
-    for x, y in cls_ppv.items():
-        try:
-            cls_ppv[x] = float("%0.4f" % y)
-        except Exception as e:  # [8]
-            pass
-
-    return acc, tpr, ppv, cls_tpr, cls_ppv
 
 
 def check_sanctity(dataloaders):
