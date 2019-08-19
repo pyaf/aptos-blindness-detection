@@ -665,6 +665,29 @@ model is not able to detect class 4 images, now I'm gonna eyeball on the sampled
 
 *libjpeg-turbo is awesome*
 
+* `198_efficientnet-b5_f1_test`: aug_3, (crop, clahe(green)x3) pretraining on 1900 images per class of old data + messidor data, 256,
+
+*thoughts*
+train/val set have ~50% class 0 and ~25% class 2, now our models get very good with 0 (F1: 0.98), they are better with 2 (F1: 0.72) compared to 1, 3, 4, so we reach a local qwk of 0.93
+now, seeing the dist of our best submissions, the public test set has 64% class 2, then comes class 0 with 18%, so we see such a decline in LB qwk. Given, two different predictions can have same qwk, it's a unstable metric to select our models. Then the question rises, what metric to choose? how to move further?
+
+I'm gonna create a val set with a the distribution of our public test set.
+submission80.csv:
+
+2    0.647303
+0    0.185166
+1    0.070539
+3    0.058091
+4    0.038900
+
+
+* `198_efficientnet-b5_f1_ptest`: finetuning on previous model, this time load train.csv, add messidor (without cls 3), extract val set which has same dist as sub80.csv,
+
+
+
+
+
+
 
 # Questions and Ideas:
 

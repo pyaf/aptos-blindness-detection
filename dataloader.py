@@ -129,13 +129,13 @@ def provider(phase, cfg):
     if cfg['sample']: #used in old data training
         count_dict = cfg['count_dict']
         df = resampled(df, count_dict)
-
+    '''
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
     train_idx, val_idx = list(kfold.split(df["id_code"], df["diagnosis"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
-
+    '''
     if cfg['add_old_samples'] and phase == "train":
         sample_dict = cfg['sample_dict']
         df_old = pd.read_csv(cfg['old_df_path'])
@@ -155,8 +155,34 @@ def provider(phase, cfg):
 
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])
+        mes_df = mes_df[mes_df.diagnosis != 3] # drop class 3, see [12]
         mes_df['weight'] = 1
-        train_df = train_df.append(mes_df, ignore_index=True)
+        #train_df = train_df.append(mes_df, ignore_index=True) <<<<<<<<<<
+        df = df.append(mes_df, ignore_index=True)
+
+    '''test'''
+    # val set dist => public test set dist
+    # line 170 modified too.
+
+    sample_dict = {
+            2:    0.647303,
+            0:    0.185166,
+            1:    0.070539,
+            3:    0.058091,
+            4:    0.038900
+    }
+
+    count = {}
+    for i, j in sample_dict.items():
+        count[i] = int(sample_dict[i] * 650) # so that, val size is ~20%
+
+    def sample(obj):  # [5]
+        return obj.sample(n=count[obj.name], replace=False, random_state=69)
+
+    val_df = df.groupby('diagnosis').apply(sample).reset_index(drop=True)
+    train_df = df[~df['id_code'].isin(val_df.id_code.tolist())]
+
+    '''test over'''
 
     if 'folder' in cfg.keys():
         # save for analysis, later on
@@ -265,4 +291,5 @@ https://github.com/btgraham/SparseConvNet/tree/kaggle_Diabetic_Retinopathy_compe
 [7]: indices of hard examples, evaluated using 0.81 scoring model.
 [10]: messidor df append will throw err when doing hard ex sampling.
 [11]: using current comp's data as val set in old data training.
+[12]: messidor's class 3 is class 3 and class 4 combined.
 """
