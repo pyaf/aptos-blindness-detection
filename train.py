@@ -71,8 +71,8 @@ class Trainer(object):
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
         self.net = get_model(self.model_name, self.num_classes)
         self.criterion = torch.nn.MSELoss()
-        #self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
-        self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
+        self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
+        #self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
         #lr_lambda = lambda epoch: epoch // 5
         self.scheduler = ReduceLROnPlateau(
             self.optimizer, mode="min", patience=self.patience, verbose=True
@@ -216,6 +216,18 @@ class Trainer(object):
             #print_time(self.log, t_epoch_start, "Time taken by the epoch")
             print_time(self.log, t0, "Total time taken so far")
             print()
+            if (epoch+1) % 10 == 0:
+                cfg['size'] = [256, 512, 1024][(epoch+1) // 10]
+                if cfg['size'] == 512:
+                    cfg['batch_size'] = {'train': 4, 'val':4}
+                elif cfg['size'] == 1024:
+                    cfg['batch_size'] = {'train': 2, 'val':2}
+                self.log('*** Setting size to %d ***' % cfg['size'])
+                self.log('batch size %s' % cfg['batch_size'])
+                self.dataloaders = {
+                    phase: provider(phase, cfg) for phase in self.phases
+                }
+
             #self.log("\n" + "=" * 60 + "\n")
 
 

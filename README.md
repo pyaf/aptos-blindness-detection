@@ -696,6 +696,18 @@ for the 2nd step model, the labels will be one-step-below the actual 1->0, 2->1 
 Getting heavily biased towards class 2.
 
 https://jdhao.github.io/2017/11/06/resize-image-to-square-with-padding/
+* `208_efficientnet-b5_f1_ptest2radam`:
+*experiment*: Adam performs better than RAdam
+
+* `208_efficientnet-b5_f1_ptestpr`: progressive resizing.
+128, 256, 512, 1024 for 10 epochs each.
+
+
+
+
+
+
+
 
 
 # Questions and Ideas:
