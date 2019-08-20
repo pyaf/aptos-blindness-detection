@@ -11,6 +11,7 @@ import logging
 import traceback
 import numpy as np
 from datetime import datetime
+
 # from config import HOME
 from tensorboard_logger import log_value, log_images
 from torchnet.meter import ConfusionMeter
@@ -39,7 +40,7 @@ def logger_init(save_folder):
 
 def predict(X, coef):
     X_p = np.copy(X)
-    return (X_p > coef).astype('int')
+    return (X_p > coef).astype("int")
 
 
 def compute_score_inv(thresholds, predictions, targets):
@@ -55,14 +56,22 @@ class FocalLoss(nn.Module):
 
     def forward(self, input, target):
         if not (target.size() == input.size()):
-            raise ValueError("Target size ({}) must be the same as input size ({})"
-                             .format(target.size(), input.size()))
+            raise ValueError(
+                "Target size ({}) must be the same as input size ({})".format(
+                    target.size(), input.size()
+                )
+            )
         max_val = (-input).clamp(min=0)
-        loss = input - input * target + max_val + \
-            ((-max_val).exp() + (-input - max_val).exp()).log()
+        loss = (
+            input
+            - input * target
+            + max_val
+            + ((-max_val).exp() + (-input - max_val).exp()).log()
+        )
         invprobs = F.logsigmoid(-input * (target * 2.0 - 1.0))
         loss = (invprobs * self.gamma).exp() * loss
         return loss.mean()
+
 
 class Meter:
     def __init__(self, phase, epoch, save_folder):
@@ -74,20 +83,20 @@ class Meter:
         self.best_thresholds = 0.5
 
     def update(self, targets, outputs):
-        '''targets, outputs are detached CUDA tensors'''
+        """targets, outputs are detached CUDA tensors"""
         # get multi-label to single label
-        #targets = torch.sum(targets, 1) - 1 # no multilabel target in regression
+        # targets = torch.sum(targets, 1) - 1 # no multilabel target in regression
         targets = targets.type(torch.LongTensor)
-        outputs = torch.sigmoid(outputs).flatten() # [n, 1] -> [n]
+        outputs = torch.sigmoid(outputs).flatten()  # [n, 1] -> [n]
         # outputs = torch.sum((outputs > 0.5), 1) - 1
 
-        #pdb.set_trace()
+        # pdb.set_trace()
         self.targets.extend(targets.tolist())
         self.predictions.extend(outputs.tolist())
         # self.predictions.extend(torch.argmax(outputs, dim=1).tolist()) #[2]
 
     def get_best_thresholds(self):
-        '''Epoch over, let's get targets in np array [6]'''
+        """Epoch over, let's get targets in np array [6]"""
         self.targets = np.array(self.targets)
 
         return self.best_thresholds
@@ -108,9 +117,9 @@ class Meter:
         return self.best_thresholds
 
     def get_cm(self):
-        #pdb.set_trace()
+        # pdb.set_trace()
         thresholds = self.best_thresholds
-        print('best_threshold:', thresholds)
+        print("best_threshold:", thresholds)
         self.predictions = predict(self.predictions, self.best_thresholds)
         cm = ConfusionMatrix(self.targets, self.predictions)
         best_acc = accuracy_score(self.targets, self.predictions)
@@ -132,13 +141,13 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
     diff = time.time() - start
     cm, best_acc = meter.get_cm()
     acc = cm.overall_stat["Overall ACC"]
-    tpr = cm.overall_stat["TPR Macro"] #[7]
+    tpr = cm.overall_stat["TPR Macro"]  # [7]
     ppv = cm.overall_stat["PPV Macro"]
-    cls_tpr = cm.class_stat['TPR']
-    cls_ppv = cm.class_stat['PPV']
+    cls_tpr = cm.class_stat["TPR"]
+    cls_ppv = cm.class_stat["PPV"]
     tpr = 0 if tpr is "None" else tpr  # [8]
     ppv = 0 if ppv is "None" else ppv
-    #pdb.set_trace()
+    # pdb.set_trace()
     print()
     log(
         "%s %d |  loss: %0.4f | best_acc: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f \n"
@@ -150,10 +159,10 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
     except:
         pass
 
-    log('Class TPR: %s' % cls_tpr)
-    log('Class PPV: %s' % cls_ppv)
+    log("Class TPR: %s" % cls_tpr)
+    log("Class PPV: %s" % cls_ppv)
     log(cm.print_normalized_matrix())
-    #log("Time taken for %s phase: %02d:%02d \n", phase, diff // 60, diff % 60)
+    # log("Time taken for %s phase: %02d:%02d \n", phase, diff // 60, diff % 60)
 
     logger = tb[phase]
     for cls in cls_tpr.keys():
@@ -165,7 +174,6 @@ def epoch_log(log, tb, phase, epoch, epoch_loss, meter, start):
         cppv = cls_ppv[cls]
         cppv = 0 if cppv == "None" else cppv
         logger.log_value("PPV_%s" % cls, float(cppv), epoch)
-
 
     # tensorboard
     logger.log_value("loss", epoch_loss, epoch)
@@ -189,34 +197,35 @@ def mkdir(folder):
 def save_hyperparameters(trainer, remark):
     hp_file = os.path.join(trainer.save_folder, "parameters.txt")
     time_now = datetime.now()
-    augmentations = trainer.dataloaders['train'].dataset.transforms.transforms
+    augmentations = trainer.dataloaders["train"].dataset.transforms.transforms
     # pdb.set_trace()
-    string_to_write =  \
-        f"Time: {time_now}\n" + \
-        f"model_name: {trainer.model_name}\n" + \
-        f"train_df_name: {trainer.train_df_name}\n" + \
-        f"resume: {trainer.resume}\n" + \
-        f"pretrained: {trainer.pretrained}\n" + \
-        f"pretrained_path: {trainer.pretrained_path}\n" + \
-        f"folder: {trainer.folder}\n" + \
-        f"fold: {trainer.fold}\n" + \
-        f"total_folds: {trainer.total_folds}\n" + \
-        f"num_samples: {trainer.num_samples}\n" + \
-        f"sampling class weights: {trainer.class_weights}\n" + \
-        f"size: {trainer.size}\n" + \
-        f"top_lr: {trainer.top_lr}\n" + \
-        f"base_lr: {trainer.base_lr}\n" + \
-        f"num_workers: {trainer.num_workers}\n" + \
-        f"batchsize: {trainer.batch_size}\n" + \
-        f"momentum: {trainer.momentum}\n" + \
-        f"mean: {trainer.mean}\n" + \
-        f"std: {trainer.std}\n" + \
-        f"start_epoch: {trainer.start_epoch}\n" + \
-        f"batchsize: {trainer.batch_size}\n" + \
-        f"augmentations: {augmentations}\n" + \
-        f"criterion: {trainer.criterion}\n" + \
-        f"optimizer: {trainer.optimizer}\n" + \
-        f"remark: {remark}\n"
+    string_to_write = (
+        f"Time: {time_now}\n"
+        + f"model_name: {trainer.model_name}\n"
+        + f"train_df_name: {trainer.train_df_name}\n"
+        + f"resume: {trainer.resume}\n"
+        + f"pretrained: {trainer.pretrained}\n"
+        + f"pretrained_path: {trainer.pretrained_path}\n"
+        + f"folder: {trainer.folder}\n"
+        + f"fold: {trainer.fold}\n"
+        + f"total_folds: {trainer.total_folds}\n"
+        + f"num_samples: {trainer.num_samples}\n"
+        + f"sampling class weights: {trainer.class_weights}\n"
+        + f"size: {trainer.size}\n"
+        + f"top_lr: {trainer.top_lr}\n"
+        + f"base_lr: {trainer.base_lr}\n"
+        + f"num_workers: {trainer.num_workers}\n"
+        + f"batchsize: {trainer.batch_size}\n"
+        + f"momentum: {trainer.momentum}\n"
+        + f"mean: {trainer.mean}\n"
+        + f"std: {trainer.std}\n"
+        + f"start_epoch: {trainer.start_epoch}\n"
+        + f"batchsize: {trainer.batch_size}\n"
+        + f"augmentations: {augmentations}\n"
+        + f"criterion: {trainer.criterion}\n"
+        + f"optimizer: {trainer.optimizer}\n"
+        + f"remark: {remark}\n"
+    )
 
     with open(hp_file, "a") as f:
         f.write(string_to_write)
@@ -225,7 +234,7 @@ def save_hyperparameters(trainer, remark):
 
 def seed_pytorch(seed=69):
     random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
     np.random.seed(seed)
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True

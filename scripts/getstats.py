@@ -59,8 +59,7 @@ if __name__ == "__main__":
 
     print("\nClass metrics")
     for metric in class_metrics:
-        metric_dict = fd(
-            train_cm.class_stat[metric], val_cm.class_stat[metric])
+        metric_dict = fd(train_cm.class_stat[metric], val_cm.class_stat[metric])
         print(f"{metric}: {metric_dict}")
 
     # print a row so that copy pasting to google sheet is easy
@@ -76,8 +75,7 @@ if __name__ == "__main__":
     # metrics which are only overall, not class wise
     oc = "Overall ACC"
     order.insert(0, oc)
-    row.insert(
-        0, f"{fl(train_cm.overall_stat[oc])}/{fl(val_cm.overall_stat[oc])}")
+    row.insert(0, f"{fl(train_cm.overall_stat[oc])}/{fl(val_cm.overall_stat[oc])}")
 
     # only class wise metrics, metric_dict corresponds to last one in class_metrics.
     order.append(class_metrics[-1])

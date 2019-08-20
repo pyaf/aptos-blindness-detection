@@ -13,7 +13,9 @@ from PIL import Image
 import jpeg4py as jpeg
 from extras import *
 from image_utils import *
-from augmentations import get_transforms
+from augmentations import * #get_transforms
+from preprocessing import *
+
 
 
 class ImageDataset(Dataset):
@@ -67,16 +69,20 @@ class ImageDataset(Dataset):
         #image = PP1(path, self.size)
         #image = cv2.imread(path)
         #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        if path[-4:] == "jpeg":
-            image = jpeg.JPEG(path).decode()
-        else:
-            image = Image.open(path)
-            image = np.array(image)
+        #if path[-4:] == "jpeg":
+        #    image = jpeg.JPEG(path).decode()
+        #else:
+        #    image = Image.open(path)
+        #    image = np.array(image)
+        image = aug_6(path)
+        w, h, _ = image.shape
+        aug = CenterCrop(int(w*0.8), int(h*0.8), p=0.5)
+        image = aug(image=image)['image']
         image = self.transform(image=image)["image"]
         return fname, image, label
 
     def __len__(self):
-        #return 1000
+        #return 100
         return len(self.df)
 
 
@@ -111,6 +117,7 @@ def provider(phase, cfg):
     else:
         df_path = cfg['new_df_path']
     df = pd.read_csv(os.path.join(HOME, df_path))
+    #print(df['diagnosis'].value_counts())
     df['weight'] = 1 # [10]
 
     if cfg['he_sampling']:
@@ -127,14 +134,15 @@ def provider(phase, cfg):
 
 
     # remove class 0, subtract all by 1
-    df = df[df['diagnosis'] != 0]
-    df['diagnosis'] -= 1
+    #df = df[df['diagnosis'] != 0]
+    #df['diagnosis'] -= 1
 
 
     if cfg['sample']: #used in old data training
         count_dict = cfg['count_dict']
         df = resampled(df, count_dict)
 
+    print(df['diagnosis'].value_counts())
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
@@ -203,6 +211,8 @@ def provider(phase, cfg):
 
     print(f"{phase}: {df.shape}")
     print(f'Data dist:\n {df["diagnosis"].value_counts(normalize=True)}\n')
+
+    df = df.sample(frac=1, random_state=69) # shuffle
 
     #df = pd.read_csv(cfg['diff_path'])
 

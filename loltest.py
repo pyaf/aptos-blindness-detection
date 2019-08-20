@@ -40,7 +40,7 @@ def get_parser():
         type=int,
         dest="epoch_range",
         help="Epoch to start from",
-    ) # usage: -e 10 20
+    )  # usage: -e 10 20
 
     parser.add_argument(
         "-p",
@@ -50,11 +50,7 @@ def get_parser():
         default="test",
     )
     parser.add_argument(
-        "-s",
-        "--size",
-        dest="size",
-        help="image size to use",
-        default=256,
+        "-s", "--size", dest="size", help="image size to use", default=256
     )
 
     return parser
@@ -67,8 +63,8 @@ class TestDataset(data.Dataset):
         self.fnames = list(df["id_code"])
         self.num_samples = len(self.fnames)
         self.tta = tta
-        self.ext = ".png" if predict_on ==  "test" else ""
-        '''
+        self.ext = ".png" if predict_on == "test" else ""
+        """
         self.ext = ".tif" if predict_on == "train_mess" else ".png"
         print("Loading images...")
         if predict_on =="train":
@@ -82,7 +78,7 @@ class TestDataset(data.Dataset):
             path = os.path.join(self.root, fname + self.ext)
             image = load_ben_color(path, size=self.size, crop=True)
             self.images.append(image)
-        '''
+        """
         print("Done")
         self.TTA = albumentations.Compose(
             [
@@ -108,23 +104,23 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        #path = os.path.join(self.root, fname + self.ext)
-        #image = load_ben_color(path, size=self.size, crop=True)
-        #image = self.images[idx]
-        #path = os.path.join(self.root, fname + '.npy')
-        #image = np.load(path)
+        # path = os.path.join(self.root, fname + self.ext)
+        # image = load_ben_color(path, size=self.size, crop=True)
+        # image = self.images[idx]
+        # path = os.path.join(self.root, fname + '.npy')
+        # image = np.load(path)
         path = os.path.join(self.root, fname + self.ext)
-        #print(path)
-        #image = id_to_image(path,
+        # print(path)
+        # image = id_to_image(path,
         #        resize=True,
         #        size=self.size,
         #        augmentation=False,
         #        subtract_median=True,
         #        clahe_green=True)
-        #image = PP1(path)
-        #if path[-4:] == "jpeg":
+        # image = PP1(path)
+        # if path[-4:] == "jpeg":
         #    image = jpeg.JPEG(path).decode()
-        #else:
+        # else:
         #    image = Image.open(path)
         #    image = np.array(image)
         image = aug_3(path)
@@ -160,8 +156,7 @@ def get_predictions(model, testset, tta):
 
 def get_model_name_fold(model_folder_path):
     # example ckpt_path = weights/9-7_{modelname}_fold0_text/
-    model_folder = model_folder_path.split(
-        "/")[1]  # 9-7_{modelname}_fold0_text
+    model_folder = model_folder_path.split("/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
     fold = fold.split("f")[-1]  # 0
@@ -192,7 +187,7 @@ if __name__ == "__main__":
         root = "data/all_images/"
     elif predict_on == "train_mess":
         root = "external_data/messidor/train_images/"
-    #root = 'data/npy_files/bgcc456'
+    # root = 'data/npy_files/bgcc456'
     size = int(args.size)
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
@@ -236,26 +231,24 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
-    #base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
+    # base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
 
     for epoch in range(start_epoch, end_epoch + 1):
         print(f"Using ckpt{epoch}.pth")
         ckpt_path = os.path.join(model_folder_path, "ckpt%d.pth" % epoch)
-        state = torch.load(
-            ckpt_path, map_location=lambda storage, loc: storage)
+        state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
         model.load_state_dict(state["state_dict"])
         preds = get_predictions(model, testset, tta)
         best_thresholds = state["best_thresholds"]
-        '''
+        """
         print(f"Best thresholds: {best_thresholds}")
         pred1 = predict(preds, best_thresholds)
         pred2 = predict(preds, base_thresholds)
         print("best:", np.unique(pred1, return_counts=True)[1])
         print("base:", np.unique(pred2, return_counts=True)[1])
-        '''
+        """
         mat_to_save = [preds, best_thresholds]
-        np.save(os.path.join(
-            npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)
+        np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)
         print("Predictions saved!")
 
 

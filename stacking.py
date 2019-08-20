@@ -14,6 +14,7 @@ import torch
 import scipy
 import pandas as pd
 import numpy as np
+
 # from tqdm import tqdm_notebook as tqdm
 from tqdm import tqdm
 import torch.backends.cudnn as cudnn
@@ -25,7 +26,8 @@ from torchvision.datasets.folder import pil_loader
 import torch.utils.data as data
 from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.metrics import cohen_kappa_score
-sys.path.append('..')
+
+sys.path.append("..")
 from models import Model, get_model
 from utils import *
 from image_utils import *
@@ -55,7 +57,7 @@ class Dataset(data.Dataset):
         self.transform = albumentations.Compose(
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
-                #albumentations.Resize(size, size),
+                # albumentations.Resize(size, size),
                 AT.ToTensor(),
             ]
         )
@@ -63,15 +65,16 @@ class Dataset(data.Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         path = os.path.join(self.root, fname + self.ext)
-#         print(path)
+        #         print(path)
 
-        image = id_to_image(path,
-                    resize=True,
-                    size=self.size,
-                    augmentation=False,
-                    subtract_median=True,
-                    clahe_green=False
-                )
+        image = id_to_image(
+            path,
+            resize=True,
+            size=self.size,
+            augmentation=False,
+            subtract_median=True,
+            clahe_green=False,
+        )
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -81,7 +84,7 @@ class Dataset(data.Dataset):
         return torch.stack(images, dim=0)
 
     def __len__(self):
-        #return 100
+        # return 100
         return self.num_samples
 
 
@@ -105,8 +108,7 @@ def get_predictions(model, testset, tta):
 
 def get_model_name_fold(model_folder_path):
     # example ckpt_path = weights/9-7_{modelname}_fold0_text/
-    model_folder = model_folder_path.split(
-        "/")[1]  # 9-7_{modelname}_fold0_text
+    model_folder = model_folder_path.split("/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
     fold = fold.split("f")[-1]  # 0
@@ -122,7 +124,7 @@ ckpt_path_list = [
     "weights/168_efficientnet-b5_f1_poma/ckpt14.pth",
     "weights/168_efficientnet-b5_f2_poma/ckpt14.pth",
     "weights/168_efficientnet-b5_f3_poma/ckpt14.pth",
-    "weights/168_efficientnet-b5_f4_poma/ckpt14.pth"
+    "weights/168_efficientnet-b5_f4_poma/ckpt14.pth",
 ]
 model_name = "efficientnet-b5"
 folder = "168_efficientnet-b5_poma"
@@ -148,8 +150,8 @@ model.eval()
 # ### train predictions
 
 phase = "train"
-df = pd.read_csv(os.path.join(home,"data/train.csv"))
-train_labels = df['diagnosis'].values
+df = pd.read_csv(os.path.join(home, "data/train.csv"))
+train_labels = df["diagnosis"].values
 root = os.path.join(home, "data/all_images/")
 trainset = DataLoader(
     Dataset(root, df, phase, size, mean, std, tta),
@@ -175,9 +177,9 @@ np.save(train_path, all_predictions)
 
 # ### test predictions
 
-print('Starting test predictions')
+print("Starting test predictions")
 phase = "test"
-df = pd.read_csv(os.path.join(home,"data/sample_submission.csv"))
+df = pd.read_csv(os.path.join(home, "data/sample_submission.csv"))
 root = os.path.join(home, "data/test_images/")
 testset = DataLoader(
     Dataset(root, df, phase, size, mean, std, tta),
@@ -205,23 +207,17 @@ test_path = os.path.join(home, "weights/ensemble", folder, "test.npy")
 np.save(test_path, all_predictions)
 
 
-
-#preds = predict(predictions, base_thresholds)
-#print(np.unique(preds, return_counts=True)[1])
+# preds = predict(predictions, base_thresholds)
+# print(np.unique(preds, return_counts=True)[1])
 #
 #
 ## In[29]:
 #
 #
 ##sub_path = 'weights/168_efficientnet_poma_ensemble.csv'
-#df = pd.read_csv('../data/sample_submission.csv')
-#df.loc[:, 'diagnosis'] = preds
-#df.to_csv(sub_path, index=False)
-
+# df = pd.read_csv('../data/sample_submission.csv')
+# df.loc[:, 'diagnosis'] = preds
+# df.to_csv(sub_path, index=False)
 
 
 # In[ ]:
-
-
-
-

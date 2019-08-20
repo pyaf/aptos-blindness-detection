@@ -54,14 +54,13 @@ class TestDataset(data.Dataset):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.RandomScale(scale_limit=0.1),
-
             ]
         )
         self.transform = albumentations.Compose(
             [
                 albumentations.Normalize(mean=mean, std=std, p=1),
                 albumentations.Resize(size, size),
-                AT.ToTensor()
+                AT.ToTensor(),
             ]
         )
 
@@ -70,17 +69,19 @@ class TestDataset(data.Dataset):
         path = os.path.join(self.root, fname + self.ext)
         # image = load_image(path, size)
         # image = load_ben_gray(path)
-        #image = load_ben_color(path, size=self.size, crop=True)
-        #print(path)
-        image = id_to_image(path,
-                resize=True,
-                size=self.size,
-                augmentation=False,
-                subtract_median=True,
-                clahe_green=False)
+        # image = load_ben_color(path, size=self.size, crop=True)
+        # print(path)
+        image = id_to_image(
+            path,
+            resize=True,
+            size=self.size,
+            augmentation=False,
+            subtract_median=True,
+            clahe_green=False,
+        )
 
         images = [self.transform(image=image)["image"]]
-        for _ in range(self.tta): # perform ttas
+        for _ in range(self.tta):  # perform ttas
             aug_img = self.TTA(image=image)["image"]
             aug_img = self.transform(image=aug_img)["image"]
             images.append(aug_img)
@@ -97,11 +98,11 @@ def get_predictions(model, testset, tta):
     for i, batch in enumerate(tqdm(testset)):
         if tta:
             for images in batch:  # images.shape [n, 3, 96, 96] where n is num of 1+tta
-                preds = model(images.to(device)) # [n, num_classes]
+                preds = model(images.to(device))  # [n, num_classes]
                 predictions.append(preds.mean(dim=0).detach().tolist())
         else:
             preds = model(batch[:, 0].to(device))
-            preds = preds.detach().tolist() #[1]
+            preds = preds.detach().tolist()  # [1]
             predictions.extend(preds)
 
     return np.array(predictions)
@@ -117,11 +118,11 @@ def get_model_name_fold(model_folder_path):
 
 
 if __name__ == "__main__":
-    '''
+    """
     Generates predictions on train/test set using the ckpts saved in the model folder path
     and saves them in npy_folder in npy format which can be analyses later for different
     thresholds
-    '''
+    """
     parser = get_parser()
     args = parser.parse_args()
     model_folder_path = args.model_folder_path
@@ -135,15 +136,15 @@ if __name__ == "__main__":
         sample_submission_path = "../data/train.csv"
         root = f"../data/all_images/"
 
-    tta = 4 # number of augs in tta
+    tta = 4  # number of augs in tta
     start_epoch = 10
     end_epoch = 30
 
     size = 256
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0, 0, 0)
-    #std = (1, 1, 1)
+    # mean = (0, 0, 0)
+    # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
     num_workers = 8
@@ -181,19 +182,19 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
-    for epoch in range(start_epoch, end_epoch+1):
+    for epoch in range(start_epoch, end_epoch + 1):
         print(f"Using ckpt{epoch}.pth")
         ckpt_path = os.path.join(model_folder_path, "ckpt%d.pth" % epoch)
         state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
         model.load_state_dict(state["state_dict"])
         preds = get_predictions(model, testset, tta)
         np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), preds)
-        print(np.unique((preds > 0.5).astype('uint8'), return_counts=True))
+        print(np.unique((preds > 0.5).astype("uint8"), return_counts=True))
         print("Predictions saved!")
 
 
-'''
+"""
 Footnotes
 
 [1] a cuda variable can be converted to python list with .detach() (i.e., grad no longer required) then .tolist(), apart from that a cuda variable can be converted to numpy variable only by copying the tensor to host memory by .cpu() and then .numpy
-'''
+"""

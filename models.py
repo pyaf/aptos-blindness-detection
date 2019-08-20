@@ -39,8 +39,7 @@ class Model(nn.Module):
                 nn.Linear(in_features=2048, out_features=1024, bias=True),
                 nn.ReLU(),
                 nn.Dropout(0.3),
-                nn.Linear(in_features=1024,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=1024, out_features=out_features, bias=True),
             )
         elif model_name == "se_resnet50_v0":
             model_name = "se_resnet50"
@@ -51,8 +50,7 @@ class Model(nn.Module):
                 nn.AdaptiveAvgPool2d((1, 1)),
                 Flatten(),
                 nn.Dropout(0.3),
-                nn.Linear(in_features=2048,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=2048, out_features=out_features, bias=True),
             )
         elif model_name in ["densenet121"]:
             self.model = pretrainedmodels.__dict__[model_name](
@@ -62,8 +60,7 @@ class Model(nn.Module):
                 nn.AdaptiveAvgPool2d((1, 1)),
                 Flatten(),
                 nn.Dropout(0.3),
-                nn.Linear(in_features=1024,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=1024, out_features=out_features, bias=True),
             )
 
         elif model_name == "resnext101_32x4d":
@@ -74,8 +71,7 @@ class Model(nn.Module):
                 nn.AdaptiveAvgPool2d((1, 1)),
                 Flatten(),
                 nn.Dropout(0.5),
-                nn.Linear(in_features=2048,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=2048, out_features=out_features, bias=True),
             )
         elif model_name == "resnext101_32x4d_v0":
             model_name = "resnext101_32x4d"
@@ -91,8 +87,7 @@ class Model(nn.Module):
                 nn.ReLU(),
                 nn.BatchNorm1d(2048),
                 nn.Dropout(p=0.5),
-                nn.Linear(in_features=2048,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=2048, out_features=out_features, bias=True),
             )
 
         elif model_name == "resnext101_32x4d_v1":
@@ -109,8 +104,7 @@ class Model(nn.Module):
                 nn.ReLU(),
                 nn.BatchNorm1d(2048),
                 nn.Dropout(p=0.5),
-                nn.Linear(in_features=2048,
-                          out_features=out_features, bias=True),
+                nn.Linear(in_features=2048, out_features=out_features, bias=True),
             )
 
     def forward(self, x):
@@ -122,13 +116,11 @@ class Model(nn.Module):
 
 def resnext101_32x16d(out_features):
     """[1]"""
-    model = torch.hub.load("facebookresearch/WSL-Images",
-                           "resnext101_32x16d_wsl")
+    model = torch.hub.load("facebookresearch/WSL-Images", "resnext101_32x16d_wsl")
     for params in model.parameters():
         params.requires_grad = False
 
-    model.fc = nn.Linear(
-        in_features=2048, out_features=out_features, bias=True)
+    model.fc = nn.Linear(in_features=2048, out_features=out_features, bias=True)
     # every new layer added, has requires_grad = True
 
     return model
@@ -145,8 +137,7 @@ def efficientNet(name, out_features):
         params.requires_grad = False
 
     in_features = model._fc.in_features
-    model._fc = nn.Linear(in_features=in_features,
-                          out_features=out_features, bias=True)
+    model._fc = nn.Linear(in_features=in_features, out_features=out_features, bias=True)
 
     return model
 

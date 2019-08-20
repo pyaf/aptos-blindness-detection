@@ -1,4 +1,3 @@
-
 # References
 
 # Pre-trained weights:
@@ -34,6 +33,7 @@ from albumentations.pytorch import ToTensor
 
 # Functions
 
+
 class RetinopathyDatasetTrain(Dataset):
     def __init__(self, csv_file, transform=None):
         self.data = pd.read_csv(csv_file)
@@ -43,15 +43,19 @@ class RetinopathyDatasetTrain(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        img_name = os.path.join('../input/aptos2019-blindness-detection/train_images', self.data.loc[idx, 'id_code'] + '.png')
+        img_name = os.path.join(
+            "../input/aptos2019-blindness-detection/train_images",
+            self.data.loc[idx, "id_code"] + ".png",
+        )
         image = cv2.imread(img_name)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = cv2.resize(image, (img_size, img_size))
-        label = torch.tensor(self.data.loc[idx, 'diagnosis'])
+        label = torch.tensor(self.data.loc[idx, "diagnosis"])
         if self.transform:
             augmented = self.transform(image=image)
-            image = augmented['image']
-        return {'image': image, 'labels': label}
+            image = augmented["image"]
+        return {"image": image, "labels": label}
+
 
 class RetinopathyDatasetTest(Dataset):
     def __init__(self, csv_file, transform=None):
@@ -62,19 +66,26 @@ class RetinopathyDatasetTest(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        img_name = os.path.join('../input/aptos2019-blindness-detection/test_images', self.data.loc[idx, 'id_code'] + '.png')
+        img_name = os.path.join(
+            "../input/aptos2019-blindness-detection/test_images",
+            self.data.loc[idx, "id_code"] + ".png",
+        )
         image = cv2.imread(img_name)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = cv2.resize(image, (img_size, img_size))
         if self.transform:
             augmented = self.transform(image=image)
-            image = augmented['image']
-        return {'image': image}
+            image = augmented["image"]
+        return {"image": image}
+
 
 def _resnext(arch, block, layers, pretrained, progress, **kwargs):
     model = ResNet(block, layers, **kwargs)
-    model.load_state_dict(torch.load('../input/resnext101-32x8/ig_resnext101_32x8-c38310e5.pth'))
+    model.load_state_dict(
+        torch.load("../input/resnext101-32x8/ig_resnext101_32x8-c38310e5.pth")
+    )
     return model
+
 
 def resnext101_32x8d_wsl(progress=True, **kwargs):
     """Constructs a ResNeXt-101 32x8 model pre-trained on weakly-supervised data
@@ -83,25 +94,28 @@ def resnext101_32x8d_wsl(progress=True, **kwargs):
     Args:
         progress (bool): If True, displays a progress bar of the download to stderr.
     """
-    kwargs['groups'] = 32
-    kwargs['width_per_group'] = 8
-    return _resnext('resnext101_32x8d', Bottleneck, [3, 4, 23, 3], True, progress, **kwargs)
+    kwargs["groups"] = 32
+    kwargs["width_per_group"] = 8
+    return _resnext(
+        "resnext101_32x8d", Bottleneck, [3, 4, 23, 3], True, progress, **kwargs
+    )
+
 
 # DataLoader
 
-transform_train = Compose([
-    HorizontalFlip(),
-    Rotate(limit=365),
-    VerticalFlip(),
-    ToTensor()
-])
+transform_train = Compose(
+    [HorizontalFlip(), Rotate(limit=365), VerticalFlip(), ToTensor()]
+)
 
-transform_test = Compose([
-    ToTensor()
-])
+transform_test = Compose([ToTensor()])
 
-train_dataset = RetinopathyDatasetTrain(csv_file='../input/aptos2019-blindness-detection/train.csv', transform=transform_train)
-train_data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+train_dataset = RetinopathyDatasetTrain(
+    csv_file="../input/aptos2019-blindness-detection/train.csv",
+    transform=transform_train,
+)
+train_data_loader = torch.utils.data.DataLoader(
+    train_dataset, batch_size=batch_size, shuffle=False, num_workers=4
+)
 
 # Model
 
@@ -114,7 +128,7 @@ model.fc = torch.nn.Linear(2048, 1)
 
 criterion = torch.nn.MSELoss()
 device = torch.device("cuda:0")
-plist = [{'params': model.parameters(), 'lr': 1e-5}]
+plist = [{"params": model.parameters(), "lr": 1e-5}]
 optimizer = optim.Adam(plist, lr=1e-5)
 
 model = model.to(device)
@@ -151,14 +165,18 @@ for epoch in range(n_epochs):
         tr_loss += loss.item()
         nb_tr_steps += 1
 
-
     epoch_loss = tr_loss / len(train_data_loader)
-    print('Training Loss: {:.4f}'.format(epoch_loss))
+    print("Training Loss: {:.4f}".format(epoch_loss))
 
 # Inference
 
-test_dataset = RetinopathyDatasetTest(csv_file='../input/aptos2019-blindness-detection/sample_submission.csv', transform=transform_test)
-test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+test_dataset = RetinopathyDatasetTest(
+    csv_file="../input/aptos2019-blindness-detection/sample_submission.csv",
+    transform=transform_test,
+)
+test_data_loader = torch.utils.data.DataLoader(
+    test_dataset, batch_size=batch_size, shuffle=False, num_workers=4
+)
 
 for param in model.parameters():
     param.requires_grad = False
@@ -170,7 +188,9 @@ test_pred = np.zeros((len(test_dataset), 1))
 for i, x_batch in enumerate(tqdm(test_data_loader)):
     x_batch = x_batch["image"]
     pred = model(x_batch.to(device))
-    test_pred[i * batch_size:(i + 1) * batch_size] = pred.detach().cpu().squeeze().numpy().ravel().reshape(-1, 1)
+    test_pred[i * batch_size : (i + 1) * batch_size] = (
+        pred.detach().cpu().squeeze().numpy().ravel().reshape(-1, 1)
+    )
 
 for i, pred in enumerate(test_pred):
     if pred < coef[0]:

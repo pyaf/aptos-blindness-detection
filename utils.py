@@ -48,12 +48,12 @@ def predict(X, coef):
             X_p[i] = 1
         elif pred >= coef[1] and pred < coef[2]:
             X_p[i] = 2
-        else:
-            X_p[i] = 3
-        #elif pred >= coef[2] and pred < coef[3]:
+        # else:
         #    X_p[i] = 3
-        #else:
-        #    X_p[i] = 4
+        elif pred >= coef[2] and pred < coef[3]:
+            X_p[i] = 3
+        else:
+            X_p[i] = 4
     return X_p.astype("int")
 
 
@@ -70,8 +70,7 @@ class Meter:
         self.phase = phase
         self.epoch = epoch
         self.save_folder = os.path.join(save_folder, "logs")
-        # self.num_classes = 5  # hard coded, yeah, I know
-        self.base_th = [0.5, 1.5, 2.5] # for non 0 class training
+        self.base_th = [0.5, 1.5, 2.5, 3.5]  #
 
     def update(self, targets, outputs):
         """targets, outputs are detached CUDA tensors"""
@@ -89,7 +88,7 @@ class Meter:
     def get_best_thresholds(self):
         """Epoch over, let's get targets in np array [6]"""
         self.targets = np.array(self.targets)
-        ''' not using this function anymore '''
+        """ not using this function anymore """
         return self.base_th
 
         if self.phase == "train":
@@ -113,7 +112,7 @@ class Meter:
         base_qwk = cohen_kappa_score(self.targets, base_preds, weights="quadratic")
         base_cm = CM(self.targets, base_preds)
         return base_cm, base_qwk
-        ''' not used '''
+        """ not used """
         if self.phase != "train":
             best_preds = predict(self.predictions, self.best_th)
             best_qwk = cohen_kappa_score(self.targets, best_preds, weights="quadratic")
@@ -123,7 +122,7 @@ class Meter:
 
 def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
     base_cm, base_qwk = meter.get_cm()
-    '''
+    """
     if phase == "train":
         base_cm, base_qwk = meter.get_cm()
     else:
@@ -140,13 +139,15 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
         obj_path = os.path.join(meter.save_folder, f"best_cm{phase}_{epoch}")
         best_cm.save(obj_path, best_qwk, epoch_loss, save_stat=True, save_vector=True)
         print()
-    '''
+    """
 
     lr = opt.param_groups[-1]["lr"]
     # take care of base metrics
     acc, tpr, ppv, f1, cls_tpr, cls_ppv, cls_f1 = get_stats(base_cm)
-    log("QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f | F1: %0.4f" %
-            (base_qwk, acc, tpr, ppv, f1))
+    log(
+        "QWK: %0.4f | ACC: %0.4f | TPR: %0.4f | PPV: %0.4f | F1: %0.4f"
+        % (base_qwk, acc, tpr, ppv, f1)
+    )
     log(f"Class TPR: {cls_tpr}")
     log(f"Class PPV: {cls_ppv}")
     log(f"Class F1: {cls_f1}")
@@ -191,9 +192,12 @@ def get_stats(cm):
     cls_ppv = cm.class_stat["PPV"]
     cls_f1 = cm.class_stat["F1"]
 
-    if tpr is "None": tpr = 0  # [8]
-    if ppv is "None": ppv = 0
-    if f1 is "None": f1 = 0
+    if tpr is "None":
+        tpr = 0  # [8]
+    if ppv is "None":
+        ppv = 0
+    if f1 is "None":
+        f1 = 0
 
     cls_tpr = sanity(cls_tpr)
     cls_ppv = sanity(cls_ppv)
@@ -211,18 +215,17 @@ def sanity(cls_dict):
     return cls_dict
 
 
-
 def check_sanctity(dataloaders):
     phases = dataloaders.keys()
     if len(phases) > 1:
-        tnames = dataloaders['train'].dataset.fnames
-        vnames = dataloaders['val'].dataset.fnames
+        tnames = dataloaders["train"].dataset.fnames
+        vnames = dataloaders["val"].dataset.fnames
         common = [x for x in tnames if x in vnames]
         if len(common):
-            print('TRAIN AND VAL SET NOT DISJOINT')
+            print("TRAIN AND VAL SET NOT DISJOINT")
             exit()
     else:
-        print('No sanctity check')
+        print("No sanctity check")
 
 
 """Footnotes:

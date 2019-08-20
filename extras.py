@@ -11,22 +11,30 @@ from datetime import datetime
 from matplotlib import pyplot as plt
 from tensorboard_logger import log_value, log_images
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+
 plt.switch_backend("agg")
 
 
 def get_parser():
     """Get parser object."""
-    parser = ArgumentParser(description=__doc__,
-                            formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-f", "--file",
-                        dest="filepath",
-                        help="experiment config file",
-                        metavar="FILE",
-                        required=True)
-    parser.add_argument("-r", "--resume",
-                        dest="resume",
-                        help="Use when to resume from ckpt.pth",
-                        action='store_true') # use -r when to resume, else don't
+    parser = ArgumentParser(
+        description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "-f",
+        "--file",
+        dest="filepath",
+        help="experiment config file",
+        metavar="FILE",
+        required=True,
+    )
+    parser.add_argument(
+        "-r",
+        "--resume",
+        dest="resume",
+        help="Use when to resume from ckpt.pth",
+        action="store_true",
+    )  # use -r when to resume, else don't
 
     args = parser.parse_args()
     return args
@@ -34,7 +42,7 @@ def get_parser():
 
 def load_cfg(args):
     filepath = args.filepath
-    with open(filepath, 'r') as stream:
+    with open(filepath, "r") as stream:
         try:
             cfg = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -106,7 +114,6 @@ def adjust_lr(lr, optimizer):
     return optimizer
 
 
-
 def iter_log(log, phase, epoch, iteration, epoch_size, loss, start):
     diff = time.time() - start
     log(
@@ -121,11 +128,10 @@ def iter_log(log, phase, epoch, iteration, epoch_size, loss, start):
     )
 
 
-
 def mkdir(path):
     os.makedirs(path, exist_ok=True)
-    #if not os.path.exists(folder):
-        #os.mkdir(folder)
+    # if not os.path.exists(folder):
+    # os.mkdir(folder)
 
 
 def seed_pytorch(seed=69):
@@ -133,7 +139,7 @@ def seed_pytorch(seed=69):
     os.environ["PYTHONHASHSEED"] = str(seed)
     np.random.seed(seed)
     torch.cuda.manual_seed(seed)
-    #torch.backends.cudnn.deterministic = True # slows down the training
+    # torch.backends.cudnn.deterministic = True # slows down the training
 
 
 def tt(cuda):
@@ -143,7 +149,8 @@ def tt(cuda):
 
 def commit(model_name):
     import subprocess
-    cmd1 = 'git add .'
+
+    cmd1 = "git add ."
     cmd2 = f'git commit -m "{model_name}"'
     process = subprocess.Popen(cmd1.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
@@ -153,4 +160,3 @@ def commit(model_name):
     output, error = process.communicate()
     if error:
         print(error)
-

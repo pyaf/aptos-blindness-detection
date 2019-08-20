@@ -115,8 +115,7 @@ def get_load_model(model_name, ckpt_path, num_classes):
 
 def get_model_name_fold(model_folder_path):
     # example ckpt_path = weights/9-7_{modelname}_fold0_text/
-    model_folder = model_folder_path.split(
-        "/")[1]  # 9-7_{modelname}_fold0_text
+    model_folder = model_folder_path.split("/")[1]  # 9-7_{modelname}_fold0_text
     model_name = "_".join(model_folder.split("_")[1:-2])  # modelname
     fold = model_folder.split("_")[-2]  # fold0
     fold = fold.split("fold")[-1]  # 0

@@ -24,12 +24,7 @@ from image_utils import *
 
 def get_parser():
     parser = ArgumentParser()
-    parser.add_argument(
-        "-c",
-        "--ckpt_path",
-        dest="ckpt_path",
-        help="Checkpoint to use",
-    )
+    parser.add_argument("-c", "--ckpt_path", dest="ckpt_path", help="Checkpoint to use")
     parser.add_argument(
         "-p",
         "--predict_on",
@@ -53,13 +48,13 @@ class TestDataset(data.Dataset):
                 albumentations.Transpose(p=0.5),
                 albumentations.Flip(p=0.5),
                 albumentations.RandomScale(scale_limit=0.1),
-                #albumentations.ShiftScaleRotate(
+                # albumentations.ShiftScaleRotate(
                 #    shift_limit=0,  # no resizing
                 #    scale_limit=0.1,
                 #    rotate_limit=120,
                 #    p=0.5,
                 #    border_mode=cv2.BORDER_CONSTANT
-                #),
+                # ),
                 albumentations.OneOf(
                     [
                         albumentations.CLAHE(clip_limit=2),
@@ -99,7 +94,6 @@ class TestDataset(data.Dataset):
         return self.num_samples
 
 
-
 def get_predictions(model, testset, tta):
     """return all predictions on testset in a list"""
     num_images = len(testset)
@@ -107,12 +101,12 @@ def get_predictions(model, testset, tta):
     for i, batch in enumerate(tqdm(testset)):
         if tta:
             for images in batch:  # images.shape [n, 3, 96, 96] where n is num of 1+tta
-                preds = torch.sigmoid(model(images.to(device))) # [n, num_classes]
+                preds = torch.sigmoid(model(images.to(device)))  # [n, num_classes]
                 preds = preds.mean(dim=0).detach().tolist()
                 predictions.append(preds)
         else:
             preds = torch.sigmoid(model(batch[:, 0].to(device)))
-            preds = preds.detach().tolist() #[1]
+            preds = preds.detach().tolist()  # [1]
             predictions.extend(preds)
 
     return np.array(predictions)
@@ -127,9 +121,9 @@ def get_model_name_fold(ckpt_path):
 
 
 if __name__ == "__main__":
-    '''
+    """
     use given ckpt to generate final predictions using the corresponding best thresholds.
-    '''
+    """
     parser = get_parser()
     args = parser.parse_args()
     ckpt_path = args.ckpt_path
@@ -141,14 +135,14 @@ if __name__ == "__main__":
     else:
         sample_submission_path = "../data/train.csv"
 
-    tta = 4 # number of augs in tta
+    tta = 4  # number of augs in tta
     sub_path = ckpt_path.replace(".pth", f"{predict_on}.csv")
     root = f"../data/{predict_on}_png/"
     size = 256
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0, 0, 0)
-    #std = (1, 1, 1)
+    # mean = (0, 0, 0)
+    # std = (1, 1, 1)
     use_cuda = True
     num_classes = 1
     num_workers = 8
@@ -192,8 +186,8 @@ if __name__ == "__main__":
     print("Predictions saved!")
 
 
-'''
+"""
 Footnotes
 
 [1] a cuda variable can be converted to python list with .detach() (i.e., grad no longer required) then .tolist(), apart from that a cuda variable can be converted to numpy variable only by copying the tensor to host memory by .cpu() and then .numpy
-'''
+"""

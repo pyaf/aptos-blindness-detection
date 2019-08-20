@@ -9,10 +9,12 @@ from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset, sampler
 from torchvision.datasets.folder import pil_loader
 from sklearn.model_selection import train_test_split, StratifiedKFold
-#from utils import *
+
+# from utils import *
 import albumentations
 from albumentations import torch as AT
 from image_utils import *
+
 
 class DRDataset(Dataset):
     def __init__(self, df, data_folder, size, mean, std, phase):
@@ -24,40 +26,41 @@ class DRDataset(Dataset):
         self.phase = phase
         self.transforms = get_transforms(phase, size, mean, std)
 
-        self.fnames = self.df['id_code'].tolist()
-        self.labels = self.df['label'].tolist() #.astype(np.int32) # [12]
+        self.fnames = self.df["id_code"].tolist()
+        self.labels = self.df["label"].tolist()  # .astype(np.int32) # [12]
         print(np.unique(self.labels, return_counts=True))
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
 
-        #image_path = os.path.join(self.root, "npy_train_256",  image_id + '.npy')
-        #img = np.load(image_path)
-        #img = np.repeat(img, 3, axis=-1)
-        #print(img.shape)
+        # image_path = os.path.join(self.root, "npy_train_256",  image_id + '.npy')
+        # img = np.load(image_path)
+        # img = np.repeat(img, 3, axis=-1)
+        # print(img.shape)
         path = os.path.join(self.root, fname)
-        #print(path)
-        image = id_to_image(path,
-                resize=True,
-                size=self.size,
-                augmentation=False,
-                subtract_median=True,
-                clahe_green=False)
-        #image = self.images[idx]
+        # print(path)
+        image = id_to_image(
+            path,
+            resize=True,
+            size=self.size,
+            augmentation=False,
+            subtract_median=True,
+            clahe_green=False,
+        )
+        # image = self.images[idx]
 
-        augmented = self.transforms(image=image)#, mask=mask)
-        img = augmented['image']# / 255.0
+        augmented = self.transforms(image=image)  # , mask=mask)
+        img = augmented["image"]  # / 255.0
 
         target = {}
         target["labels"] = self.labels[idx]
         target["image_id"] = fname
-        #pdb.set_trace()
+        # pdb.set_trace()
         return img, target
 
     def __len__(self):
-        #return 20
+        # return 20
         return len(self.fnames)
-
 
 
 def get_transforms(phase, size, mean, std):
@@ -74,20 +77,20 @@ def get_transforms(phase, size, mean, std):
                     scale_limit=0.1,
                     rotate_limit=180,
                     p=0.5,
-                    #border_mode=cv2.BORDER_CONSTANT
+                    # border_mode=cv2.BORDER_CONSTANT
                 ),
                 albumentations.RandomBrightnessContrast(p=1),
             ]
         )
     list_transforms.extend(
         [
-
             albumentations.Normalize(mean=mean, std=std, p=1),
-            #albumentations.Resize(size, size),
-            AT.ToTensor(normalize=None), # [6]
+            # albumentations.Resize(size, size),
+            AT.ToTensor(normalize=None),  # [6]
         ]
     )
     return albumentations.Compose(list_transforms)
+
 
 def get_sampler(df, class_weights=None):
     if class_weights is None:
@@ -118,19 +121,18 @@ def provider(
     num_samples=4000,
 ):
     df = pd.read_csv(df_path)
-    df['label'] = df.diagnosis.apply(lambda x: 1 if x == 4 else 0)
+    df["label"] = df.diagnosis.apply(lambda x: 1 if x == 4 else 0)
     df_with_4 = df[df["diagnosis"] == 1]
     df_without_4 = df[df["diagnosis"] != 1]
     df_without_4_sampled = df_without_4.sample(1000)
     df = pd.concat([df_with_4, df_without_4_sampled])
 
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
-    train_idx, val_idx = list(kfold.split(
-        df["id_code"], df["label"]))[fold]
+    train_idx, val_idx = list(kfold.split(df["id_code"], df["label"]))[fold]
     train_df, val_df = df.iloc[train_idx], df.iloc[val_idx]
     df = train_df if phase == "train" else val_df
     image_dataset = DRDataset(df, images_folder, size, mean, std, phase)
-    #datasampler = get_sampler(df, [1, 1])
+    # datasampler = get_sampler(df, [1, 1])
     datasampler = None
     dataloader = DataLoader(
         image_dataset,
@@ -141,32 +143,33 @@ def provider(
         sampler=datasampler,
     )  # shuffle and sampler are mutually exclusive args
 
-    #print(f'len(dataloader): {len(dataloader)}')
+    # print(f'len(dataloader): {len(dataloader)}')
     return dataloader
 
 
 if __name__ == "__main__":
     import time
+
     start = time.time()
     phase = "train"
-    #phase = "val"
+    # phase = "val"
     num_workers = 12
     fold = 0
     total_folds = 5
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
-    #mean = (0.5, 0.5, 0.5)
-    #std = (0.5, 0.5, 0.5)
+    # mean = (0.5, 0.5, 0.5)
+    # std = (0.5, 0.5, 0.5)
 
     size = 300
 
     root = os.path.dirname(__file__)  # data folder
     data_folder = "../data/all_images/"
-    df_path = '../data/train.csv'
+    df_path = "../data/train.csv"
     num_samples = None  # 5000
     class_weights = True  # [1, 1, 1, 1, 1]
     batch_size = 16
-    #images_folder = os.path.join(root, data_folder, "train_png/")  #
+    # images_folder = os.path.join(root, data_folder, "train_png/")  #
 
     dataloader = provider(
         fold,
@@ -185,22 +188,26 @@ if __name__ == "__main__":
     total_labels = []
     total_len = len(dataloader)
     from collections import defaultdict
+
     fnames_dict = defaultdict(int)
     for idx, batch in enumerate(dataloader):
         images, targets = batch
-        labels = targets['labels']
-        #pdb.set_trace()
-        for fname in targets['image_id']:
+        labels = targets["labels"]
+        # pdb.set_trace()
+        for fname in targets["image_id"]:
             fnames_dict[fname] += 1
 
         print("%d/%d" % (idx, total_len), images.shape, labels.shape)
         total_labels.extend(labels.tolist())
-    #pdb.set_trace()
+    # pdb.set_trace()
 
-    print('Unique label count:', np.unique(total_labels, return_counts=True))
+    print("Unique label count:", np.unique(total_labels, return_counts=True))
     diff = time.time() - start
-    print('Time taken: %02d:%02d' % (diff//60, diff % 60))
-    print('fnames unique count:', np.unique(list(fnames_dict.values()), return_counts=True))
+    print("Time taken: %02d:%02d" % (diff // 60, diff % 60))
+    print(
+        "fnames unique count:",
+        np.unique(list(fnames_dict.values()), return_counts=True),
+    )
     pdb.set_trace()
 
 

@@ -62,8 +62,7 @@ if __name__ == "__main__":
 
     print("\nClass metrics")
     for metric in class_metrics:
-        metric_dict = fd(
-            train_cm.class_stat[metric], val_cm.class_stat[metric])
+        metric_dict = fd(train_cm.class_stat[metric], val_cm.class_stat[metric])
         print(f"{metric}: {metric_dict}")
 
     # print a row so that copy pasting to google sheet is easy

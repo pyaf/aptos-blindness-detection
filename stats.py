@@ -62,8 +62,7 @@ if __name__ == "__main__":
 
     print("\nClass metrics")
     for metric in class_metrics:
-        metric_dict = fd(
-            train_cm.class_stat[metric], val_cm.class_stat[metric])
+        metric_dict = fd(train_cm.class_stat[metric], val_cm.class_stat[metric])
         print(f"{metric}: {metric_dict}")
 
     # print a row so that copy pasting to google sheet is easy
@@ -73,8 +72,8 @@ if __name__ == "__main__":
     order.extend(["loss", "QWK", "ACC"])
 
     qwk = f"{fl(train_dict['qwk'])}/{fl(val_dict['qwk'])}"
-    #base_qwk = f"{fl(val_dict['qwk'])}"
-    #qwk = best_qwk + " - " + base_qwk
+    # base_qwk = f"{fl(val_dict['qwk'])}"
+    # qwk = best_qwk + " - " + base_qwk
     loss = f"{fl(train_dict['loss'])}/{fl(val_dict['loss'])}"
     acc = f"{fl(train_cm.overall_stat[oc])}/{fl(val_cm.overall_stat[oc])}"
     row.extend([loss, qwk, acc])

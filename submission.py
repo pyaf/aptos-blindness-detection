@@ -25,8 +25,7 @@ from augmentations import *
 
 def get_parser():
     parser = ArgumentParser()
-    parser.add_argument("-c", "--ckpt_path",
-                        dest="ckpt_path", help="Checkpoint to use")
+    parser.add_argument("-c", "--ckpt_path", dest="ckpt_path", help="Checkpoint to use")
     parser.add_argument(
         "-p",
         "--predict_on",
@@ -55,11 +54,10 @@ class TestDataset(data.Dataset):
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        #path = os.path.join(self.root, fname + ".png")
-        #image = load_ben_color(path, size=self.size, crop=True)
-        path = os.path.join(self.root, fname + '.npy')
+        # path = os.path.join(self.root, fname + ".png")
+        # image = load_ben_color(path, size=self.size, crop=True)
+        path = os.path.join(self.root, fname + ".npy")
         image = np.load(path)
-
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -117,7 +115,7 @@ if __name__ == "__main__":
     sub_path = ckpt_path.replace(".pth", f"{predict_on}.csv")
     tta = 4  # number of augs in tta
 
-    #root = f"data/{predict_on}_images/"
+    # root = f"data/{predict_on}_images/"
     root = "data/npy_files/bgcc456"
     size = 456
     mean = (0.485, 0.456, 0.406)
@@ -158,7 +156,7 @@ if __name__ == "__main__":
     model.load_state_dict(state["state_dict"])
     best_thresholds = state["best_thresholds"]
     base_thresholds = [0.5, 1.5, 2.5, 3.5]
-    #best_thresholds = base_thresholds
+    # best_thresholds = base_thresholds
     print("best_thresholds:", best_thresholds)
 
     predictions = get_predictions(model, testset, tta)
@@ -173,7 +171,7 @@ if __name__ == "__main__":
     df.to_csv(sub_path, index=False)
     print("Predictions saved!")
 
-    #print(np.unique(predict(predictions, np.array([0.5, 1.5, 2.5, 3.5])), return_counts=True)[1])
+    # print(np.unique(predict(predictions, np.array([0.5, 1.5, 2.5, 3.5])), return_counts=True)[1])
 
 """
 Footnotes

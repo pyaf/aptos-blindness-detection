@@ -8,6 +8,7 @@ import multiprocessing as mp
 
 # functions
 
+
 def crop_image_from_gray(img, tol=7):
     """
     Crop out black borders
@@ -21,7 +22,7 @@ def crop_image_from_gray(img, tol=7):
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         mask = gray_img > tol
         check_shape = img[:, :, 0][np.ix_(mask.any(1), mask.any(0))].shape[0]
-        if (check_shape == 0):
+        if check_shape == 0:
             return img
         else:
             img1 = img[:, :, 0][np.ix_(mask.any(1), mask.any(0))]
@@ -30,15 +31,17 @@ def crop_image_from_gray(img, tol=7):
             img = np.stack([img1, img2, img3], axis=-1)
         return img
 
-def scaleRadius(img,scale):
+
+def scaleRadius(img, scale):
     """
     Part of Ben's technique
     https://github.com/btgraham/SparseConvNet/blob/kaggle_Diabetic_Retinopathy_competition/competitionreport.pdf
     """
-    x=img[int(img.shape[0]/2),:,:].sum(1)
-    r=(x>x.mean()/10).sum()/2
-    s=scale*1.0/r
-    return cv2.resize(img, (0,0), fx=s,fy=s)
+    x = img[int(img.shape[0] / 2), :, :].sum(1)
+    r = (x > x.mean() / 10).sum() / 2
+    s = scale * 1.0 / r
+    return cv2.resize(img, (0, 0), fx=s, fy=s)
+
 
 def aug_0(img_path):
     """
@@ -48,8 +51,11 @@ def aug_0(img_path):
     img = cv2.imread(img_path)
     img = crop_image_from_gray(img)
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_0/{}'.format(
-            os.path.basename(img_path)), img)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_0/{}".format(
+            os.path.basename(img_path)
+        ),
+        img,
+    )
 
 
 def aug_1(img_path):
@@ -62,14 +68,25 @@ def aug_1(img_path):
 
     a = cv2.imread(img_path)
     a = scaleRadius(a, scale)
-    a = cv2.addWeighted(a, 4, cv2.GaussianBlur(a, (0, 0), scale/30), -4, 128)
+    a = cv2.addWeighted(a, 4, cv2.GaussianBlur(a, (0, 0), scale / 30), -4, 128)
     b = np.zeros(a.shape)
-    cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)), int(scale*0.9),(1,1,1),-1,8,0)
-    a = a*b-128*(1-b)
+    cv2.circle(
+        b,
+        (int(a.shape[1] / 2), int(a.shape[0] / 2)),
+        int(scale * 0.9),
+        (1, 1, 1),
+        -1,
+        8,
+        0,
+    )
+    a = a * b - 128 * (1 - b)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_1/{}'.format(
-            os.path.basename(img_path)), a)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_1/{}".format(
+            os.path.basename(img_path)
+        ),
+        a,
+    )
 
 
 def aug_2(img_path):
@@ -87,12 +104,23 @@ def aug_2(img_path):
 
     a = cv2.addWeighted(a, 4, cv2.medianBlur(a, k), -4, 128)
     b = np.zeros(a.shape)
-    cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)), int(scale*0.9),(1,1,1),-1,8,0)
-    a = a*b-128*(1-b)
+    cv2.circle(
+        b,
+        (int(a.shape[1] / 2), int(a.shape[0] / 2)),
+        int(scale * 0.9),
+        (1, 1, 1),
+        -1,
+        8,
+        0,
+    )
+    a = a * b - 128 * (1 - b)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_2/{}'.format(
-            os.path.basename(img_path)), a)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_2/{}".format(
+            os.path.basename(img_path)
+        ),
+        a,
+    )
 
 
 def aug_3(img_path):
@@ -127,9 +155,11 @@ def aug_4(img_path):
     image = cv2.addWeighted(image, 4, bg, -4, 128)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_4/{}'.format(
-            os.path.basename(img_path)), image)
-
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_4/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
 
 
 def aug_5(img_path):
@@ -147,8 +177,11 @@ def aug_5(img_path):
     image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_5/{}'.format(
-            os.path.basename(img_path)), image)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_5/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
 
 
 def aug_6(img_path):
@@ -163,15 +196,12 @@ def aug_6(img_path):
 
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     lab[..., 0] = clahe.apply(lab[..., 0])
-    image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+    image = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
 
-    k = np.min(image.shape[0:2]) // 20 * 2 + 1
+    k = np.min(image.shape[0:2]) // 30 * 2 + 1
     bg = cv2.medianBlur(image, k)
     image = cv2.addWeighted(image, 4, bg, -4, 128)
-
-    cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_6/{}'.format(
-            os.path.basename(img_path)), image)
+    return image
 
 
 def aug_7(img_path):
@@ -187,10 +217,10 @@ def aug_7(img_path):
 
     image = image[:, :, 1]
 
-    q1 = image[0:int(height / 2), 0:int(width / 2)]
-    q2 = image[0:int(height / 2), int(width / 2):]
-    q3 = image[int(height / 2):, 0:int(width / 2)]
-    q4 = image[int(height / 2):, int(width / 2):]
+    q1 = image[0 : int(height / 2), 0 : int(width / 2)]
+    q2 = image[0 : int(height / 2), int(width / 2) :]
+    q3 = image[int(height / 2) :, 0 : int(width / 2)]
+    q4 = image[int(height / 2) :, int(width / 2) :]
 
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
 
@@ -221,9 +251,11 @@ def aug_7(img_path):
     image = np.dstack((image, image, image))
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_7/{}'.format(
-            os.path.basename(img_path)), image)
-
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_7/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
 
 
 def aug_8(img_path):
@@ -237,10 +269,10 @@ def aug_8(img_path):
 
     height, width, depth = image.shape
 
-    q1 = image[0:int(height / 2), 0:int(width / 2)]
-    q2 = image[0:int(height / 2), int(width / 2):]
-    q3 = image[int(height / 2):, 0:int(width / 2)]
-    q4 = image[int(height / 2):, int(width / 2):]
+    q1 = image[0 : int(height / 2), 0 : int(width / 2)]
+    q2 = image[0 : int(height / 2), int(width / 2) :]
+    q3 = image[int(height / 2) :, 0 : int(width / 2)]
+    q4 = image[int(height / 2) :, int(width / 2) :]
 
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
 
@@ -277,8 +309,11 @@ def aug_8(img_path):
     image = np.concatenate((h1, h2), axis=0)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_8/{}'.format(
-            os.path.basename(img_path)), image)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_8/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
 
 
 def aug_9(img_path):
@@ -296,8 +331,12 @@ def aug_9(img_path):
     image[..., 2] = clahe.apply(image[..., 2])
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_9/{}'.format(
-            os.path.basename(img_path)), image)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_9/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
+
 
 def aug_10(img_path):
     """
@@ -318,15 +357,17 @@ def aug_10(img_path):
     image = cv2.addWeighted(image, 4, bg, -4, 128)
 
     cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_10/{}'.format(
-            os.path.basename(img_path)), image)
+        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_10/{}".format(
+            os.path.basename(img_path)
+        ),
+        image,
+    )
 
 
-
-'''
+"""
 images = glob.glob('/home/ains/PycharmProjects/aptos2019/data/aptos2019-blindness-detection/train_images/*.png')
 
 pool = mp.Pool(mp.cpu_count())
 pool.map(aug_2, images)
 pool.close()
-'''
+"""

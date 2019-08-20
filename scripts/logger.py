@@ -27,8 +27,7 @@ def log_overall(folder_name, phase, log_folder, metrics):
     cmfiles = glob(os.path.join(folder_name, "logs/*%s*.obj" % phase))
     for i in range(len(cmfiles)):
         cms[f"cm{i}"] = ConfusionMatrix(
-            file=open(os.path.join(
-                folder_name, f"logs/cm{phase}_{i}.obj"), "r")
+            file=open(os.path.join(folder_name, f"logs/cm{phase}_{i}.obj"), "r")
         )
     logger = Logger(os.path.join(log_folder, phase))
     overall_stats = {x: [] for x in metrics}
@@ -53,8 +52,7 @@ def log_class_stats(folder_name, phase, log_folder, metrics):
     cmfiles = glob(os.path.join(folder_name, "logs/*%s*.obj" % phase))
     for i in range(len(cmfiles)):
         cms[f"cm{i}"] = ConfusionMatrix(
-            file=open(os.path.join(
-                folder_name, f"logs/cm{phase}_{i}.obj"), "r")
+            file=open(os.path.join(folder_name, f"logs/cm{phase}_{i}.obj"), "r")
         )
     for class_name in range(5):
         logger = Logger(os.path.join(log_folder, phase, str(class_name)))
@@ -64,8 +62,7 @@ def log_class_stats(folder_name, phase, log_folder, metrics):
                 try:
                     value = cms["cm%d" % i].class_stat[metric][class_name]
                 except Exception as e:
-                    value = cms["cm%d" %
-                                i].class_stat[metric][str(class_name)]  # [1]
+                    value = cms["cm%d" % i].class_stat[metric][str(class_name)]  # [1]
                 class_stats[metric].append(value if value is not "None" else 0)
         for metric in metrics:
             metric_name = "class " + metric

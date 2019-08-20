@@ -681,7 +681,7 @@ submission80.csv:
 4    0.038900
 
 
-* `198_efficientnet-b5_f1_ptest`: finetuning on previous model, this time load train.csv, add messidor (without cls 3), extract val set which has same dist as sub80.csv,
+* `198_efficientnet-b5_f1_ptest`: finetuning on previous model, this time load train.csv, add messidor (without cls 3), extracted val set which has same dist as sub80.csv,
 
 Funny, the optimized val qwk results in heavily skewing of thresholds: [0.49413991 0.5547372  2.45687935 4.55316238], results in higher qwk as compared to base thresholds, but with almost zero PPV, all getting classified as class 2, the majority class. This shows how unreliable is val set optimzation.
 base qwk is plateauing at 0.76
@@ -708,11 +708,14 @@ doesn't work.
 use random center crop.
 
 
-* `208_efficientnet-b5_f1_ptest2`: same as  `198_efficientnet-b5_f1_ptest2` with centreCrop finetuning on new data. ckpt16 looks good.
+* `208_efficientnet-b5_f1_ptest2`: same as  `198_efficientnet-b5_f1_ptest2` with centreCrop finetuning on new data.-> model is getting heavily biased towards 2.
 
 
+Implemented Gradient weighted Class activation mappings (Grad-CAM) for the efficientnet-b5 model,
+Looks like: model is missing hemorrhages specially large ones and abnormal growth of blood vessels, it is good with hard exudates and cotton wool spots,
 
-
+Messidor-2 dataset: https://medicine.uiowa.edu/eye/abramoff
+downloaded the dataset, gotta figure out the labels.
 
 
 

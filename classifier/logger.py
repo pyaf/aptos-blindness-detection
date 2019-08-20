@@ -47,7 +47,7 @@ def log_class_stats(folder_name, phase, log_folder, metrics):
     save_folder: place where to log tb files
     metrics: (list) metrics to log
     """
-    #pdb.set_trace()
+    # pdb.set_trace()
     cms = {}
     cmfiles = glob(os.path.join(folder_name, "logs/*%s*.obj" % phase))
     for i in range(len(cmfiles)):
@@ -62,7 +62,7 @@ def log_class_stats(folder_name, phase, log_folder, metrics):
                 try:
                     value = cms["cm%d" % i].class_stat[metric][class_name]
                 except Exception as e:
-                    value = cms["cm%d" % i].class_stat[metric][str(class_name)] # [1]
+                    value = cms["cm%d" % i].class_stat[metric][str(class_name)]  # [1]
                 class_stats[metric].append(value if value is not "None" else 0)
         for metric in metrics:
             metric_name = "class " + metric
@@ -85,25 +85,25 @@ if __name__ == "__main__":
 
     # empty previously written tb files by this file
 
-    files = glob(os.path.join(log_folder, '*/*/*')) # logs/train/1/*
+    files = glob(os.path.join(log_folder, "*/*/*"))  # logs/train/1/*
     if len(files):
-        print('deleting files:')
+        print("deleting files:")
         print(files)
     for f in files:
         os.remove(f)
 
     """log overall statistics"""
 
-#    overall_metrics = [
-#        "Overall ACC",
-#        "Kappa",
-#        "TPR Micro",
-#        "PPV Micro",
-#        "F1 Micro",
-#        "Cross Entropy",
-#    ]
+    #    overall_metrics = [
+    #        "Overall ACC",
+    #        "Kappa",
+    #        "TPR Micro",
+    #        "PPV Micro",
+    #        "F1 Micro",
+    #        "Cross Entropy",
+    #    ]
 
-    overall_metrics = ["TPR Micro", "PPV Micro",]
+    overall_metrics = ["TPR Micro", "PPV Micro"]
 
     print(f"Logging overall metrics: {overall_metrics}")
     log_overall(folder_name, "train", log_folder, overall_metrics)
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
     """log class statistics"""
 
-    #class_metrics = ["TPR", "TNR", "PPV", "NPV", "FNR", "FPR", "ACC", "F1", "AUC"]
+    # class_metrics = ["TPR", "TNR", "PPV", "NPV", "FNR", "FPR", "ACC", "F1", "AUC"]
     class_metrics = ["TPR", "PPV"]
     print()
     print(f"Logging class metrics: {class_metrics}")
@@ -123,8 +123,7 @@ if __name__ == "__main__":
     # * If curve goes to zero, suddenly, they that's a 0 replaced in place of None value
 
 
-
-''' Footnotes
+""" Footnotes
 
 [1]: If input targets to ConfusionMatrix is not numpy it takes those as strings. So, earlier code didn't do that and to tackle those cases we have try except
-'''
+"""

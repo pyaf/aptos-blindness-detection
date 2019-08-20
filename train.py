@@ -11,6 +11,7 @@ import torch.optim as optim
 import torch.backends.cudnn as cudnn
 from collections import defaultdict
 from tqdm import tqdm
+
 # from ssd import build_ssd
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -33,46 +34,46 @@ date = "%s-%s" % (now.day, now.month)
 
 class Trainer(object):
     def __init__(self):
-        #seed_pytorch()
+        # seed_pytorch()
         self.args = get_parser()
         self.cfg = load_cfg(self.args)
-        self.model_name = self.cfg['model_name']
-        ext_text = self.cfg['ext_text']
+        self.model_name = self.cfg["model_name"]
+        ext_text = self.cfg["ext_text"]
         self.filename = Path(self.args.filepath).stem
-        #{date}_{self.model_name}_f{self.fold}_{ext_text}
+        # {date}_{self.model_name}_f{self.fold}_{ext_text}
         self.folder = f"weights/{self.filename}"
-        self.cfg['folder'] = self.folder
-        #self.resume = self.cfg['resume']
+        self.cfg["folder"] = self.folder
+        # self.resume = self.cfg['resume']
         self.resume = self.args.resume
-        self.pretrained = self.cfg['pretrained']
-        self.pretrained_path = self.cfg['pretrained_path']
-        self.batch_size = self.cfg['batch_size']
-        self.accumulation_steps = {x: 32//bs for x, bs in self.batch_size.items()}
-        self.num_classes = self.cfg['num_classes']
-        self.top_lr = eval(self.cfg['top_lr'])
-        self.ep2unfreeze = self.cfg['ep2unfreeze']
-        self.num_epochs = self.cfg['num_epochs']
-        self.base_lr = self.cfg['base_lr']
-        self.momentum = self.cfg['momentum']
-        self.patience = self.cfg['patience']
-        self.phases = self.cfg['phases']
+        self.pretrained = self.cfg["pretrained"]
+        self.pretrained_path = self.cfg["pretrained_path"]
+        self.batch_size = self.cfg["batch_size"]
+        self.accumulation_steps = {x: 32 // bs for x, bs in self.batch_size.items()}
+        self.num_classes = self.cfg["num_classes"]
+        self.top_lr = eval(self.cfg["top_lr"])
+        self.ep2unfreeze = self.cfg["ep2unfreeze"]
+        self.num_epochs = self.cfg["num_epochs"]
+        self.base_lr = self.cfg["base_lr"]
+        self.momentum = self.cfg["momentum"]
+        self.patience = self.cfg["patience"]
+        self.phases = self.cfg["phases"]
         self.start_epoch = 0
         self.best_qwk = 0
         self.best_loss = float("inf")
         self.cuda = torch.cuda.is_available()
         torch.set_num_threads(12)
         self.device = torch.device("cuda" if self.cuda else "cpu")
-        #self.df_path = self.cfg['df_path']
+        # self.df_path = self.cfg['df_path']
         self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
-        #self.resume_path = self.cfg['resume_path']
+        # self.resume_path = self.cfg['resume_path']
         self.save_folder = os.path.join(HOME, self.folder)
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
         self.net = get_model(self.model_name, self.num_classes)
         self.criterion = torch.nn.MSELoss()
         self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
-        #self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
-        #lr_lambda = lambda epoch: epoch // 5
+        # self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
+        # lr_lambda = lambda epoch: epoch // 5
         self.scheduler = ReduceLROnPlateau(
             self.optimizer, mode="min", patience=self.patience, verbose=True
         )
@@ -88,15 +89,13 @@ class Trainer(object):
         self.net, self.optimizer = amp.initialize(
             self.net, self.optimizer, opt_level="O1", verbosity=0
         )
-        if self.cuda: cudnn.benchmark = True
+        if self.cuda:
+            cudnn.benchmark = True
         self.tb = {
-            x: Logger(os.path.join(self.save_folder, "logs", x))
-            for x in self.phases
+            x: Logger(os.path.join(self.save_folder, "logs", x)) for x in self.phases
         }  # tensorboard logger, see [3]
         mkdir(self.save_folder)
-        self.dataloaders = {
-            phase: provider(phase, self.cfg) for phase in self.phases
-        }
+        self.dataloaders = {phase: provider(phase, self.cfg) for phase in self.phases}
         check_sanctity(self.dataloaders)
         save_cfg(self.cfg, self)
 
@@ -161,16 +160,17 @@ class Trainer(object):
             if phase == "train":
                 with amp.scale_loss(loss, self.optimizer) as scaled_loss:
                     scaled_loss.backward()
-                if (itr + 1 ) % accu_steps == 0:
+                if (itr + 1) % accu_steps == 0:
                     self.optimizer.step()
                     self.optimizer.zero_grad()
             running_loss += loss.item()
             meter.update(targets, outputs.detach())
-            tk0.set_postfix(loss=((running_loss * accu_steps ) / ((itr + 1))))
+            tk0.set_postfix(loss=((running_loss * accu_steps) / ((itr + 1))))
         best_thresholds = meter.get_best_thresholds()
         epoch_loss = (running_loss * accu_steps) / total_batches
-        qwk = epoch_log(self.optimizer, self.log, self.tb, phase,
-                        epoch, epoch_loss, meter, start)
+        qwk = epoch_log(
+            self.optimizer, self.log, self.tb, phase, epoch, epoch_loss, meter, start
+        )
         torch.cuda.empty_cache()
         return epoch_loss, qwk, best_thresholds
 
@@ -206,16 +206,15 @@ class Trainer(object):
                 # state["best_qwk"] = self.best_qwk = val_qwk
                 torch.save(state, self.model_path)
             copyfile(
-                self.ckpt_path, os.path.join(
-                    self.save_folder, "ckpt%d.pth" % epoch)
+                self.ckpt_path, os.path.join(self.save_folder, "ckpt%d.pth" % epoch)
             )
-            if epoch==0 and len(self.dataloaders['train']) > 100:
+            if epoch == 0 and len(self.dataloaders["train"]) > 100:
                 # make sure train/val ran error free, and it's not debugging
                 commit(self.filename)
-            #print_time(self.log, t_epoch_start, "Time taken by the epoch")
+            # print_time(self.log, t_epoch_start, "Time taken by the epoch")
             print_time(self.log, t0, "Total time taken so far")
             print()
-            ''' progressive resizing
+            """ progressive resizing
             if (epoch+1) % 5 == 0:
                 self.cfg['size'] = [299, 384, 512, 784, 1024][(epoch+1) // 5]
                 if self.cfg['size'] == 512:
@@ -227,8 +226,8 @@ class Trainer(object):
                 self.dataloaders = {
                     phase: provider(phase, self.cfg) for phase in self.phases
                 }
-            '''
-            #self.log("\n" + "=" * 60 + "\n")
+            """
+            # self.log("\n" + "=" * 60 + "\n")
 
 
 if __name__ == "__main__":
