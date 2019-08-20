@@ -22,6 +22,7 @@ from sklearn.metrics import cohen_kappa_score
 from models import Model, get_model
 from utils import *
 from image_utils import *
+from preprocessing import *
 
 
 def get_parser():
@@ -121,11 +122,12 @@ class TestDataset(data.Dataset):
         #        subtract_median=True,
         #        clahe_green=True)
         #image = PP1(path)
-        if path[-4:] == "jpeg":
-            image = jpeg.JPEG(path).decode()
-        else:
-            image = Image.open(path)
-            image = np.array(image)
+        #if path[-4:] == "jpeg":
+        #    image = jpeg.JPEG(path).decode()
+        #else:
+        #    image = Image.open(path)
+        #    image = np.array(image)
+        image = aug_3(path)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas

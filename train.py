@@ -35,37 +35,36 @@ class Trainer(object):
     def __init__(self):
         #seed_pytorch()
         self.args = get_parser()
-        cfg = load_cfg(self.args)
-        self.model_name = cfg['model_name']
-        ext_text = cfg['ext_text']
+        self.cfg = load_cfg(self.args)
+        self.model_name = self.cfg['model_name']
+        ext_text = self.cfg['ext_text']
         self.filename = Path(self.args.filepath).stem
         #{date}_{self.model_name}_f{self.fold}_{ext_text}
         self.folder = f"weights/{self.filename}"
-        cfg['folder'] = self.folder
-        #self.resume = cfg['resume']
+        self.cfg['folder'] = self.folder
+        #self.resume = self.cfg['resume']
         self.resume = self.args.resume
-        self.pretrained = cfg['pretrained']
-        self.pretrained_path = cfg['pretrained_path']
-        self.batch_size = cfg['batch_size']
+        self.pretrained = self.cfg['pretrained']
+        self.pretrained_path = self.cfg['pretrained_path']
+        self.batch_size = self.cfg['batch_size']
         self.accumulation_steps = {x: 32//bs for x, bs in self.batch_size.items()}
-        self.num_classes = cfg['num_classes']
-        self.top_lr = eval(cfg['top_lr'])
-        self.ep2unfreeze = cfg['ep2unfreeze']
-        self.num_epochs = cfg['num_epochs']
-        self.base_lr = cfg['base_lr']
-        self.momentum = cfg['momentum']
-        self.patience = cfg['patience']
-        self.phases = cfg['phases']
-        self.cfg = cfg
+        self.num_classes = self.cfg['num_classes']
+        self.top_lr = eval(self.cfg['top_lr'])
+        self.ep2unfreeze = self.cfg['ep2unfreeze']
+        self.num_epochs = self.cfg['num_epochs']
+        self.base_lr = self.cfg['base_lr']
+        self.momentum = self.cfg['momentum']
+        self.patience = self.cfg['patience']
+        self.phases = self.cfg['phases']
         self.start_epoch = 0
         self.best_qwk = 0
         self.best_loss = float("inf")
         self.cuda = torch.cuda.is_available()
         torch.set_num_threads(12)
         self.device = torch.device("cuda" if self.cuda else "cpu")
-        #self.df_path = cfg['df_path']
+        #self.df_path = self.cfg['df_path']
         self.resume_path = os.path.join(HOME, self.folder, "ckpt.pth")
-        #self.resume_path = cfg['resume_path']
+        #self.resume_path = self.cfg['resume_path']
         self.save_folder = os.path.join(HOME, self.folder)
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
@@ -96,10 +95,10 @@ class Trainer(object):
         }  # tensorboard logger, see [3]
         mkdir(self.save_folder)
         self.dataloaders = {
-            phase: provider(phase, cfg) for phase in self.phases
+            phase: provider(phase, self.cfg) for phase in self.phases
         }
         check_sanctity(self.dataloaders)
-        save_cfg(cfg, self)
+        save_cfg(self.cfg, self)
 
     def load_state(self):  # [4]
         if self.resume:
@@ -216,18 +215,19 @@ class Trainer(object):
             #print_time(self.log, t_epoch_start, "Time taken by the epoch")
             print_time(self.log, t0, "Total time taken so far")
             print()
+            ''' progressive resizing
             if (epoch+1) % 5 == 0:
-                cfg['size'] = [299, 384, 512, 784, 1024][(epoch+1) // 5]
-                if cfg['size'] == 512:
-                    cfg['batch_size'] = {'train': 4, 'val':4}
-                elif cfg['size'] > 512:
-                    cfg['batch_size'] = {'train': 2, 'val':2}
-                self.log('*** Setting size to %d ***' % cfg['size'])
-                self.log('batch size %s' % cfg['batch_size'])
+                self.cfg['size'] = [299, 384, 512, 784, 1024][(epoch+1) // 5]
+                if self.cfg['size'] == 512:
+                    self.cfg['batch_size'] = {'train': 4, 'val':4}
+                elif self.cfg['size'] > 512:
+                    self.cfg['batch_size'] = {'train': 2, 'val':2}
+                self.log('*** Setting size to %d ***' % self.cfg['size'])
+                self.log('batch size %s' % self.cfg['batch_size'])
                 self.dataloaders = {
-                    phase: provider(phase, cfg) for phase in self.phases
+                    phase: provider(phase, self.cfg) for phase in self.phases
                 }
-
+            '''
             #self.log("\n" + "=" * 60 + "\n")
 
 

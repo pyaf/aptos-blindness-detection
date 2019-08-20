@@ -106,10 +106,8 @@ def aug_3(img_path):
 
     image = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(image)
     image = np.dstack((image, image, image))
-
-    cv2.imwrite(
-        '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_3/{}'.format(
-            os.path.basename(img_path)), image)
+    # all Green, RGB BGR doesn't matter
+    return image
 
 
 def aug_4(img_path):
@@ -323,8 +321,12 @@ def aug_10(img_path):
         '/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_10/{}'.format(
             os.path.basename(img_path)), image)
 
+
+
+'''
 images = glob.glob('/home/ains/PycharmProjects/aptos2019/data/aptos2019-blindness-detection/train_images/*.png')
 
 pool = mp.Pool(mp.cpu_count())
 pool.map(aug_2, images)
 pool.close()
+'''

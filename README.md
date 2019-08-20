@@ -688,7 +688,7 @@ base qwk is plateauing at 0.76
 
 *Idea*
 so, in this challenge,  metrics averaged over all classes are not reliable. We'll have to watch the class wise metrics, get the best per class performing model.
-I've an idea: What about a 2 step model, we are at F1 score of ~0.98+, if we train a bin classifier of zero-vs-others I'm pretty sure we can increase this f1 score to 0.99, after that we can train a model solely on class 1, 2, 3, 4, and focus on these rare classes. The metrics won't get biased towards class 0.
+I've an idea: What about a 2 step model, we are at F1 score of ~0.98+, if we train a bin classifier of zero-vs-others I'm pretty sure we can increase this f1 score to 0.99, after that we can train a model solely on class 1, 2, 3, 4, and focus on these rare classes. The metrics won't get biased towards class 0., distribution will be less skewed.
 for the 2nd step model, the labels will be one-step-below the actual 1->0, 2->1 etc.
 
 * `198_efficientnet-b5_f1_test2`: only class 1, 2, 3, 4 -> 0, 1, 2, 3, base_th = [0.5, 1.5, 2.5], 256 old aug_3 dataset, without messidor. clamp (0, 4)
@@ -696,13 +696,19 @@ for the 2nd step model, the labels will be one-step-below the actual 1->0, 2->1 
 Getting heavily biased towards class 2.
 
 https://jdhao.github.io/2017/11/06/resize-image-to-square-with-padding/
+
 * `208_efficientnet-b5_f1_ptest2radam`:
 *experiment*: Adam performs better than RAdam
 
 * `208_efficientnet-b5_f1_ptestpr`: progressive resizing.
 256, 299, 512, 784, 1024 for 10 epochs each.
+doesn't work.
 
 
+use random center crop.
+
+
+* `208_efficientnet-b5_f1_ptest2`: same as  `198_efficientnet-b5_f1_ptest2` with centreCrop finetuning on new data. ckpt16 looks good.
 
 
 

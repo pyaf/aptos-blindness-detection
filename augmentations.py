@@ -4,7 +4,7 @@ from albumentations import (
     Transpose, ShiftScaleRotate, Blur, OpticalDistortion, GridDistortion, HueSaturationValue,
     IAAAdditiveGaussianNoise, GaussNoise, MotionBlur, MedianBlur, IAAPiecewiseAffine,
     IAASharpen, IAAEmboss, RandomContrast, RandomBrightness, Flip, OneOf, Compose, RandomGamma, ElasticTransform, ChannelShuffle,RGBShift, Rotate,
-    Normalize, RandomBrightnessContrast, Resize
+    Normalize, RandomBrightnessContrast, Resize, CenterCrop
 )
 
 from albumentations.torch import ToTensor
@@ -50,6 +50,7 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
+                CenterCrop(int(size*0.8), int(size*0.8), p=0.5),
                 Transpose(p=0.5),
                 Flip(p=0.5),
                 ShiftScaleRotate(
@@ -59,7 +60,7 @@ def get_transforms(phase, cfg):
                     p=0.5,
                 ),
 
-               RandomBrightnessContrast(0.1, 0.1, p=1),
+               RandomBrightnessContrast(0.1, 0.1, p=0.5),
             ]
         )
     list_transforms.extend(
