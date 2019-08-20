@@ -700,7 +700,8 @@ https://jdhao.github.io/2017/11/06/resize-image-to-square-with-padding/
 *experiment*: Adam performs better than RAdam
 
 * `208_efficientnet-b5_f1_ptestpr`: progressive resizing.
-128, 256, 512, 1024 for 10 epochs each.
+256, 299, 512, 784, 1024 for 10 epochs each.
+
 
 
 

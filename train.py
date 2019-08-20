@@ -216,11 +216,11 @@ class Trainer(object):
             #print_time(self.log, t_epoch_start, "Time taken by the epoch")
             print_time(self.log, t0, "Total time taken so far")
             print()
-            if (epoch+1) % 10 == 0:
-                cfg['size'] = [256, 512, 1024][(epoch+1) // 10]
+            if (epoch+1) % 5 == 0:
+                cfg['size'] = [299, 384, 512, 784, 1024][(epoch+1) // 5]
                 if cfg['size'] == 512:
                     cfg['batch_size'] = {'train': 4, 'val':4}
-                elif cfg['size'] == 1024:
+                elif cfg['size'] > 512:
                     cfg['batch_size'] = {'train': 2, 'val':2}
                 self.log('*** Setting size to %d ***' % cfg['size'])
                 self.log('batch size %s' % cfg['batch_size'])
