@@ -1,4 +1,5 @@
 import cv2
+import random
 from albumentations import (
     HorizontalFlip,
     IAAPerspective,
@@ -35,6 +36,7 @@ from albumentations import (
 )
 
 from albumentations.torch import ToTensor
+from albumentations.core.transforms_interface import ImageOnlyTransform
 
 
 def strong_aug(p=1):
@@ -75,6 +77,32 @@ def strong_aug(p=1):
     )
 
 
+
+class MyCenterCrop(ImageOnlyTransform):
+    """Customized center crop, randomly center crops, keeping the aspect ratio
+    intact.
+
+    Targets:
+        image
+
+    Image types:
+        uint8, float32
+    """
+
+    def __init__(self, always_apply=False, p=1.0):
+        super(MyCenterCrop, self).__init__(always_apply, p)
+
+    def apply(self, image, **params):
+        w, h, _ = image.shape
+        ratio = random.choice([0.8, 0.85, 0.9])
+        aug = CenterCrop(int(w * ratio), int(h * ratio), p=1)
+        image = aug(image=image)['image']
+        return image
+
+    def get_transform_init_args_names(self):
+        return ()
+
+
 def get_transforms(phase, cfg):
     size = cfg["size"]
     mean = eval(cfg["mean"])
@@ -84,60 +112,23 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
+                MyCenterCrop(p=0.3),
                 Transpose(p=0.5),
                 Flip(p=0.5),
                 ShiftScaleRotate(
                     shift_limit=0.1, scale_limit=(-0.1, 0.3), rotate_limit=180, p=0.5
                 ),
                 RandomBrightnessContrast(0.1, 0.1, p=0.5),
+
             ]
         )
     list_transforms.extend(
         [
-            Normalize(mean=mean, std=std, p=1),
             Resize(size, size),
+            Normalize(mean=mean, std=std, p=1),
             ToTensor(normalize=None),  # [6]
         ]
     )
     return Compose(list_transforms)
 
 
-def get_test_transforms(size, mean, std):
-
-    list_transforms = []
-    list_transforms.extend(
-        [
-            Transpose(p=0.5),
-            Flip(p=0.5),
-            ShiftScaleRotate(
-                shift_limit=0.1,
-                scale_limit=(-0.1, 0.3),
-                rotate_limit=180,
-                p=0.5,
-                # border_mode=cv2.BORDER_CONSTANT
-            ),
-            strong_aug(),
-        ]
-    )
-    return Compose(list_transforms)
-
-
-"""
-        self.TTA = albumentations.Compose(
-            [
-                albumentations.Rotate(limit=180, p=0.5),
-                albumentations.Transpose(p=0.5),
-                albumentations.Flip(p=0.5),
-                albumentations.RandomScale(scale_limit=0.1),
-            ]
-        )
-        self.transform = albumentations.Compose(
-            [
-                albumentations.Normalize(mean=mean, std=std, p=1),
-                albumentations.Resize(size, size),
-                AT.ToTensor(),
-            ]
-        )
-
-
-"""

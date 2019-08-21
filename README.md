@@ -727,6 +727,25 @@ downloaded the dataset, gotta figure out the labels.
     4: 1914
 trained for 11 eps, finetuning on new data.
 
+*updated train.csv*
+name, actual, new label
+2221cf5c7935.png, 0, 2
+2d07162a13b1.png, 0, 1
+4f0866b90c27.png, 3, 4
+772af553b8b7.png, 3, 4
+bf8092e4001d.png, 3, 4
+fcc6aa6755e6.png, 3, 4
+4f0866b90c27.png, 3, 4
+5b3e7197ac1c.png, 3, 4
+
+original train.csv saved as data/train_org.csv
+
+* `218_efficientnet-b5_f1_po6cc`: with centercrop(p=0.2), finetuning. 1e-5 is slow for finetuning.
+
+1e-4 for pretraining. 5e-5 for finetuning efficientnets
+
+*BUG*
+first resize, then normalize. -_-, resizing adds interpolated values.
 
 
 

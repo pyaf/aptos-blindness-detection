@@ -69,15 +69,13 @@ class ImageDataset(Dataset):
         #image = PP1(path, self.size)
         #image = cv2.imread(path)
         #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        #if path[-4:] == "jpeg":
-        #    image = jpeg.JPEG(path).decode()
-        #else:
-        #    image = Image.open(path)
-        #    image = np.array(image)
-        image = aug_6(path)
-        w, h, _ = image.shape
-        aug = CenterCrop(int(w*0.8), int(h*0.8), p=0.2)
-        image = aug(image=image)['image']
+        _, ext = os.path.splitext(path)
+        if ext == ".jpeg" or ext == ".jpg":
+            image = jpeg.JPEG(path).decode()
+        else:
+            image = Image.open(path)
+            image = np.array(image)
+        #image = aug_6(path)
         image = self.transform(image=image)["image"]
         return fname, image, label
 

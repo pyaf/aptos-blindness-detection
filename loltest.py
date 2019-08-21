@@ -96,8 +96,8 @@ class TestDataset(data.Dataset):
         )
         self.transform = albumentations.Compose(
             [
-                albumentations.Normalize(mean=mean, std=std, p=1),
                 albumentations.Resize(size, size),
+                albumentations.Normalize(mean=mean, std=std, p=1),
                 AT.ToTensor(),
             ]
         )
@@ -123,7 +123,7 @@ class TestDataset(data.Dataset):
         # else:
         #    image = Image.open(path)
         #    image = np.array(image)
-        image = aug_3(path)
+        image = aug_6(path)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
