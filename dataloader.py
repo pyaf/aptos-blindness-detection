@@ -76,7 +76,7 @@ class ImageDataset(Dataset):
         #    image = np.array(image)
         image = aug_6(path)
         w, h, _ = image.shape
-        aug = CenterCrop(int(w*0.8), int(h*0.8), p=0.5)
+        aug = CenterCrop(int(w*0.8), int(h*0.8), p=0.2)
         image = aug(image=image)['image']
         image = self.transform(image=image)["image"]
         return fname, image, label
@@ -142,7 +142,7 @@ def provider(phase, cfg):
         count_dict = cfg['count_dict']
         df = resampled(df, count_dict)
 
-    print(df['diagnosis'].value_counts())
+    #print(df['diagnosis'].value_counts())
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
@@ -171,6 +171,11 @@ def provider(phase, cfg):
         mes_df = mes_df[mes_df.diagnosis != 3] # drop class 3, see [12]
         mes_df['weight'] = 1
         train_df = train_df.append(mes_df, ignore_index=True)
+
+    if cfg['idrid_in_train']:
+        idrid_df = pd.read_csv(cfg['idrid_df'])
+        idrid_df['weight'] = 1
+        train_df = train_df.append(idrid_df, ignore_index=True)
         #df = df.append(mes_df, ignore_index=True)
 
     #'''test'''
@@ -258,8 +263,8 @@ if __name__ == "__main__":
     args = get_parser()
     cfg = load_cfg(args)
     cfg["num_workers"] = 8
-    cfg["batch_size"]["train"] = 16
-    cfg["batch_size"]["val"] = 8
+    cfg["batch_size"]["train"] = 4
+    cfg["batch_size"]["val"] = 4
 
     dataloader = provider(phase, cfg)
     ''' train val set sanctity

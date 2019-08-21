@@ -718,6 +718,26 @@ Messidor-2 dataset: https://medicine.uiowa.edu/eye/abramoff
 downloaded the dataset, gotta figure out the labels.
 
 
+* `218_efficientnet-b5_f1_o6cc` aug 6, with centrop crop (p=0.5) in augmentations.
+  old sample:
+    0: 6000
+    2: 6000
+    1: 6000
+    3: 2000
+    4: 1914
+trained for 11 eps, finetuning on new data.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Questions and Ideas:
