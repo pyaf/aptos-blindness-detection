@@ -70,6 +70,7 @@ class ImageDataset(Dataset):
         #image = cv2.imread(path)
         #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         _, ext = os.path.splitext(path)
+        #print(path)
         if ext == ".jpeg" or ext == ".jpg":
             image = jpeg.JPEG(path).decode()
         else:

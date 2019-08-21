@@ -29,8 +29,9 @@ data_folder: data/all_images/
 phases: ["train", "val", "val_new"]
 batch_size:
     train: 8
-    val: 4
-    val_new: 4
+    val: 8
+    val_new: 8
+
 num_workers: 12
 num_classes: 1
 ep2unfreeze: 2 # <<<<<<<<<<

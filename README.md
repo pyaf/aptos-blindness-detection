@@ -747,9 +747,12 @@ original train.csv saved as data/train_org.csv
 *BUG*
 first resize, then normalize. -_-, resizing adds interpolated values.
 
+* `218_efficientnet-b5_f1_oc6cc2`: with above bugfix, with 2k image each of previous data. lr: 1e-4
+*pretraining? go with 1e-4, preprocess and save the images instead of doing that on the fly*
 
-
-
+model needs more examples of Class 0 to be good at it.
+*so the model was being trained on all_images* -_- so basically no preprocessing at all.
+the oc6cc was trained on aug_6, poc6cc was finetuned on all_images -_-
 
 
 
@@ -895,7 +898,7 @@ A good ensemble contains high performing models which are less correlated., each
 EXTRAS:
 
 EfficientNet params:
-  # (width_coefficient, depth_coefficient, resolution, dropout_rate)
+  * (width_coefficient, depth_coefficient, resolution, dropout_rate)
   'efficientnet-b0': (1.0, 1.0, 224, 0.2),
   'efficientnet-b1': (1.0, 1.1, 240, 0.2),
   'efficientnet-b2': (1.1, 1.2, 260, 0.3),
