@@ -40,7 +40,7 @@ batch_size:
 num_workers: 12
 num_classes: 1
 ep2unfreeze: 0 # <<<<<<<<<<
-num_epochs: 30
+num_epochs: 40
 base_lr: None
 momentum: 0.95
 patience: 3
@@ -60,7 +60,7 @@ count_dict:
 messidor_in_train: True
 idrid_in_train: True
 
-add_old_samples: True
+add_old_samples: False
 sample_dict:
     0: 1900
     2: 1900
