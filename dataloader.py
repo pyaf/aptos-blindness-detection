@@ -55,6 +55,7 @@ class ImageDataset(Dataset):
         label = self.labels[idx]
         path = os.path.join(self.root, fname.split('.')[0] + '.npy')
         image = np.load(path)
+        #print(image.shape)
         #filename, ext = os.path.splitext(path)
         #if ext == ".jpeg" or ext == ".jpg":
         #    image = jpeg.JPEG(path).decode()

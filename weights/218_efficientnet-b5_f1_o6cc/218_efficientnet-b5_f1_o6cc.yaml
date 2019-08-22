@@ -23,17 +23,19 @@ pretrained_path: weights/198_efficientnet-b5_f1_test2/ckpt20.pth
 new_df_path: data/train.csv
 old_df_path: data/2015.csv
 mes_df: data/train_messidor.csv
-#data_folder: data/aug_3/
-data_folder: data/all_images/
+idrid_df: data/idrid.csv
+data_folder: data/npy_files/aug_6/
+#data_folder: data/all_images/
 phases: ["train", "val", "val_new"]
 batch_size:
-    train: 8
-    val: 4
-    val_new: 4
+    train: 16
+    val: 8
+    val_new: 8
+
 num_workers: 12
 num_classes: 1
 ep2unfreeze: 2 # <<<<<<<<<<
-num_epochs: 25
+num_epochs: 30
 base_lr: None
 momentum: 0.95
 patience: 4
@@ -51,6 +53,8 @@ count_dict:
     4: 1914
 
 messidor_in_train: False
+idrid_in_train: False
+
 add_old_samples: False
 sample_dict:
     0: 1900
