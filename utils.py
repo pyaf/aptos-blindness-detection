@@ -199,14 +199,14 @@ def get_stats(cm):
     if f1 is "None":
         f1 = 0
 
-    cls_tpr = sanity(cls_tpr)
-    cls_ppv = sanity(cls_ppv)
-    cls_f1 = sanity(cls_f1)
+    cls_tpr = sanitize(cls_tpr)
+    cls_ppv = sanitize(cls_ppv)
+    cls_f1 = sanitize(cls_f1)
 
     return acc, tpr, ppv, f1, cls_tpr, cls_ppv, cls_f1
 
 
-def sanity(cls_dict):
+def sanitize(cls_dict):
     for x, y in cls_dict.items():
         try:
             cls_dict[x] = float("%0.4f" % y)

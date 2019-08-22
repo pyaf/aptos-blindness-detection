@@ -762,6 +762,8 @@ the oc6cc was trained on aug_6, poc6cc was finetuned on all_images -_-
 
 *Idea* to fix the corner issue in heatmaps, use heavy aug, increased p values in in aug
 
+retraining with npyfiles/aug_6: images with width: 256, height acc to original aspect ratio. Model training on new + messsidor + irdia + 1.9k each old samples. using PadIfNeeded, instead of resize in augmentations.
+
 
 
 
@@ -819,7 +821,7 @@ the oc6cc was trained on aug_6, poc6cc was finetuned on all_images -_-
 * The public test data is 15% of total test data and is used for public LB scoring. The private test set (85% of total) Will be used for private LB scoring.
 * Updated the dataset to a new version? Just reboot the kernel to reflect that update (no remove and add shit)
 * First epoch may not have full utilization, next epoch it'll be full thanks to pin_memory.
-
+* pil image.size returns w, h, np.array/ cv2 return h, w
 
 
 # Things to check, just before starting the model training:

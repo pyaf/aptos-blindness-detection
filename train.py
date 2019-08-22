@@ -48,7 +48,7 @@ class Trainer(object):
         self.pretrained = self.cfg["pretrained"]
         self.pretrained_path = self.cfg["pretrained_path"]
         self.batch_size = self.cfg["batch_size"]
-        self.accumulation_steps = {x: 32 // bs for x, bs in self.batch_size.items()}
+        self.accumulation_steps = {x: 64 // bs for x, bs in self.batch_size.items()}
         self.num_classes = self.cfg["num_classes"]
         self.top_lr = eval(self.cfg["top_lr"])
         self.ep2unfreeze = self.cfg["ep2unfreeze"]

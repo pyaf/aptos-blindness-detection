@@ -50,12 +50,8 @@ def aug_0(img_path):
 
     img = cv2.imread(img_path)
     img = crop_image_from_gray(img)
-    cv2.imwrite(
-        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_0/{}".format(
-            os.path.basename(img_path)
-        ),
-        img,
-    )
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return img
 
 
 def aug_1(img_path):
@@ -174,14 +170,9 @@ def aug_5(img_path):
 
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     lab[..., 0] = clahe.apply(lab[..., 0])
-    image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+    image = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+    return img
 
-    cv2.imwrite(
-        "/media/ains/dec4dfd1-4e1b-4f58-8203-1e4a2fb67acf/preprocessing_experiment/aug_5/{}".format(
-            os.path.basename(img_path)
-        ),
-        image,
-    )
 
 
 def aug_6(img_path):

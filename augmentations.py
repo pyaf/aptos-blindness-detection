@@ -33,7 +33,9 @@ from albumentations import (
     RandomBrightnessContrast,
     Resize,
     CenterCrop,
+    PadIfNeeded
 )
+
 
 from albumentations.torch import ToTensor
 from albumentations.core.transforms_interface import ImageOnlyTransform
@@ -124,7 +126,8 @@ def get_transforms(phase, cfg):
         )
     list_transforms.extend(
         [
-            Resize(size, size),
+            #Resize(size, size),
+            PadIfNeeded(size, size, p=1),
             Normalize(mean=mean, std=std, p=1),
             ToTensor(normalize=None),  # [6]
         ]

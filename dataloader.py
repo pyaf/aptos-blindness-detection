@@ -53,30 +53,14 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
-        #fname = fname.split('.')[0]
-        #path = os.path.join(self.root, fname + ".npy")
-        #image = np.load(path)
-        #image = toCLAHEgreen(image)
-        path = os.path.join(self.root, fname)
-        #print(path)
-        #image = id_to_image(path,
-        #        resize=True,
-        #        size=self.size,
-        #        augmentation=True,
-        #        subtract_median=True,
-        #        clahe_green=True)
-        #image = self.images[idx]
-        #image = PP1(path, self.size)
-        #image = cv2.imread(path)
-        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        _, ext = os.path.splitext(path)
-        #print(path)
-        if ext == ".jpeg" or ext == ".jpg":
-            image = jpeg.JPEG(path).decode()
-        else:
-            image = Image.open(path)
-            image = np.array(image)
-        #image = aug_6(path)
+        path = os.path.join(self.root, fname.split('.')[0] + '.npy')
+        image = np.load(path)
+        #filename, ext = os.path.splitext(path)
+        #if ext == ".jpeg" or ext == ".jpg":
+        #    image = jpeg.JPEG(path).decode()
+        #else:
+        #    image = Image.open(path)
+        #    image = np.array(image)
         image = self.transform(image=image)["image"]
         return fname, image, label
 
@@ -161,10 +145,6 @@ def provider(phase, cfg):
     #print(f'data dist:\n {train_df["diagnosis"].value_counts(normalize=True)}\n')
     #'''test over'''
 
-    if cfg['tc_dups']: # add good duplicates
-        #train_df = train_df.append(good_dups_df, ignore_index=False)
-        pass # Tom's the boss
-
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])
         mes_df = mes_df[mes_df.diagnosis != 3] # drop class 3, see [12]
@@ -239,6 +219,28 @@ def provider(phase, cfg):
     )  # shuffle and sampler are mutually exclusive args
 
     #print(f'len(dataloader): {len(dataloader)}')
+    return dataloader
+
+
+
+def testprovider(cfg):
+    HOME = cfg['home']
+    df_path = cfg['sample_submission']
+    df = pd.read_csv(os.path.join(HOME, df_path))
+    phase = cfg['phase']
+    if phase == "test":
+        df['id_code'] += '.png'
+    batch_size = cfg['batch_size']['test']
+    num_workers = cfg['num_workers']
+
+
+    dataloader = DataLoader(
+        ImageDataset(df, phase, cfg),
+        batch_size=batch_size,
+        num_workers=num_workers,
+        pin_memory=True,
+        shuffle=False
+    )
     return dataloader
 
 
