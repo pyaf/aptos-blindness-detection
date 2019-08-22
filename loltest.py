@@ -118,12 +118,13 @@ class TestDataset(data.Dataset):
         #        subtract_median=True,
         #        clahe_green=True)
         # image = PP1(path)
-        # if path[-4:] == "jpeg":
-        #    image = jpeg.JPEG(path).decode()
-        # else:
-        #    image = Image.open(path)
-        #    image = np.array(image)
-        image = aug_6(path)
+        _, ext = os.path.splitext(path)
+        if ext == ".jpeg" or ext == ".jpg":
+           image = jpeg.JPEG(path).decode()
+        else:
+           image = Image.open(path)
+           image = np.array(image)
+        #image = aug_6(path)
 
         images = [self.transform(image=image)["image"]]
         for _ in range(self.tta):  # perform ttas
@@ -231,7 +232,7 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
-    # base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
+    base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
 
     for epoch in range(start_epoch, end_epoch + 1):
         print(f"Using ckpt{epoch}.pth")
@@ -240,12 +241,12 @@ if __name__ == "__main__":
         model.load_state_dict(state["state_dict"])
         preds = get_predictions(model, testset, tta)
         best_thresholds = state["best_thresholds"]
+        pred2 = predict(preds, base_thresholds)
+        print("base:", np.unique(pred2, return_counts=True)[1])
         """
         print(f"Best thresholds: {best_thresholds}")
         pred1 = predict(preds, best_thresholds)
-        pred2 = predict(preds, base_thresholds)
         print("best:", np.unique(pred1, return_counts=True)[1])
-        print("base:", np.unique(pred2, return_counts=True)[1])
         """
         mat_to_save = [preds, best_thresholds]
         np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)

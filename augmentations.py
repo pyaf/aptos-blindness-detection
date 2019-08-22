@@ -112,11 +112,11 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                MyCenterCrop(p=0.3),
+                MyCenterCrop(p=0.5),
                 Transpose(p=0.5),
                 Flip(p=0.5),
                 ShiftScaleRotate(
-                    shift_limit=0.1, scale_limit=(-0.1, 0.3), rotate_limit=180, p=0.5
+                    shift_limit=0.1, scale_limit=(-0.1, 0.3), rotate_limit=180, p=0.9
                 ),
                 RandomBrightnessContrast(0.1, 0.1, p=0.5),
 

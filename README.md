@@ -747,12 +747,20 @@ original train.csv saved as data/train_org.csv
 *BUG*
 first resize, then normalize. -_-, resizing adds interpolated values.
 
-* `218_efficientnet-b5_f1_oc6cc2`: with above bugfix, with 2k image each of previous data. lr: 1e-4
+* `218_efficientnet-b5_f1_o6cc2`: with above bugfix, with 2k image each of previous data. lr: 1e-4, with MyCenterCrop.
 *pretraining? go with 1e-4, preprocess and save the images instead of doing that on the fly*
 
 model needs more examples of Class 0 to be good at it.
-*so the model was being trained on all_images* -_- so basically no preprocessing at all.
+*so the model was being trained on all_images* -_- so basically no preprocessing at all. not even fundus cropped.
 the oc6cc was trained on aug_6, poc6cc was finetuned on all_images -_-
+
+* `218_efficientnet-b5_f1_po6cc2`: finetuning with 5e-5.
+
+
+* `218_efficientnet-b5_f1_po6cc`: retraining again with aug_6. with MyCenterCrop
+
+
+*Idea* to fix the corner issue in heatmaps, use heavy aug, increased p values in in aug
 
 
 

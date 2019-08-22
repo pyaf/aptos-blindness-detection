@@ -4,7 +4,7 @@ home: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/
 fold: 1
 total_folds: 5
 size: 256
-top_lr: 1e-5
+top_lr: 5e-5
 class_weights: None
 cw_sampling: False
 he_sampling: False
@@ -24,8 +24,8 @@ new_df_path: data/train.csv
 old_df_path: data/2015.csv
 mes_df: data/train_messidor.csv
 idrid_df: data/idrid.csv
-#data_folder: data/aug_3/
-data_folder: data/all_images/
+data_folder: data/aug_6/
+#data_folder: data/all_images/
 phases: ["train", "val"]
 batch_size:
     train: 8
@@ -51,6 +51,8 @@ count_dict:
     4: 1914
 
 messidor_in_train: True
+idrid_in_train: True
+
 add_old_samples: False
 sample_dict:
     0: 1900
@@ -59,4 +61,3 @@ sample_dict:
     3: 1900
     4: 1900
 
-idrid_in_train: True
