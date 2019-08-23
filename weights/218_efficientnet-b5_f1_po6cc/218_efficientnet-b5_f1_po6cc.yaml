@@ -4,7 +4,7 @@ home: /media/ags/DATA/CODE/kaggle/aptos2019-blindness-detection/
 fold: 1
 total_folds: 5
 size: 256
-top_lr: 1e-4
+top_lr: 1e-5
 
 # started cw sampling after 20 epochs.
 class_weights: [1, 1.5, 1.2, 1.5, 1.5]
@@ -22,7 +22,7 @@ std: (0.229, 0.224, 0.225)
 pretraining: False # <<<<<<<
 
 pretrained: True
-pretrained_path: weights/218_efficientnet-b5_f1_o6cc/ckpt11.pth
+pretrained_path: weights/218_efficientnet-b5_f1_o6cc/ckpt30.pth
 new_df_path: data/train.csv
 old_df_path: data/2015.csv
 mes_df: data/train_messidor.csv

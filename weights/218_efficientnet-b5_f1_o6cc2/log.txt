@@ -131406,3 +131406,4 @@
 01:13:28 lr: 0.0001
 01:13:30 Total time taken so far: 149:15
 01:13:30 Starting epoch: 16 | phase: train | 01:13:30
+11:48:51 Starting epoch: 0 | phase: train | 11:48:51
