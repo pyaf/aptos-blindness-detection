@@ -126,12 +126,14 @@ def resnext101_32x16d(out_features):
     return model
 
 
-def efficientNet(name, out_features):
+def efficientNet(name, out_features, pretrained="imagenet"):
     """name like: `efficientnet-b5`
     [2]
     """
-
-    model = EfficientNet.from_pretrained(name, num_classes=out_features)
+    if pretrained:
+        model = EfficientNet.from_pretrained(name, num_classes=out_features)
+    else:
+        model = EfficientNet.from_name(name, num_classes=out_features)
 
     for params in model.parameters():
         params.requires_grad = False
@@ -146,7 +148,7 @@ def get_model(model_name, out_features=1, pretrained="imagenet"):
     if model_name == "resnext101_32x16d":
         return resnext101_32x16d(out_features)
     elif model_name.startswith("efficientnet"):
-        return efficientNet(model_name, out_features)
+        return efficientNet(model_name, out_features, pretrained)
     return Model(model_name, out_features, pretrained)
 
 

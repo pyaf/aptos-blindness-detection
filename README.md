@@ -764,6 +764,17 @@ the oc6cc was trained on aug_6, poc6cc was finetuned on all_images -_-
 
 retraining with npyfiles/aug_6: images with width: 256, height acc to original aspect ratio. Model training on new + messsidor + irdia + 1.9k each old samples. using PadIfNeeded, instead of resize in augmentations.
 
+*some inferences* No matter what I try, data balancing hasn't helped me, the best strategy so far has been to pretrain the model on old data, with old data having ~50% class 0 samples, instead of 70% which it natively has and then finetuning on the new data set, without any data balancing.
+
+* `238_efficientnet-b6_f1_o6`: training b6, with mycentercrop, old data:
+ 0: 22k,     0.488878
+ 2: 13k,     0.288882
+ 1: 6k,     0.133330
+ 3: 2k,     0.046377
+ 4: 1.9k,    0.042532
+total, 39k in train, 5k in val, (1/8), new as val,
+
+
 
 
 
