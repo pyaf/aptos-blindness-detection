@@ -131,9 +131,9 @@ def efficientNet(name, out_features, pretrained="imagenet"):
     [2]
     """
     if pretrained:
-        model = EfficientNet.from_pretrained(name, num_classes=out_features)
+        model = EfficientNet.from_pretrained(name)
     else:
-        model = EfficientNet.from_name(name, num_classes=out_features)
+        model = EfficientNet.from_name(name)
 
     for params in model.parameters():
         params.requires_grad = False

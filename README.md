@@ -778,6 +778,8 @@ ckpt 17 looks good.
 
 * `238_efficientnet-b6_f1_po6`: finetuning on new data. 1e-5
 
+NO big improvement.
+
 
 
 

@@ -84,7 +84,7 @@ if __name__ == "__main__":
     cfg['phase'] = args.predict_on
     if predict_on == "train":
         cfg['sample_submission'] = "data/train.csv"
-        cfg['data_folder'] = "data/all_images/"
+        #cfg['data_folder'] = "data/all_images/"
 
     tta = 0  # number of augs in tta
 
