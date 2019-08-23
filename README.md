@@ -773,6 +773,10 @@ retraining with npyfiles/aug_6: images with width: 256, height acc to original a
  3: 2k,     0.046377
  4: 1.9k,    0.042532
 total, 39k in train, 5k in val, (1/8), new as val,
+15mins for train epoch.
+ckpt 17 looks good.
+
+* `238_efficientnet-b6_f1_po6`: finetuning on new data. 1e-5
 
 
 
