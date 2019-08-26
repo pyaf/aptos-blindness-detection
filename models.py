@@ -25,95 +25,6 @@ class AdaptiveConcatPool2d(nn.Module):
         return torch.cat([self.mp(x), self.ap(x)], 1)
 
 
-class Model(nn.Module):
-    def __init__(self, model_name, out_features, pretrained="imagenet"):
-        super(Model, self).__init__()
-        if model_name in ["se_resnet50"]:
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool2d((1, 1)),
-                Flatten(),
-                nn.Dropout(0.3),
-                nn.Linear(in_features=2048, out_features=1024, bias=True),
-                nn.ReLU(),
-                nn.Dropout(0.3),
-                nn.Linear(in_features=1024, out_features=out_features, bias=True),
-            )
-        elif model_name == "se_resnet50_v0":
-            model_name = "se_resnet50"
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool2d((1, 1)),
-                Flatten(),
-                nn.Dropout(0.3),
-                nn.Linear(in_features=2048, out_features=out_features, bias=True),
-            )
-        elif model_name in ["densenet121"]:
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool2d((1, 1)),
-                Flatten(),
-                nn.Dropout(0.3),
-                nn.Linear(in_features=1024, out_features=out_features, bias=True),
-            )
-
-        elif model_name == "resnext101_32x4d":
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool2d((1, 1)),
-                Flatten(),
-                nn.Dropout(0.5),
-                nn.Linear(in_features=2048, out_features=out_features, bias=True),
-            )
-        elif model_name == "resnext101_32x4d_v0":
-            model_name = "resnext101_32x4d"
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool2d(1),
-                Flatten(),
-                nn.BatchNorm1d(2048),
-                nn.Dropout(p=0.25),
-                nn.Linear(in_features=2048, out_features=2048, bias=True),
-                nn.ReLU(),
-                nn.BatchNorm1d(2048),
-                nn.Dropout(p=0.5),
-                nn.Linear(in_features=2048, out_features=out_features, bias=True),
-            )
-
-        elif model_name == "resnext101_32x4d_v1":
-            model_name = "resnext101_32x4d"
-            self.model = pretrainedmodels.__dict__[model_name](
-                num_classes=1000, pretrained=pretrained
-            )
-            self.classifier = nn.Sequential(
-                AdaptiveConcatPool2d(1),
-                Flatten(),
-                nn.BatchNorm1d(4096),
-                nn.Dropout(p=0.25),
-                nn.Linear(in_features=4096, out_features=2048, bias=True),
-                nn.ReLU(),
-                nn.BatchNorm1d(2048),
-                nn.Dropout(p=0.5),
-                nn.Linear(in_features=2048, out_features=out_features, bias=True),
-            )
-
-    def forward(self, x):
-        # pdb.set_trace()
-        x = self.model.features(x)  # only backbone features
-        x = self.classifier(x)
-        return x
-
-
 def resnext101_32x16d(out_features):
     """[1]"""
     model = torch.hub.load("facebookresearch/WSL-Images", "resnext101_32x16d_wsl")
@@ -149,7 +60,15 @@ def get_model(model_name, out_features=1, pretrained="imagenet"):
         return resnext101_32x16d(out_features)
     elif model_name.startswith("efficientnet"):
         return efficientNet(model_name, out_features, pretrained)
-    return Model(model_name, out_features, pretrained)
+
+    model = pretrainedmodels.__dict__[model_name](pretrained=pretrained)
+    in_features = model.last_linear.in_features
+    model.last_linear = nn.Linear(
+            in_features=in_features,
+            out_features=out_features,
+            bias=True
+    )
+    return model
 
 
 if __name__ == "__main__":

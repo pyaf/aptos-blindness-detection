@@ -54,15 +54,20 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         fname = self.fnames[idx]
         label = self.labels[idx]
-        path = os.path.join(self.root, fname.split('.')[0] + '.npy')
-        image = np.load(path)
+        path = os.path.join(self.root, fname)
+        #path = os.path.join(self.root, fname.split('.')[0] + '.npy')
+        #image = np.load(path)
         #print(image.shape)
-        #filename, ext = os.path.splitext(path)
+        filename, ext = os.path.splitext(path)
         #if ext == ".jpeg" or ext == ".jpg":
         #    image = jpeg.JPEG(path).decode()
         #else:
         #    image = Image.open(path)
         #    image = np.array(image)
+        #image = cv2.imread(path)
+        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        #image = resize_sa(image, self.size)
+        image = id_to_image(path, size=self.size, clahe=True)
         image = self.transform(image=image)["image"]
         return fname, image, label
 

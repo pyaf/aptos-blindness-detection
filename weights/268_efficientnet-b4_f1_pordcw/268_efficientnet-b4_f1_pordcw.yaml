@@ -5,8 +5,8 @@ fold: 1
 total_folds: 5
 size: 256
 top_lr: 1e-5
-cw_sampling: False
-class_weights: [1, 1.5, 1, 1.5, 1.5]
+cw_sampling: True
+class_weights: [0.5, 2, 1, 3, 3]
 he_sampling: False
 hard_ex_weight: 2
 hard_df: weights/118_efficientnet-b5_f1_postraug2/diff.csv
@@ -36,7 +36,7 @@ batch_size:
 num_workers: 12
 num_classes: 5
 ep2unfreeze: 0 # <<<<<<<<<<
-num_epochs: 30
+num_epochs: 40
 base_lr: None
 momentum: 0.95
 patience: 3

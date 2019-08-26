@@ -41,6 +41,23 @@ from albumentations.torch import ToTensor
 from albumentations.core.transforms_interface import ImageOnlyTransform
 
 
+def resize_sa(img, size):
+    '''Resize, keeping the aspect ratio same
+    Larger side is set to `size`, smaller side adjusted
+    acc to aspect ratio
+    image.shape -> height, width
+    cv2.resize takes (width, height)
+    '''
+
+    h, w, _ = img.shape
+    if h <= w: # equality is imp.
+        nh, nw = int(size * (h/w) ), size
+    elif h > w:
+        nh, nw = size, int(size * (w/h) )
+    nimg = cv2.resize(img, (nw, nh))
+    return nimg
+
+
 def strong_aug(p=1):
     """for reference, doesn't help"""
     return Compose(
@@ -96,7 +113,7 @@ class MyCenterCrop(ImageOnlyTransform):
 
     def apply(self, image, **params):
         w, h, _ = image.shape
-        ratio = random.choice([0.8, 0.85, 0.9])
+        ratio = random.choice([0.8, 0.85, 0.9, 0.95])
         aug = CenterCrop(int(w * ratio), int(h * ratio), p=1)
         image = aug(image=image)['image']
         return image

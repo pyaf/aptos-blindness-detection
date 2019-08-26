@@ -794,6 +794,8 @@ No class weights: ([2139,  448, 1151,  225,  275])
 
 with 1.5 to 1, 3, 4: ([1925,  639, 1030,  273,  371])
 
+*Remember* Given public test set is shit. God knows how the private one is gonna be.
+Finetuning shouldn't be prolonged, you'll start overfitting.
 
 
 

@@ -19,7 +19,7 @@ from tensorboard_logger import Logger
 from utils import *
 from dataloader import provider
 from shutil import copyfile
-from models import Model, get_model
+from models import get_model
 from extras import *
 from opt import RAdam
 from pathlib import Path
@@ -206,9 +206,9 @@ class Trainer(object):
                 state["best_loss"] = self.best_loss = val_loss
                 # state["best_qwk"] = self.best_qwk = val_qwk
                 torch.save(state, self.model_path)
-            copyfile(
-                self.ckpt_path, os.path.join(self.save_folder, "ckpt%d.pth" % epoch)
-            )
+            #copyfile(
+            #    self.ckpt_path, os.path.join(self.save_folder, "ckpt%d.pth" % epoch)
+            #)
             if epoch == 0 and len(self.dataloaders["train"]) > 100:
                 # make sure train/val ran error free, and it's not debugging
                 commit(self.filename)
