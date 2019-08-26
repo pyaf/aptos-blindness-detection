@@ -13,6 +13,7 @@ from PIL import Image
 import jpeg4py as jpeg
 from extras import *
 from image_utils import *
+from utils import *
 from augmentations import * #get_transforms
 from preprocessing import *
 
@@ -37,7 +38,7 @@ class ImageDataset(Dataset):
         self.fnames = self.df["id_code"].values
         self.labels = self.df["diagnosis"].values.astype("int64")
         self.num_classes = len(np.unique(self.labels))
-        # self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
+        self.labels = to_multi_label(self.labels, self.num_classes)  # [1]
         # self.labels = np.eye(self.num_classes)[self.labels]
         self.transform = get_transforms(phase, cfg)
         self.root = os.path.join(cfg['home'], cfg['data_folder'])
@@ -289,7 +290,7 @@ if __name__ == "__main__":
 
         print("%d/%d" % (idx, total_len), images.shape, labels.shape)
         total_labels.extend(labels.tolist())
-        #pdb.set_trace()
+        pdb.set_trace()
     print(np.unique(total_labels, return_counts=True))
     diff = time.time() - start
     print('Time taken: %02d:%02d' % (diff//60, diff % 60))

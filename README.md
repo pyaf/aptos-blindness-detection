@@ -4,6 +4,7 @@
 
 # Models on training:
 
+*lol*
 
 ### 8 Jul
 

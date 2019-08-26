@@ -114,10 +114,10 @@ class Trainer(object):
             self.best_loss = state["best_loss"]
             self.best_qwk = state["best_qwk"]
             self.start_epoch = state["epoch"] + 1
-            if self.start_epoch > 5:
-                # self.base_lr = self.top_lr
-                # print(f"Base lr = Top lr = {self.top_lr}")
-                pass
+            if self.start_epoch > self.cfg['ep2unfreeze']:
+                for params in self.net.parameters():
+                    params.requires_grad = True
+                print('All parameters are trainable')
 
         if self.cuda:
             for opt_state in self.optimizer.state.values():

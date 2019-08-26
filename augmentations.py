@@ -127,7 +127,7 @@ def get_transforms(phase, cfg):
     list_transforms.extend(
         [
             #Resize(size, size),
-            PadIfNeeded(size, size, p=1),
+            PadIfNeeded(size, size, p=1, border_mode=1),
             Normalize(mean=mean, std=std, p=1),
             ToTensor(normalize=None),  # [6]
         ]

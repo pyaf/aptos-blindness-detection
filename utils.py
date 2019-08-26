@@ -38,6 +38,22 @@ class CM(ConfusionMatrix):
         json.dump(dump_dict, open(obj_full_path, "w"))
 
 
+def to_multi_label(target, classes):
+    """[0, 0, 1, 0] to [1, 1, 1, 0]"""
+    multi_label = np.zeros((len(target), classes))
+    for i in range(len(target)):
+        j = target[i] + 1
+        multi_label[i][:j] = 1
+    return np.array(multi_label)
+
+
+def get_preds(arr, num_cls):
+    """ takes in thresholded predictions (num_samples, num_cls) and returns (num_samples,)
+    [3], arr needs to be a numpy array, NOT torch tensor"""
+    mask = arr == 0
+    # pdb.set_trace()
+    return np.clip(np.where(mask.any(1), mask.argmax(1), num_cls) - 1, 0, num_cls - 1)
+
 def predict(X, coef):
     # [0.15, 2.4, ..] -> [0, 2, ..]
     X_p = np.copy(X)
