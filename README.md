@@ -785,12 +785,14 @@ NO big improvement.
 
 * `268_efficientnet-b4_f1_ord`: with ordinal regression,
     ckpt14 looks good, loss: 0.17/0.19, qwk 0.76/0.72
+* `268_efficientnet-b4_f1_pord`, performs relatively better than b6 regression models, + forgot to add sigmoid during meter update, was using BCEWithLogitsLoss so no issues, just the metrics were computed with base_th=0.5 on logits. sigmoid(0.5) is 0.6225, it was like using base_th of 0.6225
+
+*bugfix* in get_sampler, if-> elif.
 
 
+No class weights: ([2139,  448, 1151,  225,  275])
 
-
-
-
+with 1.5 to 1, 3, 4: ([1925,  639, 1030,  273,  371])
 
 
 

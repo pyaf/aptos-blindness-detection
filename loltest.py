@@ -65,7 +65,7 @@ def get_predictions(model, testset, tta):
     predictions = []
     for i, batch in enumerate(tqdm(testset)):
         _, images, _ = batch
-        preds = model(images.to(device))
+        preds = torch.sigmoid(model(images.to(device)))
         preds = preds.detach().tolist()  # [1]
         predictions.extend(preds)
     return np.array(predictions)
@@ -78,7 +78,10 @@ if __name__ == "__main__":
     parser = test_parser()
     args = parser.parse_args()
     predict_on = args.predict_on
-    start_epoch, end_epoch = args.epoch_range
+    eps_range = args.epoch_range
+    if len(eps_range) == 1:
+        eps_range *= 2  # [1] -> [1, 1]
+    start_epoch, end_epoch = eps_range
     cfg = load_cfg(args)
 
     cfg['phase'] = args.predict_on
@@ -106,7 +109,7 @@ if __name__ == "__main__":
     print(f"From epoch {start_epoch} to {end_epoch}")
     print(f"Using tta: {tta}\n")
 
-    base_thresholds = np.array([0.5, 1.5, 2.5, 3.5])
+    base_th = 0.5
     y_test = pd.read_csv('weights/submission829.csv')['diagnosis'].values
     for epoch in range(start_epoch, end_epoch + 1):
         print(f"Using ckpt{epoch}.pth")
@@ -114,8 +117,8 @@ if __name__ == "__main__":
         state = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
         model.load_state_dict(state["state_dict"])
         preds = get_predictions(model, test_dataloader, tta)
-        best_thresholds = state["best_thresholds"]
-        cls_preds = predict(preds, base_thresholds)
+        outputs = (preds > base_th).astype('uint8')
+        cls_preds = get_preds(outputs, cfg['num_classes'])
         print("base:", np.unique(cls_preds, return_counts=True)[1])
         if cfg['phase'] == 'test':
             score = cohen_kappa_score(y_test, cls_preds, weights="quadratic")
@@ -129,7 +132,7 @@ if __name__ == "__main__":
         pred1 = predict(preds, best_thresholds)
         print("best:", np.unique(pred1, return_counts=True)[1])
         """
-        mat_to_save = [preds, best_thresholds]
+        mat_to_save = [preds, base_th]
         np.save(os.path.join(npy_folder, f"{predict_on}_ckpt{epoch}.npy"), mat_to_save)
         print("Predictions saved!")
 

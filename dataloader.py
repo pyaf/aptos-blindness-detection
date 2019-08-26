@@ -77,14 +77,13 @@ def get_sampler(df, cfg):
         class_weights = cfg['class_weights']
         print("weights", class_weights)
         dataset_weights = [class_weights[idx] for idx in df["diagnosis"]]
-        datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
-    if cfg['he_sampling']:
+    elif cfg['he_sampling']:
         '''sampler using hard examples (he)'''
         print('Hard example sampling')
         dataset_weights = df["weight"].values
-        datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
     else:
-        datasampler = None
+        return None
+    datasampler = sampler.WeightedRandomSampler(dataset_weights, len(df))
     return datasampler
 
 def resampled(df, count_dict):
@@ -285,12 +284,13 @@ if __name__ == "__main__":
     fnames_dict = defaultdict(int)
     for idx, batch in enumerate(dataloader):
         fnames, images, labels = batch
+        labels = (torch.sum(labels, 1) - 1).numpy().astype('uint8')
         for fname in fnames:
             fnames_dict[fname] += 1
 
         print("%d/%d" % (idx, total_len), images.shape, labels.shape)
         total_labels.extend(labels.tolist())
-        pdb.set_trace()
+        #pdb.set_trace()
     print(np.unique(total_labels, return_counts=True))
     diff = time.time() - start
     print('Time taken: %02d:%02d' % (diff//60, diff % 60))

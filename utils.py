@@ -75,6 +75,7 @@ class Meter:
         # get multi-label to single label
         #pdb.set_trace()
         targets = (torch.sum(targets, 1) - 1).numpy().astype('uint8')
+        outputs = torch.sigmoid(outputs)
         outputs = (outputs > self.base_th).cpu().numpy().astype('uint8')
         outputs = get_preds(outputs, 5)#.astype('uint')
         # outputs = torch.sum((outputs > 0.5), 1) - 1
@@ -231,6 +232,24 @@ def check_sanctity(dataloaders):
     else:
         print("No sanctity check")
 
+
+def predict(X, coef):
+    # [0.15, 2.4, ..] -> [0, 2, ..]
+    X_p = np.copy(X)
+    for i, pred in enumerate(X_p):
+        if pred < coef[0]:
+            X_p[i] = 0
+        elif pred >= coef[0] and pred < coef[1]:
+            X_p[i] = 1
+        elif pred >= coef[1] and pred < coef[2]:
+            X_p[i] = 2
+        # else:
+        #    X_p[i] = 3
+        elif pred >= coef[2] and pred < coef[3]:
+            X_p[i] = 3
+        else:
+            X_p[i] = 4
+    return X_p.astype("int")
 
 """Footnotes:
 
