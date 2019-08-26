@@ -164,8 +164,13 @@ def epoch_log(opt, log, tb, phase, epoch, epoch_loss, meter, start):
     logger.log_value("loss", epoch_loss, epoch)
     if phase == "train":
         logger.log_value("lr", lr, epoch)
-    metrics = [acc, base_qwk, tpr, ppv]
-    log_metrics(tb[phase], metrics, epoch, "base")
+
+    logger.log_value(f"ACC", acc, epoch)
+    logger.log_value(f"QWK", base_qwk, epoch)
+    logger.log_value(f"TPR", tpr, epoch)
+    logger.log_value(f"PPV", ppv, epoch)
+    logger.log_value(f"F1", f1, epoch)
+
 
     # save pycm confusion
     obj_path = os.path.join(meter.save_folder, f"base_cm{phase}_{epoch}")

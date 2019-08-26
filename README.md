@@ -782,7 +782,9 @@ ckpt 17 looks good.
 NO big improvement.
 
 *Revisiting ordinal regression*
-* 268_efficientnet-b4_f1_ord:
+
+* `268_efficientnet-b4_f1_ord`: with ordinal regression,
+    ckpt14 looks good, loss: 0.17/0.19, qwk 0.76/0.72
 
 
 
