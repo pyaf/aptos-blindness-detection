@@ -70,7 +70,8 @@ class Trainer(object):
         self.model_path = os.path.join(self.save_folder, "model.pth")
         self.ckpt_path = os.path.join(self.save_folder, "ckpt.pth")
         self.net = get_model(self.model_name, self.num_classes)
-        self.criterion = torch.nn.MSELoss()
+        #self.criterion = torch.nn.MSELoss()
+        self.criterion = torch.nn.BCEWithLogitsLoss()
         self.optimizer = optim.Adam(self.net.parameters(), lr=self.top_lr)
         # self.optimizer = RAdam(self.net.parameters(), lr=self.top_lr)
         # lr_lambda = lambda epoch: epoch // 5
@@ -132,11 +133,11 @@ class Trainer(object):
     def forward(self, images, targets):
         # pdb.set_trace()
         images = images.to(self.device)
-        # targets = targets.type(torch.LongTensor).to(self.device) # [1]
+        #targets = targets.type(torch.LongTensor).to(self.device) # [1]
         targets = targets.type(torch.FloatTensor).to(self.device)
-        targets = targets.view(-1, 1)  # [n] -> [n, 1] V. imp for MSELoss
+        #targets = targets.view(-1, 1)  # [n] -> [n, 1] V. imp for MSELoss
         outputs = self.net(images)
-        outputs = torch.clamp(outputs, 0, 4)
+        #outputs = torch.clamp(outputs, 0, 4)
         # outputs = torch.sigmoid(outputs) # no sigmoid for regression mode
         loss = self.criterion(outputs, targets)
         return loss, outputs

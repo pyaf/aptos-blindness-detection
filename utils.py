@@ -54,24 +54,6 @@ def get_preds(arr, num_cls):
     # pdb.set_trace()
     return np.clip(np.where(mask.any(1), mask.argmax(1), num_cls) - 1, 0, num_cls - 1)
 
-def predict(X, coef):
-    # [0.15, 2.4, ..] -> [0, 2, ..]
-    X_p = np.copy(X)
-    for i, pred in enumerate(X_p):
-        if pred < coef[0]:
-            X_p[i] = 0
-        elif pred >= coef[0] and pred < coef[1]:
-            X_p[i] = 1
-        elif pred >= coef[1] and pred < coef[2]:
-            X_p[i] = 2
-        # else:
-        #    X_p[i] = 3
-        elif pred >= coef[2] and pred < coef[3]:
-            X_p[i] = 3
-        else:
-            X_p[i] = 4
-    return X_p.astype("int")
-
 
 def compute_score_inv(thresholds, predictions, targets):
     predictions = predict(predictions, thresholds)
@@ -86,17 +68,18 @@ class Meter:
         self.phase = phase
         self.epoch = epoch
         self.save_folder = os.path.join(save_folder, "logs")
-        self.base_th = [0.5, 1.5, 2.5, 3.5]  #
+        self.base_th = 0.5 #, 0.5, 0.5, 0.5, 0.5]  #
 
     def update(self, targets, outputs):
         """targets, outputs are detached CUDA tensors"""
         # get multi-label to single label
-        # targets = torch.sum(targets, 1) - 1 # no multilabel target in regression
-        targets = targets.type(torch.LongTensor)
-        outputs = outputs.flatten()  # [n, 1] -> [n]
+        #pdb.set_trace()
+        targets = (torch.sum(targets, 1) - 1).numpy().astype('uint8')
+        outputs = (outputs > self.base_th).cpu().numpy().astype('uint8')
+        outputs = get_preds(outputs, 5)#.astype('uint')
         # outputs = torch.sum((outputs > 0.5), 1) - 1
 
-        # pdb.set_trace()
+        #pdb.set_trace()
         self.targets.extend(targets.tolist())
         self.predictions.extend(outputs.tolist())
         # self.predictions.extend(torch.argmax(outputs, dim=1).tolist()) #[2]
@@ -104,6 +87,7 @@ class Meter:
     def get_best_thresholds(self):
         """Epoch over, let's get targets in np array [6]"""
         self.targets = np.array(self.targets)
+        self.predictions = np.array(self.predictions)
         """ not using this function anymore """
         return self.base_th
 
@@ -124,9 +108,8 @@ class Meter:
 
     def get_cm(self):
         # pdb.set_trace()
-        base_preds = predict(self.predictions, self.base_th)
-        base_qwk = cohen_kappa_score(self.targets, base_preds, weights="quadratic")
-        base_cm = CM(self.targets, base_preds)
+        base_qwk = cohen_kappa_score(self.targets, self.predictions, weights="quadratic")
+        base_cm = CM(self.targets, self.predictions)
         return base_cm, base_qwk
         """ not used """
         if self.phase != "train":

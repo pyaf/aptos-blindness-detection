@@ -781,6 +781,9 @@ ckpt 17 looks good.
 
 NO big improvement.
 
+*Revisiting ordinal regression*
+* 268_efficientnet-b4_f1_ord:
+
 
 
 
