@@ -797,6 +797,13 @@ with 1.5 to 1, 3, 4: ([1925,  639, 1030,  273,  371])
 *Remember* Given public test set is shit. God knows how the private one is gonna be.
 Finetuning shouldn't be prolonged, you'll start overfitting.
 
+* `278_inceptionresnetv2_f1_ord`: performing below efficientnets till ep 11, gotta train it longer.
+
+*One thing to notice*
+There's something different with class 1 images of old data and class 1 data of new images, Tom hinted me about this long ago. If you see you can achieve 0.90 qwk on 2019 dataset by just training on 2015 dataset, but if you look at the class wise stats, you'll find that all class 1 examples of 2019 would be classified as class 2
+
+
+So, now I'm gonna rerun pord, with 2k samples per class from old data except for class 1.
 
 
 # Questions and Ideas:
