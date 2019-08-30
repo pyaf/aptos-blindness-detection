@@ -36,7 +36,7 @@ batch_size:
 num_workers: 12
 num_classes: 5
 ep2unfreeze: 0 # <<<<<<<<<<
-num_epochs: 30
+num_epochs: 60
 base_lr: None
 momentum: 0.95
 patience: 3
