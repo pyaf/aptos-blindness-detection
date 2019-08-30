@@ -696,7 +696,7 @@ for the 2nd step model, the labels will be one-step-below the actual 1->0, 2->1 
 * `198_efficientnet-b5_f1_ptest2`: finetuning on new data. ckpt16 looks good.
 Getting heavily biased towards class 2.
 
-https://jdhao.github.io/2017/11/06/resize-image-to-square-with-padding/
+[check](https://jdhao.github.io/2017/11/06/resize-image-to-square-with-padding/)
 
 * `208_efficientnet-b5_f1_ptest2radam`:
 *experiment*: Adam performs better than RAdam
@@ -783,6 +783,7 @@ NO big improvement.
 
 *Revisiting ordinal regression*
 
+
 * `268_efficientnet-b4_f1_ord`: with ordinal regression,
     ckpt14 looks good, loss: 0.17/0.19, qwk 0.76/0.72
 * `268_efficientnet-b4_f1_pord`, performs relatively better than b6 regression models, + forgot to add sigmoid during meter update, was using BCEWithLogitsLoss so no issues, just the metrics were computed with base_th=0.5 on logits. sigmoid(0.5) is 0.6225, it was like using base_th of 0.6225
@@ -804,6 +805,19 @@ There's something different with class 1 images of old data and class 1 data of 
 
 
 So, now I'm gonna rerun pord, with 2k samples per class from old data except for class 1.
+
+Messidor 2 grades:
+https://www.kaggle.com/google-brain/messidor2-dr-grades#messidor_data.csv
+
+
+
+
+
+
+
+
+
+
 
 
 # Questions and Ideas:
