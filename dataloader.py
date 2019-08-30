@@ -57,6 +57,7 @@ class ImageDataset(Dataset):
         #path = os.path.join(self.root, fname)
         path = os.path.join(self.root, fname.split('.')[0] + '.npy')
         image = np.load(path)
+        image = resize_sa(image, self.size)
         #print(image.shape)
         #filename, ext = os.path.splitext(path)
         #if ext == ".jpeg" or ext == ".jpg":

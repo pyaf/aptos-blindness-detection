@@ -15,6 +15,9 @@ def get_model(model_name, out_features=1, pretrained="imagenet"):
         return model
 
     model = pretrainedmodels.__dict__[model_name](pretrained=pretrained)
+    for params in model.parameters():
+        params.requires_grad = False
+
     in_features = model.last_linear.in_features
     model.last_linear = nn.Linear(
             in_features=in_features,
