@@ -131,20 +131,20 @@ def get_transforms(phase, cfg):
     if phase == "train":
         list_transforms.extend(
             [
-                MyCenterCrop(p=0.5),
-                Transpose(p=0.5),
-                Flip(p=0.5),
+                #MyCenterCrop(p=0.5),
+                #Transpose(p=0.5),
+                #Flip(p=0.5),
                 ShiftScaleRotate(
-                    shift_limit=0.1, scale_limit=(-0.1, 0.3), rotate_limit=180, p=0.9
+                    shift_limit=0.1, scale_limit=(-0.1, 0.3), rotate_limit=180, p=0.7
                 ),
-                RandomBrightnessContrast(0.1, 0.1, p=0.5),
+                RandomBrightnessContrast(0.1, 0.1, p=0.2),
 
             ]
         )
     list_transforms.extend(
         [
             #Resize(size, size),
-            PadIfNeeded(size, size, p=1, border_mode=1),
+            #PadIfNeeded(size, size, p=1, border_mode=1),
             Normalize(mean=mean, std=std, p=1),
             ToTensor(normalize=None),  # [6]
         ]
