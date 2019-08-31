@@ -182,6 +182,7 @@ class Trainer(object):
             if epoch == self.ep2unfreeze:
                 for params in self.net.parameters():
                     params.requires_grad = True
+                print('All params trainable')
                 # self.base_lr = self.top_lr
                 # self.optimizer = adjust_lr(self.base_lr, self.optimizer)
 
