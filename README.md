@@ -818,6 +818,11 @@ https://www.kaggle.com/google-brain/messidor2-dr-grades#messidor_data.csv
 * `318_senet154_f1_pord`: using ord's model.pth, no mes, no idrid,
 * `318_senet154_f1_pordmi`: using ord's model.pth, with mes (3=3.5), idrid.
 
+with mes and idrid, train loss is higher, test pred perf drops.
+
+* `318_senet514_f1_pordpt`: with pseudo labels taken from the same df of best four submissions.
+
+
 
 
 

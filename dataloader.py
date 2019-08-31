@@ -132,7 +132,11 @@ def provider(phase, cfg):
         count_dict = cfg['count_dict']
         df = resampled(df, count_dict)
 
+    if cfg['pseudo']:
+        pseudo_test = pd.read_csv(cfg['pseudo_df'])
+        df.append(pseudo_test, ignore_index=True)
     #print(df['diagnosis'].value_counts())
+
     fold = cfg['fold']
     total_folds = cfg['total_folds']
     kfold = StratifiedKFold(total_folds, shuffle=True, random_state=69)
