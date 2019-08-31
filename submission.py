@@ -17,7 +17,7 @@ from torchvision.datasets.folder import pil_loader
 import torch.utils.data as data
 from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.metrics import cohen_kappa_score
-from models import Model, get_model
+from models import get_model
 from utils import *
 from image_utils import *
 from augmentations import *

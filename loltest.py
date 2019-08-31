@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     use_cuda = True
     device = torch.device("cuda" if use_cuda else "cpu")
-    size = args.size
+    size = cfg['size']
     test_dataloader = testprovider(cfg)
 
     model = get_model(cfg['model_name'], cfg['num_classes'], pretrained=None)

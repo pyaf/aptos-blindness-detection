@@ -154,7 +154,8 @@ def provider(phase, cfg):
 
     if cfg['messidor_in_train']:
         mes_df = pd.read_csv(cfg['mes_df'])
-        mes_df = mes_df[mes_df.diagnosis != 3] # drop class 3, see [12]
+        #mes_df = mes_df[mes_df.diagnosis != 3] # drop class 3, see [12]
+        mes_df = mes_df.replace(to_replace=3, value=3.5)
         mes_df['weight'] = 1
         train_df = train_df.append(mes_df, ignore_index=True)
 

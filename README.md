@@ -811,7 +811,12 @@ https://www.kaggle.com/google-brain/messidor2-dr-grades#messidor_data.csv
 
 
 
+* `308_zoominnet_f1_ord`: testing zoom in net.
 
+
+* `318_senet154_f1_ord`: senet on old, 224
+* `318_senet154_f1_pord`: using ord's model.pth, no mes, no idrid,
+* `318_senet154_f1_pordmi`: using ord's model.pth, with mes (3=3.5), idrid.
 
 
 

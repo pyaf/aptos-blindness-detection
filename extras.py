@@ -53,7 +53,7 @@ def load_cfg(args):
 
 
 def save_cfg(cfg, trainer):
-    augmentations = trainer.dataloaders["train"].dataset.transform.transforms
+    augmentations = trainer.dataloaders["train"].dataset.transform.transforms.transforms
     text = (
         f"model_name: {trainer.model_name}\n"
         + f"augmentations: {augmentations}\n"
