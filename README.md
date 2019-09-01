@@ -822,6 +822,14 @@ with mes and idrid, train loss is higher, test pred perf drops.
 
 * `318_senet514_f1_pordpt`: with pseudo labels taken from the same df of best four submissions.
 
+All efforts going in vain :(
+
+* `318_effnet-b5_f1_pord` aug_11 (path_to_image, median)
+
+    Class wise perf looks good. val ep18: Class F1: {0: 0.9819, 1: 0.5455, 2: 0.7901, 3: 0.459, 4: 0.5979}
+*compare its class wise perf with poma*
+
+One thing, which I'm sure about is there is some difference in class 1 of 2015 and class 1 of 2019. class 1 of 2019 is classified as class2 by model trained solely on 2015.
 
 
 

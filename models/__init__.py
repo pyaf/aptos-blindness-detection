@@ -2,13 +2,13 @@ from .pretrained import *
 from .zoominnet import ZoomInNet
 
 
-def get_model(model_name, out_features=1, pretrained="imagenet"):
+def get_model(model_name, num_classes=1, pretrained="imagenet"):
 
     if model_name == "resnext101_32x16d":
-        return resnext101_32x16d(out_features)
+        return resnext101_32x16d(num_classes)
 
     elif model_name.startswith("efficientnet"):
-        return efficientNet(model_name, out_features, pretrained)
+        return efficientNet(model_name, num_classes, pretrained)
 
     elif model_name == 'zoominnet':
         model = ZoomInNet()
@@ -21,7 +21,7 @@ def get_model(model_name, out_features=1, pretrained="imagenet"):
     in_features = model.last_linear.in_features
     model.last_linear = nn.Linear(
             in_features=in_features,
-            out_features=out_features,
+            out_features=num_classes,
             bias=True
     )
     return model
