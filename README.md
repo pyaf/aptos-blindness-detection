@@ -831,6 +831,8 @@ All efforts going in vain :(
 
 One thing, which I'm sure about is there is some difference in class 1 of 2015 and class 1 of 2019. class 1 of 2019 is classified as class2 by model trained solely on 2015.
 
+*`318_effnet-b5_f1_pordos`: with 1900 sampled 3 and 4 images in train set.
+
 
 
 

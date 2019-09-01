@@ -86,10 +86,13 @@ if __name__ == "__main__":
 
     cfg['phase'] = args.predict_on
     if predict_on == "train":
-        cfg['sample_submission'] = "data/train.csv"
-        #cfg['data_folder'] = "data/all_images/"
+        cfg['sample_submission'] = cfg['new_df_path']
+    if predict_on == "mes":
+        cfg['sample_submission'] = cfg['mes_df']
+    if predict_on == "idrid":
+        cfg['sample_submission'] = cfg['idrid_df']
 
-    tta = 0  # number of augs in tta
+    tta = 4  # number of augs in tta
 
     use_cuda = True
     device = torch.device("cuda" if use_cuda else "cpu")
