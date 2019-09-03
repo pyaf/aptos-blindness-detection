@@ -826,19 +826,20 @@ All efforts going in vain :(
 
 * `318_effnet-b5_f1_pord` aug_11 (path_to_image, median)
 
-    Class wise perf looks good. val ep18: Class F1: {0: 0.9819, 1: 0.5455, 2: 0.7901, 3: 0.459, 4: 0.5979}
-*compare its class wise perf with poma*
+Class wise perf looks good. val ep18:
+Class F1: {0: 0.9819, 1: 0.5455, 2: 0.7901, 3: 0.459, 4: 0.5979}
 
 One thing, which I'm sure about is there is some difference in class 1 of 2015 and class 1 of 2019. class 1 of 2019 is classified as class2 by model trained solely on 2015.
 
 *`318_effnet-b5_f1_pordos`: with 1900 sampled 3 and 4 images in train set.
 
-*poma model was overfitting on class 3 (tpr: 0.51 on train, 0.15 on val), why? because of messidor?, compartively pord model is much better with class 3 (no mess) *
+*poma model was overfitting on class 3 (tpr: 0.51 on train, 0.15 on val), why? because of messidor?, compartively pord model is much better with class 3 (no mess)*
 
-class wise perf has decreased in class 3: Class F1: {0: 0.9817, 1: 0.4956, 2: 0.7384, 3: 0.1944, 4: 0.6207}
+class wise perf has decreased in class 3:
+Class F1: {0: 0.9817, 1: 0.4956, 2: 0.7384, 3: 0.1944, 4: 0.6207}
 
 * `318_effnet-b5_f1_pordcw`: cw: [1, 2, 1, 2, 2]: [1161,  476,  591,  212,  336]
-
+Class F1: {0: 0.9831, 1: 0.6187, 2: 0.7389, 3: 0.4, 4: 0.5859}
 
 # Questions and Ideas:
 
