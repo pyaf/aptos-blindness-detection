@@ -1,10 +1,6 @@
-# Logs for the competition
+# ADPOS 2019 blindness detection
 
-# ADPOS diabetic retina
-
-# Models on training:
-
-*lol*
+## Logs:
 
 ### 8 Jul
 
@@ -840,6 +836,36 @@ Class F1: {0: 0.9817, 1: 0.4956, 2: 0.7384, 3: 0.1944, 4: 0.6207}
 
 * `318_effnet-b5_f1_pordcw`: cw: [1, 2, 1, 2, 2]: [1161,  476,  591,  212,  336]
 Class F1: {0: 0.9831, 1: 0.6187, 2: 0.7389, 3: 0.4, 4: 0.5859}
+
+
+Trained all folds for pord model, selecting ckpt 27 for all of em.
+
+tensorboard --logdir v0:318_effnet-b5_f0_pord,v1:318_effnet-b5_f1_pord,v2:318_effnet-b5_f2_pord,v3:318_effnet-b5_f3_pord,v4:318_effnet-b5_f4_pord,
+
+tensorboard --logdir v0:168_efficientnet-b5_f0_poma,v1:168_efficientnet-b5_f1_poma,v2:168_efficientnet-b5_f2_poma,v3:168_efficientnet-b5_f3_poma,v4:168_efficientnet-b5_f4_poma
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Questions and Ideas:
 
