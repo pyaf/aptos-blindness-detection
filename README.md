@@ -842,16 +842,42 @@ Trained all folds for pord model, selecting ckpt 27 for all of em.
 
 tensorboard --logdir v0:318_effnet-b5_f0_pord,v1:318_effnet-b5_f1_pord,v2:318_effnet-b5_f2_pord,v3:318_effnet-b5_f3_pord,v4:318_effnet-b5_f4_pord,
 
-tensorboard --logdir v0:168_efficientnet-b5_f0_poma,v1:168_efficientnet-b5_f1_poma,v2:168_efficientnet-b5_f2_poma,v3:168_efficientnet-b5_f3_poma,v4:168_efficientnet-b5_f4_poma
+tensorboard --logdir v0:168_effnet-b5_f0_poma,v1:168_effnet-b5_f1_poma,v2:168_effnet-b5_f2_poma,v3:168_effnet-b5_f3_poma,v4:168_effnet-b5_f4_poma
+
+poma's CV class wise base F1 score (averaged across val sets)
+
+ 0: 0.9827113872839935,
+ 1: 0.536769080708311,
+ 2: 0.7676222747580537,
+ 3: 0.355603561350371,
+ 4: 0.6452698832341925
+
+pord's
+ 0: 0.9822527779167257,
+ 1: 0.4730054126374783,
+ 2: 0.7895828381785207,
+ 3: 0.3751911218350072,
+ 4: 0.6622086985037487
+
+So, they are kinda same
 
 
 
 
+*manual tweaks with the ord thresholds?, especially class 1*?
+
+b5_loss_preds,
+b5_kappa_preds,
+b5_last_preds,
+b4_loss_preds,
+b4_kappa_preds,
+b4_last_preds,
+b3_loss_preds,
+b3_kappa_preds,
+b3_last_preds,
 
 
-
-
-
+My predictions of public test set dist: 380, 250, 1150, 100, 60
 
 
 
